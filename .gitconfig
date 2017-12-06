@@ -1,0 +1,42 @@
+[user]
+	name = shinsuke-0519
+	email = s.zerogoichi@gmail.com
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[core]
+	autocrlf = true
+	excludesfile = C:\\Users\\SHINSUKE\\Documents\\gitignore_global.txt
+	editor = C:/Vim/Vim.exe
+	pager = less
+[alias]
+    s = status
+    ss = status -s
+    co = checkout
+    tree = log --graph --date=short --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    windiff = difftool -y -d -t WinMerge
+    winmerge = mergetool -y -t WinMerge
+	ignore = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+[diff]
+    tool = WinMerge
+    guitool = WinMerge
+[difftool "WinMerge"]
+    path = C:/Program Files/WinMerge/WinMergeU.exe
+    cmd = \"C:/Program Files/WinMerge/WinMergeU.exe\" -f \"*.*\" -e -u -r \"$LOCAL\" \"$REMOTE\"
+    trustExitCode = false
+[merge]
+    ff = false
+    tool = WinMerge
+[mergetool "WinMerge"]
+    path = C:/Program Files/WinMerge/WinMergeU.exe
+    cmd = \"C:/Program Files/WinMerge/WinMergeU.exe\" -e -u \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+[pull]
+	ff = only
+[hub]
+    protocol = https

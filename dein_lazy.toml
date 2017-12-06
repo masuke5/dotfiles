@@ -1,0 +1,42 @@
+[[plugins]]
+repo = 'osyo-manga/vim-marching'
+on_ft = 'cpp'
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = 'typescript'
+
+# C#
+[[plugins]]
+repo = 'OmniSharp/omnisharp-vim'
+on_ft = 'cs'
+
+# Nim
+[[plugins]]
+repo = 'zah/nim.vim'
+on_ft = 'nim'
+
+# Rust
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
+
+[[plugins]]
+repo = 'sebastianmarkow/deoplete-rust'
+on_ft = 'rust'
+depends = ['deoplete.nvim']
+
+# [[plugins]]
+# repo = 'racer-rust/vim-racer'
+# on_ft = 'rust'
+
+# Python
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_ft = 'python'
+
+# Kotlin
+[[plugins]]
+repo = 'udalov/kotlin-vim'
+on_ft = 'kotlin'
+
