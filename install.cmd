@@ -7,3 +7,4 @@ mklink %USERPROFILE%\.vrapperrc %~dp0\.vrapperrc
 mklink %USERPROFILE%\_vsvimrc %~dp0\_vsvimrc
 mklink %USERPROFILE%\.vim\rc\dein.toml %~dp0\dein.toml
 mklink %USERPROFILE%\.vim\rc\dein_lazy.toml %~dp0\dein_lazy.toml
+mklink %USERPROFILE%\.vim\ginit.vim %~dp0\ginit.vim
