@@ -281,6 +281,8 @@ let g:deoplete#sources#rust#disable_keymap = 1
 nmap <buffer> gd <plug>DeopleteRustGoToDefinitionDefault
 nmap <buffer> K  <plug>DeopleteRustShowDocumentation
 
+let g:syntastic_rust_checkers = ['rustc']
+
 "Auto Format
 let g:rustfmt_autosave = 1
 let g:rustfmt_command = '$HOME/.cargo/bin/rustfmt'
@@ -479,3 +481,21 @@ augroup END
 
 let g:syntastic_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
 let g:syntastic_java_javac_delete_option = 0
+
+"NERDTree
+let NERDTreeShowHidden = 1
+
+augroup MyVimrc
+  autocmd!
+augroup END
+
+autocmd MyVimrc BufNewFile,BufRead dein*.toml call s:syntax_range_dein()
+
+function! s:syntax_range_dein() abort
+  let start = '^\s*hook_\%('.
+  \           'add\|source\|post_source\|post_update'.
+  \           '\)\s*=\s*%s'
+
+  call SyntaxRange#Include(printf(start, "'''"), "'''", 'vim', '')
+  call SyntaxRange#Include(printf(start, '"""'), '"""', 'vim', '')
+endfunction
