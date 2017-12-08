@@ -6,15 +6,35 @@ repo = 'Shougo/dein.vim'
 
 [[plugins]]
 repo = 'ervandew/supertab'
+hook_add = '''
+  let g:SuperTabDefaultCompletionType = "<c-n>"
+  let g:SuperTabContextDefaultCompletionType = "<c-n>"
+'''
 
 [[plugins]]
 repo = 'scrooloose/syntastic'
+hook_add = '''
+  let g:syntastic_ruby_checkers = ['rubocop']
+  let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
+  let g:syntastic_rust_checkers = ['rustc']
+  let g:syntastic_cs_checkers = ['code_checker']
+  let g:syntastic_python_checkers = ['flake8']
+
+  let g:syntastic_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
+  let g:syntastic_java_javac_delete_option = 0
+'''
 
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
+hook_add = '''
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline#extensions#tabline#buffer_nr_show = 1
+  let g:airline#extensions#whitespace#mixed_indent_algo = 1
+  "let g:airline_powerline_fonts = 1
+'''
 
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
@@ -23,46 +43,25 @@ repo = 'vim-airline/vim-airline-themes'
 repo = 'tpope/vim-endwise'
 
 [[plugins]]
-repo = 'fatih/vim-go'
-
-#[[plugins]]
-#repo = 'tpope/vim-fugitive'
-
-[[plugins]]
 repo = 'lambdalisue/gina.vim'
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
-
-[[plugins]]
-repo = 'freeo/vim-kalisi'
-
-[[plugins]]
-repo = 'w0ng/vim-hybrid'
-
-[[plugins]]
-repo = 'vim-scripts/rdark'
-
-[[plugins]]
-repo = 'jonathanfilip/vim-lucius'
-
-[[plugins]]
-repo = 'vim-scripts/twilight'
+hook_add = '''
+    let NERDTreeShowHidden = 1
+'''
 
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
+hook_add = '''
+    let g:vim_markdown_folding_disabled = 1
+'''
 
 [[plugins]]
 repo = 'kannokanno/previm'
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
-
-[[plugins]]
-repo = 'sjl/badwolf'
-
-[[plugins]]
-repo = 'osyo-manga/vim-monster'
 
 [[plugins]]
 repo = 'thinca/vim-ref'
@@ -74,25 +73,12 @@ repo = 'yuku-t/vim-ref-ri'
 repo = 'szw/vim-tags'
 
 [[plugins]]
-repo = 'nightsense/carbonized'
-
-[[plugins]]
-repo = 'Zabanaa/neuromancer.vim'
-
-[[plugins]]
-repo = 'hzchirs/vim-material'
-
-[[plugins]]
-repo = 'vim-scripts/mayansmoke'
-
-[[plugins]]
-repo = 'bluz71/vim-moonfly-colors'
-
-[[plugins]]
-repo = 'cnj4/horseradish256'
-
-[[plugins]]
 repo = 'mattn/emmet-vim'
+hook_add = '''
+    let g:user_emmet_settings = {
+    \   'lang': 'ja'
+    \ }
+'''
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
@@ -102,6 +88,9 @@ repo = 'ujihisa/unite-colorscheme'
 
 [[plugins]]
 repo = 'KabbAmine/gulp-vim'
+hook_add = '''
+  autocmd FileType typescript nnoremap <C-b> :Gulp<CR>
+'''
 
 [[plugins]]
 repo = 'tpope/vim-dispatch'
@@ -122,52 +111,81 @@ hook_post_update = '''
 '''
 
 [[plugins]]
-repo = 'ujihisa/unite-font'
-
-[[plugins]]
-repo = 'therubymug/vim-pyte'
-
-#[[plugins]]
-#repo = 'ryanoasis/vim-devicons'
-
-[[plugins]]
 repo = 'osyo-manga/unite-airline_themes'
 
 [[plugins]]
 repo = 'tyru/caw.vim'
+hook_add = '''
+  nmap <leader>c <Plug>(caw:zeropos:toggle)
+  xmap <leader>c <Plug>(caw:zeropos:toggle)
+  nmap <leader>C <Plug>(caw:zeropos:uncomment)
+  xmap <leader>C <Plug>(caw:zeropos:uncomment)
+'''
 
 [[plugins]]
 repo = 't9md/vim-quickhl'
-
-[[plugins]]
-repo = 'nanotech/jellybeans.vim'
+hook_add = '''
+  nmap <Space>m <Plug>(quickhl-manual-this)
+  xmap <Space>m <Plug>(quickhl-manual-this)
+  nmap <Space>M <Plug>(quickhl-manual-reset)
+  xmap <Space>M <Plug>(quickhl-manual-reset)
+'''
 
 [[plugins]]
 repo = 'vim-scripts/Highlight-UnMatched-Brackets'
 
 [[plugins]]
-repo = 'nightsense/simplifysimplify'
-
-[[plugins]]
 repo = 'https://gitlab.com/zerogoichi/Fazima.git'
+hook_add = '''
+  let g:fazima#enable = 0
+'''
 
 [[plugins]]
 repo = 'elixir-editors/vim-elixir'
 
 [[plugins]]
 repo = 'haya14busa/incsearch.vim'
-
-[[plugins]]
-repo = 'cocopon/iceberg.vim'
+hook_add = '''
+  "map / <Plug>(incsearch-forward)
+  "map ? <Plug>(incsearch-backward)
+  "map g/ <Plug>(incsearch-stay)
+'''
 
 [[plugins]]
 repo = 'artur-shaik/vim-javacomplete2'
+hook_add = '''
+  let g:JavaComplete_ClasspathGenerationOrder = ['Maven', 'Eclipse', 'Gradle']
+  
+  function! AJavaImports()
+    :JCimportsAddMissing
+    :JCimportsRemoveUnused
+  endfunction
+  
+  augroup JavaA
+    autocmd!
+    autocmd FileType java setlocal omnifunc=javacomplete#Complete
+    autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
+    autocmd BufWrite *.java call AJavaImports()
+  augroup END
+'''
 
 [[plugins]]
 repo = 'vim-jp/vim-java'
 
-#[[plugins]]
-#repo = 'thinca/vim-quickrun'
+# [[plugins]]
+# repo = 'thinca/vim-quickrun'
+# hook_add = '''
+#     let g:quickrun_config = get(g:, 'quickrun_config', {})
+#     let g:quickrun_config._ = {
+#           \ 'runner'    : 'vimproc',
+#           \ 'runner/vimproc/updatetime' : 60,
+#           \ 'outputter' : 'error',
+#           \ 'outputter/error/success' : 'buffer',
+#           \ 'outputter/error/error'   : 'quickfix',
+#           \ 'outputter/buffer/split'  : ':rightbelow 8sp',
+#           \ 'outputter/buffer/close_on_empty' : 1,
+#           \ }
+# '''
 
 #[[plugins]]
 #repo = 'mikelue/vim-maven-plugin'
@@ -178,6 +196,16 @@ repo = 'vim-jp/vim-java'
 # TypeScript
 [[plugins]]
 repo = 'Quramy/tsuquyomi'
+hook_add = '''
+    let g:tsuquyomi_completion_detail = 1
+    let g:tsuquyomi_disable_quickfix = 1
+    let g:tsuquyomi_completion_preview = 1
+    let g:syntastic_typescript_checkers = ['tsuquyomi']
+
+    autocmd! FileType typescript setlocal balloonexpr=tsuquyomi#balloonexpr()
+    autocmd! FileType typescript nnoremap <C-k> :TsuSignatureHelp<CR>
+
+'''
 
 [[plugins]]
 repo = 'tpope/vim-surround'
@@ -190,6 +218,7 @@ repo = 'Shougo/NeoSnippet'
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
+depends = ['NeoSnippet']
 
 [[plugins]]
 repo = 'prabirshrestha/async.vim'
@@ -200,6 +229,11 @@ repo = 'prabirshrestha/vim-lsp'
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 depends = ['nvim-yarp', 'vim-hug-neovim-rpc']
+hook_add = '''
+  let g:python3_host_prog = "C:/Python35/python.exe"
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#complete_method = "omnifunc"
+'''
 
 [[plugins]]
 repo = 'roxma/nvim-yarp'
@@ -212,3 +246,55 @@ repo = 'cespare/vim-toml'
 
 [[plugins]]
 repo = 'tmsanrinsha/SyntaxRange'
+
+# ==================================================
+# Colorscheme
+# ==================================================
+
+[[plugins]]
+repo = 'freeo/vim-kalisi'
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+
+[[plugins]]
+repo = 'vim-scripts/rdark'
+
+[[plugins]]
+repo = 'jonathanfilip/vim-lucius'
+
+[[plugins]]
+repo = 'vim-scripts/twilight'
+
+[[plugins]]
+repo = 'sjl/badwolf'
+
+[[plugins]]
+repo = 'nightsense/carbonized'
+
+[[plugins]]
+repo = 'Zabanaa/neuromancer.vim'
+
+[[plugins]]
+repo = 'hzchirs/vim-material'
+
+[[plugins]]
+repo = 'vim-scripts/mayansmoke'
+
+[[plugins]]
+repo = 'bluz71/vim-moonfly-colors'
+
+[[plugins]]
+repo = 'cnj4/horseradish256'
+
+[[plugins]]
+repo = 'therubymug/vim-pyte'
+
+[[plugins]]
+repo = 'nanotech/jellybeans.vim'
+
+[[plugins]]
+repo = 'nightsense/simplifysimplify'
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'

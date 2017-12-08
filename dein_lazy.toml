@@ -1,6 +1,31 @@
 [[plugins]]
 repo = 'osyo-manga/vim-marching'
 on_ft = 'cpp'
+hook_source = '''
+  let g:marching_clang_command = "C:/msys64/mingw64/bin/clang++.exe"
+  
+  let g:marching#clang_command#options = {
+    \ "cpp": "-std=gnu++1y"
+  \ }
+  
+  "let g:marching_clang_command_option="-IC:/Users/SHINSUKE/Programming/Libraries/C++/oxygine-framework-with-sdl/oxygine-framework/oxygine/src"
+  
+  
+  let g:marching_include_paths = [
+    \ "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
+    \ "C:/Users/SHINSUKE/Programming/Libraries/C++/oxygine-framework-with-sdl/oxygine-framework/oxygine/src",
+    \ "C:/Users/SHINSUKE/Programming/Libraries/C++/oxygine-framework-with-sdl/SDL/include"
+  \ ]
+  
+  "let g:neocomplete#force_omni_input_patterns.cpp =
+  "      \ '[^.[:digit:] *\t]\%(\.\|->\))\w*\|\h\w*::\w*'
+  
+  let g:marching#default_config = {
+    \ "ignore_pat": '^_\D'
+  \ }
+  
+  let g:marching_backend = "sync_clang_command"
+'''
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
@@ -10,6 +35,55 @@ on_ft = 'typescript'
 [[plugins]]
 repo = 'OmniSharp/omnisharp-vim'
 on_ft = 'cs'
+hook_source = '''
+  let g:Omnisharp_server_type = 'roslyn'
+  let g:OmniSharp_host = "http://localhost:2000"
+
+  augroup omnisharp_commands
+    autocmd!
+  
+    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+  
+    autocmd FileType cs nnoremap <C-b> :wa!<CR>:OmniSharpBuild<CR>
+  
+    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+  
+    "The following commands are contextual, based on the current cursor position.
+  
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+    "finds members in the current buffer
+    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
+    " cursor can be anywhere on the line containing an issue
+    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
+    autocmd FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
+    autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
+    autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
+    "navigate up by method/property/field
+    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
+  augroup END
+  
+  " Contextual code actions (requires CtrlP or unite.vim)
+  nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+  " Run code actions with text selected in visual mode to extract method
+  vnoremap <leader><space> :call OmniSharp#GetCodeActions('visual')<cr>
+  
+  " Force OmniSharp to reload the solution. Useful when switching branches etc.
+  nnoremap <leader>rl :OmniSharpReloadSolution<cr>
+  nnoremap <leader>cf :OmniSharpCodeFormat<cr>
+  " Load the current .cs file to the nearest project
+  nnoremap <leader>tp :OmniSharpAddToProject<cr>
+  
+  " (Experimental - uses vim-dispatch or vimproc plugin) - Start the omnisharp server for the current solution
+  nnoremap <leader>ss :OmniSharpStartServer<cr>
+  nnoremap <leader>sp :OmniSharpStopServer<cr>
+  
+  command! -nargs=1 Ehe !<f-args>\bin\debug\<f-args>.exe
+'''
 
 # Nim
 [[plugins]]
@@ -20,23 +94,68 @@ on_ft = 'nim'
 [[plugins]]
 repo = 'rust-lang/rust.vim'
 on_ft = 'rust'
+hook_source = '''
+  "Auto Format
+    let g:rustfmt_autosave = 1
+    let g:rustfmt_command = '$HOME/.cargo/bin/rustfmt'
+'''
 
 [[plugins]]
 repo = 'sebastianmarkow/deoplete-rust'
 on_ft = 'rust'
 depends = ['deoplete.nvim']
-
-# [[plugins]]
-# repo = 'racer-rust/vim-racer'
-# on_ft = 'rust'
+hook_source = '''
+  augroup MyVimrc
+    autocmd!
+  augroup END
+  
+  let g:deoplete#sources#rust#racer_binary='C:/Users/SHINSUKE/.cargo/bin/racer.exe'
+  let g:deoplete#sources#rust#rust_source_path='C:\Users\SHINSUKE\.rustup\toolchains\nightly-x86_64-pc-windows-msvc/lib/rustlib/src/rust/src'
+  let g:deoplete#sources#rust#show_duplicates = 1
+  let g:deoplete#sources#rust#disable_keymap = 1
+  nmap <buffer> gd <plug>DeopleteRustGoToDefinitionDefault
+  nmap <buffer> K  <plug>DeopleteRustShowDocumentation
+'''
 
 # Python
 [[plugins]]
 repo = 'davidhalter/jedi-vim'
 on_ft = 'python'
+hook_source = '''
+  autocmd FileType python setlocal completeopt-=preview
+'''
 
 # Kotlin
 [[plugins]]
 repo = 'udalov/kotlin-vim'
 on_ft = 'kotlin'
 
+# Go
+[[plugins]]
+repo = 'fatih/vim-go'
+hook_add = '''
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_structs = 1
+  let g:go_highlight_interfaces = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_build_constraints = 1
+
+  augroup Golang
+    autocmd!
+    autocmd FileType go :highlight goErr cterm=bold ctermfg=214 gui=bold guifg=#eddd33
+    autocmd FileType go :match goErr /\<err\>/
+    autocmd FileType go nnoremap <C-m> :GoTestFunc<CR>
+  augroup END
+
+  let g:go_list_type = "quick_fix"
+'''
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+build = "make"
+on_ft = "go"
+depends = ['deoplete.nvim']
+hook_source = '''
+  let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode.exe'
+'''
