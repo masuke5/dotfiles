@@ -1,3 +1,5 @@
+set secure
+
 " Encode
 set encoding=UTF-8
 set fileencoding=UTF-8
@@ -28,10 +30,10 @@ set shiftwidth=4
 set tabstop=4
 set expandtab
 set softtabstop=4
-set clipboard=unnamed
 set mouse=a
 set textwidth=0
 set formatoptions=q
+set belloff=all
 
 " View
 set laststatus=2
@@ -41,6 +43,7 @@ if !has('nvim')
 endif
 
 " Indent
+set breakindent
 augroup fileTypeIndent
   autocmd!
   autocmd BufNewFile,BufRead *.jezcon setlocal tabstop=2 softtabstop=2 shiftwidth=2
@@ -56,14 +59,19 @@ augroup END
 noremap <C-j> <esc>
 noremap! <C-j> <esc>
 inoremap <esc> <esc>:set iminsert=0<Cr>
-map <C-n> :NERDTreeToggle<CR>
-vnoremap <silent> <C-p> "0p<CR>
-map <C-h> <esc>:NERDTreeFocus<CR>
-noremap <C-s> <esc>:set nohlsearch<CR>
+nnoremap <C-s> :cd %:h<CR>
+nnoremap <silent> <C-y> "*y
+nnoremap <silent> <C-p> "*p
 
 " Fazim
 " inoremap <silent> <C-m> <esc>a<C-r>=strftime("%Y%m%d%H%M%S")<Cr><space>--<space>
 " inoremap <C-i> <space>::<space>
+
+" leader
+noremap <leader> <nop>
+noremap <LocalLeader> <nop>
+let g:mapleader = "\<Space>"
+let g:mamplocalleader = '\'
 
 " Brackets completion
 "inoremap { {}<Left>
@@ -81,6 +89,8 @@ command! DeinLazyToml e ~/.vim/rc/dein_lazy.toml
 command! Gd GoDef
 command! Now <esc>a<C-r>=strftime("%Y-%m-%dT%H:%M:%S+09:00")<CR><ESC>
 
+command! VimShowHlGroup echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+
 " Syntax
 syntax on
 set autoindent
@@ -89,12 +99,12 @@ set number
 set cursorline
 
 " Auto close html/xml tags
-augroup AutoCloseHtmlXMLTags
-  autocmd!
-  autocmd Filetype xml        inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype html       inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype eruby      inoremap <buffer> </ </<C-x><C-o>
-augroup END
+" augroup AutoCloseHtmlXMLTags
+"   autocmd!
+"   autocmd Filetype xml        inoremap <buffer> </ </<C-x><C-o>
+"   autocmd Filetype html       inoremap <buffer> </ </<C-x><C-o>
+"   autocmd Filetype eruby      inoremap <buffer> </ </<C-x><C-o>
+" augroup END
 
 " Japanese Documents
 set runtimepath+=~/.vim/doc-ja
@@ -122,8 +132,10 @@ augroup RunScript
   autocmd FileType ruby nnoremap <C-e> :!ruby %<CR>
   autocmd FileType python nnoremap <C-e> :!python %<CR>
   autocmd FileType perl nnoremap <C-e> :!perl %<CR>
-  autocmd FileType go nnoremap <C-e> :!go run %<CR>
+  autocmd FileType go nnoremap <C-e> :!go run main.go<CR>
   autocmd FileType scheme nnoremap <C-e> :!gosh %<CR>
+  autocmd FileType rust nnoremap <C-e> :!cargo run<CR>
+  autocmd FileType vim nnoremap <C-e> :source %<CR>
 augroup END
 
 " Format JSON
@@ -137,17 +149,25 @@ function! s:Jq(...)
     execute "%! jq \"" . l:arg . "\""
 endfunction
 
-" {{{ dein
 filetype plugin on
 
 if &compatible
   set nocompatible
 endif
 
-set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+" {{{ dein
+let s:dein_dir = expand('~/.vim/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-if dein#load_state(expand('~/.vim/dein'))
-  call dein#begin(expand('~/.vim/dein'))
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+endif
+
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
   let g:rc_dir = expand('~/.vim/rc')
   let s:toml = g:rc_dir . '/dein.toml'
@@ -185,6 +205,26 @@ function! s:syntax_range_dein() abort
   call SyntaxRange#Include(printf(start, '"""'), '"""', 'vim', '')
 endfunction
 
+" Reload
+" <F10> で編集中の Vim script をソース
+if !exists('*s:source_script')
+  " ~/.vimrc をソースすると関数実行中に関数の上書きを行うことになりエラーとなるため
+  " 'function!' による強制上書きではなく if によるガードを行っている
+  function s:source_script(path) abort
+    let path = expand(a:path)
+    if !filereadable(path)
+      return
+    endif
+    execute 'source' fnameescape(path)
+    echomsg printf(
+          \ '"%s" has sourced (%s)',
+          \ simplify(fnamemodify(path, ':~:.')),
+          \ strftime('%c'),
+          \)
+  endfunction
+endif
+nnoremap <silent> <F10> :<C-u>call <SID>source_script('%')<CR>
+
 " Python dll
 if !has('nvim')
   set pythondll=C:/Windows/System32/python27.dll
@@ -194,3 +234,41 @@ endif
 " TypeScript
 syntax match tsReference /\/\/\/\s*\<reference\s*path\=.*\s*\/\>/
 highlight link tsReference Label
+
+set hidden
+  let g:lightline = {
+    \ 'tabline': {
+      \   'left': [ [ 'bufferinfo' ],
+      \             [ 'separator' ],
+      \             [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
+      \   'right': [ [ 'close' ], ],
+      \ },
+    \ 'component_expand': {
+      \   'buffercurrent': 'lightline#buffer#buffercurrent',
+      \   'bufferbefore': 'lightline#buffer#bufferbefore',
+      \   'bufferafter': 'lightline#buffer#bufferafter',
+      \ },
+    \ 'component_type': {
+      \   'buffercurrent': 'tabsel',
+      \   'bufferbefore': 'raw',
+      \   'bufferafter': 'raw',
+      \ },
+    \ 'component_function': {
+      \   'bufferinfo': 'lightline#buffer#bufferinfo',
+      \ },
+    \ 'component': {
+      \   'separator': '',
+      \ },
+  \ }
+
+  " lightline-buffer function settings
+  let g:lightline_buffer_show_bufnr = 1
+  let g:lightline_buffer_rotate = 0
+  let g:lightline_buffer_fname_mod = ':t'
+  let g:lightline_buffer_excludes = ['vimfiler']
+
+  let g:lightline_buffer_maxflen = 30
+  let g:lightline_buffer_maxfextlen = 3
+  let g:lightline_buffer_minflen = 16
+  let g:lightline_buffer_minfextlen = 3
+  let g:lightline_buffer_reservelen = 20

@@ -8,35 +8,47 @@ hook_source = '''
     \ "cpp": "-std=gnu++1y"
   \ }
   
-  "let g:marching_clang_command_option="-IC:/Users/SHINSUKE/Programming/Libraries/C++/oxygine-framework-with-sdl/oxygine-framework/oxygine/src"
-  
-  
   let g:marching_include_paths = [
-    \ "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
-    \ "C:/Users/SHINSUKE/Programming/Libraries/C++/oxygine-framework-with-sdl/oxygine-framework/oxygine/src",
-    \ "C:/Users/SHINSUKE/Programming/Libraries/C++/oxygine-framework-with-sdl/SDL/include"
+    \ "C:\mingw64\lib\gcc\x86_64-w64-mingw32\6.3.0\include\c++",
   \ ]
-  
+
+  "let g:marching_enable_neocomplete = 1
+
+  "if !exists('g:neocomplete#force_omni_input_patterns')
+  "  let g:neocomplete#force_omni_input_patterns = {}
+  "endif
+
   "let g:neocomplete#force_omni_input_patterns.cpp =
-  "      \ '[^.[:digit:] *\t]\%(\.\|->\))\w*\|\h\w*::\w*'
+  "  \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+  " オムニ補完時に補完ワードを挿入したくない場合
+  imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+
+  " キャッシュを削除してからオムに補完を行う
+  imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
   
   let g:marching#default_config = {
     \ "ignore_pat": '^_\D'
   \ }
   
-  let g:marching_backend = "sync_clang_command"
+  "let g:marching_backend = "sync_clang_command"
 '''
 
+# TypeScript
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
 on_ft = 'typescript'
+
+# [[plugins]]
+# repo = 'mhartington/nvim-typescript'
+# on_ft = 'typescript'
 
 # C#
 [[plugins]]
 repo = 'OmniSharp/omnisharp-vim'
 on_ft = 'cs'
 hook_source = '''
-  let g:Omnisharp_server_type = 'roslyn'
+  let g:Omnisharp_server_type = 'v1'
   let g:OmniSharp_host = "http://localhost:2000"
 
   augroup omnisharp_commands
@@ -108,7 +120,7 @@ hook_source = '''
   augroup MyVimrc
     autocmd!
   augroup END
-  
+
   let g:deoplete#sources#rust#racer_binary='C:/Users/SHINSUKE/.cargo/bin/racer.exe'
   let g:deoplete#sources#rust#rust_source_path='C:\Users\SHINSUKE\.rustup\toolchains\nightly-x86_64-pc-windows-msvc/lib/rustlib/src/rust/src'
   let g:deoplete#sources#rust#show_duplicates = 1

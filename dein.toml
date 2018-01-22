@@ -11,29 +11,100 @@ hook_add = '''
   let g:SuperTabContextDefaultCompletionType = "<c-n>"
 '''
 
-[[plugins]]
-repo = 'scrooloose/syntastic'
-hook_add = '''
-  let g:syntastic_ruby_checkers = ['rubocop']
-  let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
-  let g:syntastic_rust_checkers = ['rustc']
-  let g:syntastic_cs_checkers = ['code_checker']
-  let g:syntastic_python_checkers = ['flake8']
+# [[plugins]]
+# repo = 'scrooloose/syntastic'
+# hook_add = '''
+#   let g:syntastic_ruby_checkers = ['rubocop']
+#   let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
+#   let g:syntastic_rust_checkers = ['rustc']
+#   let g:syntastic_cs_checkers = ['code_checker']
+#   let g:syntastic_python_checkers = ['flake8']
+#
+#   " let g:syntastic_typescript_checkers = ['tsc', 'tslint']
+#   " let g:syntastic_typescript_tsc_fname = ''
+#
+#   let g:syntastic_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
+#   let g:syntastic_java_javac_delete_option = 0
+#
+#   " Disable
+#   let g:syntastic_cpp_checkers = ['']
+# '''
 
-  let g:syntastic_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
-  let g:syntastic_java_javac_delete_option = 0
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+  let g:ale_linters = {
+    \ 'cpp': ['clang', 'cppcheck'],
+    \ 'go': ['go vet', 'golint', 'go build'],
+    \ 'javascript': ['eslint', 'flow'],
+    \ 'typescript': ['tsserver', 'tslint'],
+    \ 'python': ['flake8'],
+    \ 'rust': ['rustc']
+  \ }
+
+  let g:ale_fixers = {
+    \ 'javascript': ['eslint']
+    \ }
+
+  let g:ale_completion_enabled = 1
+
+  function! s:lint_on_save()
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_text_changed = 'never'
+    let g:ale_lint_on_enter = 0
+  endfunction
+
+  autocmd! FileType javascript call s:lint_on_save()
 '''
+
+# [[plugins]]
+# repo = 'autozimu/LanguageClient-neovim'
+# hook_add = '''
+#   set hidden
+#
+#   let g:LanguageClient_serverCommands = {
+#       \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+#       \ }
+#
+#   nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+#   nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+#   nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+# '''
 
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
 
+# [[plugins]]
+# repo = 'vim-airline/vim-airline'
+# hook_add = '''
+#   let g:airline#extensions#tabline#enabled = 1
+#   let g:airline#extensions#tabline#buffer_nr_show = 1
+#   let g:airline#extensions#whitespace#mixed_indent_algo = 1
+#   "let g:airline_powerline_fonts = 1
+# '''
+
 [[plugins]]
-repo = 'vim-airline/vim-airline'
+repo = 'delphinus/lightline-delphinus'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
 hook_add = '''
-  let g:airline#extensions#tabline#enabled = 1
-  let g:airline#extensions#tabline#buffer_nr_show = 1
-  let g:airline#extensions#whitespace#mixed_indent_algo = 1
-  "let g:airline_powerline_fonts = 1
+  let g:lightline = { 'colorscheme': 'solarized' }
+
+  augroup LightLineOnALE
+    autocmd!
+    autocmd User ALELint call lightline#update()
+  augroup END
+'''
+
+[[plugins]]
+repo = 'maximbaz/lightline-ale'
+
+[[plugins]]
+repo = 'ap/vim-buftabline'
+hook_add = '''
+  let g:buftabline_numbers = 1
+  let g:buftabline_indicators = 1
 '''
 
 [[plugins]]
@@ -44,11 +115,17 @@ repo = 'tpope/vim-endwise'
 
 [[plugins]]
 repo = 'lambdalisue/gina.vim'
+hook_add = '''
+  nnoremap <leader>ss :<C-u>Gina status -s<CR>
+  nnoremap <leader>gc :<C-u>Gina commit<CR>
+  nnoremap <leader>ga :<C-u>Gina commit --amend<CR>
+  nnoremap <leader>gl :<C-u>Gina log<CR>
+'''
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'
+repo = 'cocopon/vaffle.vim'
 hook_add = '''
-    let NERDTreeShowHidden = 1
+  nmap <C-n> :Vaffle<CR>
 '''
 
 [[plugins]]
@@ -97,6 +174,9 @@ repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
+hook_add = '''
+  let g:vimproc#download_windows_dll = 1
+'''
 hook_post_update = '''
   if dein#util#_is_windows()
     let cmd = 'tools\\update-dll-mingw'
@@ -193,19 +273,18 @@ repo = 'vim-jp/vim-java'
 #[[plugins]]
 #repo = 'hackhowtofaq/vim-solargraph'
 
-# TypeScript
-[[plugins]]
-repo = 'Quramy/tsuquyomi'
-hook_add = '''
-    let g:tsuquyomi_completion_detail = 1
-    let g:tsuquyomi_disable_quickfix = 1
-    let g:tsuquyomi_completion_preview = 1
-    let g:syntastic_typescript_checkers = ['tsuquyomi']
-
-    autocmd! FileType typescript setlocal balloonexpr=tsuquyomi#balloonexpr()
-    autocmd! FileType typescript nnoremap <C-k> :TsuSignatureHelp<CR>
-
-'''
+#TypeScript
+# [[plugins]]
+# repo = 'Quramy/tsuquyomi'
+# hook_add = '''
+#     let g:tsuquyomi_completion_detail = 1
+#     let g:tsuquyomi_disable_quickfix = 1
+#     let g:tsuquyomi_completion_preview = 1
+#     let g:syntastic_typescript_checkers = ['tsuquyomi']
+#
+#     autocmd! FileType typescript setlocal balloonexpr=tsuquyomi#balloonexpr()
+#     autocmd! FileType typescript nnoremap <C-k> :TsuSignatureHelp<CR>
+# '''
 
 [[plugins]]
 repo = 'tpope/vim-surround'
@@ -232,7 +311,10 @@ depends = ['nvim-yarp', 'vim-hug-neovim-rpc']
 hook_add = '''
   let g:python3_host_prog = "C:/Python35/python.exe"
   let g:deoplete#enable_at_startup = 1
-  let g:deoplete#complete_method = "omnifunc"
+  let g:enable_smart_case = 1
+  let g:deoplete#disable_auto_complete = 1
+
+  inoremap <expr> <C-x><C-o> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 '''
 
 [[plugins]]
@@ -246,6 +328,30 @@ repo = 'cespare/vim-toml'
 
 [[plugins]]
 repo = 'tmsanrinsha/SyntaxRange'
+
+[[plugins]]
+repo = 'ryym/vim-riot'
+
+[[plugins]]
+repo = 'posva/vim-vue'
+
+[[plugins]]
+repo = 'dbmrq/vim-redacted'
+
+[[plugins]]
+repo = 'othree/yajs.vim'
+
+[[plugins]]
+repo = 'mxw/vim-jsx'
+
+[[plugins]]
+repo = 'severin-lemaignan/vim-minimap'
+hook_add = '''
+  let g:minimap_highlight = 'Visual'
+'''
+
+[[plugins]]
+repo = "PProvost/vim-ps1"
 
 # ==================================================
 # Colorscheme
