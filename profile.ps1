@@ -5,11 +5,11 @@ function mpd { cd "~\Documents\Projects" }
 function vi { vim --noplugin $args }
 
 function prompt {
-    $idx = $pwd.ProviderPath.LastIndexOf("\") + 1
-    $cdn = $pwd.ProviderPath.Remove(0, $idx)
+    $datetime = Get-Date -Format "HH:mm:ss"
 
+    Write-Host $datetime -NoNewLine -ForegroundColor Green
+    Write-Host " " -NoNewLine
     Write-Host $pwd -NoNewLine -ForegroundColor Magenta
-    Write-Host ""-NoNewLine
 
     # git-posh
     Write-VcsStatus
