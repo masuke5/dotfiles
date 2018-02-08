@@ -145,7 +145,8 @@ on_ft = 'kotlin'
 # Go
 [[plugins]]
 repo = 'fatih/vim-go'
-hook_add = '''
+on_ft = "go"
+hook_source = '''
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   let g:go_highlight_structs = 1
@@ -171,3 +172,10 @@ depends = ['deoplete.nvim']
 hook_source = '''
   let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode.exe'
 '''
+
+# [[plugins]]
+# repo = 'kovisoft/slimv'
+# on_ft = 'lisp'
+# hook_source = '''
+#   let g:slimv_swank_cmd = '!start "C:/Program Files/Steel Bank Common Lisp/1.4.2/sbcl.exe" --load "C:/Users/SHINSUKE/.vim/dein/repo/github.com/kovisoft/slimv/slime/start-swank.lisp"'
+# '''

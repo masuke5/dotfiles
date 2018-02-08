@@ -1,4 +1,34 @@
 [[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+  let g:ale_linters = {
+    \ 'c': ['clang'],
+    \ 'cpp': ['clang', 'cppcheck'],
+    \ 'go': ['go vet', 'golint', 'go build'],
+    \ 'javascript': ['eslint', 'flow'],
+    \ 'typescript': ['tsserver', 'tslint'],
+    \ 'python': ['flake8'],
+    \ 'rust': ['rustc']
+  \ }
+
+  let g:ale_fixers = {
+    \ 'javascript': ['eslint']
+    \ }
+
+  let g:ale_completion_enabled = 1
+
+  let g:ale_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
+
+  function! s:lint_on_save()
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_text_changed = 'never'
+    let g:ale_lint_on_enter = 0
+  endfunction
+
+  autocmd! FileType javascript call s:lint_on_save()
+'''
+
+[[plugins]]
 repo = 'Shougo/dein.vim'
 
 # [[plugins]]
@@ -29,33 +59,6 @@ hook_add = '''
 #   " Disable
 #   let g:syntastic_cpp_checkers = ['']
 # '''
-
-[[plugins]]
-repo = 'w0rp/ale'
-hook_add = '''
-  let g:ale_linters = {
-    \ 'cpp': ['clang', 'cppcheck'],
-    \ 'go': ['go vet', 'golint', 'go build'],
-    \ 'javascript': ['eslint', 'flow'],
-    \ 'typescript': ['tsserver', 'tslint'],
-    \ 'python': ['flake8'],
-    \ 'rust': ['rustc']
-  \ }
-
-  let g:ale_fixers = {
-    \ 'javascript': ['eslint']
-    \ }
-
-  let g:ale_completion_enabled = 1
-
-  function! s:lint_on_save()
-    let g:ale_lint_on_save = 1
-    let g:ale_lint_on_text_changed = 'never'
-    let g:ale_lint_on_enter = 0
-  endfunction
-
-  autocmd! FileType javascript call s:lint_on_save()
-'''
 
 # [[plugins]]
 # repo = 'autozimu/LanguageClient-neovim'
@@ -215,7 +218,7 @@ hook_add = '''
 repo = 'vim-scripts/Highlight-UnMatched-Brackets'
 
 [[plugins]]
-repo = 'https://gitlab.com/zerogoichi/Fazima.git'
+repo = 'https://gitlab.com/sgkmi/Fazima.git'
 hook_add = '''
   let g:fazima#enable = 0
 '''
@@ -247,6 +250,16 @@ hook_add = '''
     autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
     autocmd BufWrite *.java call AJavaImports()
   augroup END
+'''
+hook_post_update = '''
+  iunmap <C-j>I  
+  iunmap <C-j>R  
+  iunmap <C-j>i  
+  iunmap <C-j>ii 
+  iunmap <C-j>jM 
+  iunmap <C-j>s  
+  iunmap <C-j>g  
+  iunmap <C-j>a  
 '''
 
 [[plugins]]
@@ -352,6 +365,9 @@ hook_add = '''
 
 [[plugins]]
 repo = "PProvost/vim-ps1"
+
+[[plugins]]
+repo = 'ElmCast/elm-vim'
 
 # ==================================================
 # Colorscheme
