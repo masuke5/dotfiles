@@ -56,11 +56,10 @@ augroup fileTypeIndent
 augroup END
 
 " ShortcutKey
-noremap <C-j> <esc>
-noremap! <C-j> <esc>
 inoremap <esc> <esc>:set iminsert=0<Cr>
 nnoremap <C-s> :cd %:h<CR>
-nnoremap <silent> <C-y> "*y
+nnoremap <C-j> "*y
+vnoremap <C-j> "*y
 nnoremap <silent> <C-p> "*p
 
 " Fazim
@@ -98,6 +97,15 @@ set backspace=indent,eol,start
 set number
 set cursorline
 
+if !has("gui_running")
+  hi CursorLine ctermbg=darkblue
+  augroup Terminal
+    autocmd!
+    autocmd InsertEnter * set cul
+    autocmd InsertLeave * set nocul
+  augroup END
+endif
+
 " Auto close html/xml tags
 " augroup AutoCloseHtmlXMLTags
 "   autocmd!
@@ -129,6 +137,7 @@ augroup END
 augroup RunScript
   autocmd!
 
+  nnoremap <C-e> :!build %<CR>
   autocmd FileType ruby nnoremap <C-e> :!ruby %<CR>
   autocmd FileType python nnoremap <C-e> :!python %<CR>
   autocmd FileType perl nnoremap <C-e> :!perl %<CR>
@@ -136,6 +145,7 @@ augroup RunScript
   autocmd FileType scheme nnoremap <C-e> :!gosh %<CR>
   autocmd FileType rust nnoremap <C-e> :!cargo run<CR>
   autocmd FileType vim nnoremap <C-e> :source %<CR>
+  autocmd FileType lisp nnoremap <C-e> :!sbcl --script %<CR>
 augroup END
 
 " Format JSON
