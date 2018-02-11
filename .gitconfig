@@ -1,5 +1,5 @@
 [user]
-	name = sgkmi
+	name = masuke5
 	email = s.zerogoichi@gmail.com
 [filter "hawser"]
 	clean = git hawser clean %f
