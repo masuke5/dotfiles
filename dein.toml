@@ -126,12 +126,6 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'cocopon/vaffle.vim'
-hook_add = '''
-  nmap <C-n> :Vaffle<CR>
-'''
-
-[[plugins]]
 repo = 'plasticboy/vim-markdown'
 hook_add = '''
     let g:vim_markdown_folding_disabled = 1
@@ -358,16 +352,15 @@ repo = 'othree/yajs.vim'
 repo = 'mxw/vim-jsx'
 
 [[plugins]]
-repo = 'severin-lemaignan/vim-minimap'
-hook_add = '''
-  let g:minimap_highlight = 'Visual'
-'''
-
-[[plugins]]
 repo = "PProvost/vim-ps1"
 
 [[plugins]]
-repo = 'ElmCast/elm-vim'
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+  nnoremap <C-n> :NERDTreeToggle<CR>
+  nnoremap <C-h> :NERDTreeFocus<CR>
+'''
+
 
 # ==================================================
 # Colorscheme

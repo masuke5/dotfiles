@@ -1,0 +1,7 @@
+[[plugins]]
+repo = "neovim/node-host"
+build = "npm install"
+
+[[plugins]]
+repo = "billyvg/tigris.nvim"
+build = "./install.sh"
