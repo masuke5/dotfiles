@@ -1,4 +1,11 @@
-Remove-Item alias:mp -force
+function RemoveAliasIfExist ($name) {
+    # 最初はスクリプトのスコープのエイリアス、次にグローバルのエイリアスを削除する
+    while (Test-Path alias:$name) {
+        Remove-Item -Path alias:$name -Force
+    }
+}
+
+RemoveAliasIfExist "mp"
 
 function mp { cd "~\Programming\Projects" }
 function mpd { cd "~\Documents\Projects" }
@@ -9,10 +16,12 @@ function prompt {
 
     Write-Host $datetime -NoNewLine -ForegroundColor Green
     Write-Host " " -NoNewLine
-    Write-Host $pwd -NoNewLine -ForegroundColor Magenta
+
+    $newpwd = $pwd -replace [regex]::escape($env:USERPROFILE), "~"
+    Write-Host $newpwd -NoNewLine -ForegroundColor Yellow
 
     # git-posh
     Write-VcsStatus
 
-    return "> "
+    return "# "
 }
