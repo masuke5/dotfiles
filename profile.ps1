@@ -24,15 +24,21 @@ function prompt {
     if (Test-Path ".git") {
         Write-Host " [" -NoNewline -ForegroundColor Yellow
 
+        $gitstatus = git status --long
+
         $color = "DarkCyan"
         $info = ""
 
-        # 現在のブランチを取得
-        $currentBranch = git branch --color=never | where { $_ -match "^\*" } # 現在のブランチを取得
-        $currentBranch = [string]::Join("", $currentBranch) -replace "`n", "" # 文字列に変換
-        $currentBranch = ($currentBranch -replace "^\*", "").Trim() # アスタリスクを削除
+        $currentBranch = ""
+        if ($gitstatus[2] -match "No commits yet") {
+            $currentBranch = "no branch"
+        } else {
+            # 現在のブランチを取得
+            $currentBranch = git branch --color=never | where { $_ -match "^\*" } # 現在のブランチを取得
+            $currentBranch = [string]::Join("", $currentBranch) -replace "`n", "" # 文字列に変換
+            $currentBranch = ($currentBranch -replace "^\*", "").Trim() # アスタリスクを削除
+        }
 
-        $gitstatus = git status --long
         if ($gitstatus[1] -match "^Your branch is ahead of") {
             $color = "Green"
 

@@ -5,13 +5,14 @@ function Dotfile($path, $value) {
     if (Test-Path $path) {
         if ($Force) {
             Remove-Item $path
-            New-Item -ItemType SymbolicLink -Path $path -Value $value
+            New-Item -ItemType SymbolicLink -Path $path -Value $value > $null
             Write-Warning "Replaced $path"
         } else {
             Write-Output "$path exists already"
         }
     } else {
-        New-Item -ItemType SymbolicLink -Path $path -Value $value
+        New-Item -ItemType SymbolicLink -Path $path -Value $value > $null
+        Write-Output "Created $path"
     }
 }
 
