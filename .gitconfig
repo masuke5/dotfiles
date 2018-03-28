@@ -11,7 +11,7 @@
 	required = true
 	clean = git-lfs clean -- %f
 [core]
-	autocrlf = true
+	autoCRLF = false
 	excludesfile = C:\\Users\\SHINSUKE\\Documents\\gitignore_global.txt
 	editor = C:/Vim/Vim.exe
 	pager = less
