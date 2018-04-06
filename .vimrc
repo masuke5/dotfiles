@@ -14,6 +14,7 @@ set backupdir=$HOME/.vim/backup
 set browsedir=buffer
 set directory=$HOME/.vim/backup,/c/temp
 set history=1000
+set backup
 
 " Search
 set incsearch
@@ -95,7 +96,6 @@ syntax on
 set autoindent
 set backspace=indent,eol,start
 set number
-set cursorline
 
 if !has("gui_running")
   hi CursorLine ctermbg=darkblue

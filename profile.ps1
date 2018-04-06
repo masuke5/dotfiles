@@ -1,3 +1,7 @@
+function fclone {
+    C:\Program` Files\ConEmu\ConEmu64.exe /Single -cmd "powershell.exe -NoLogo -NoExit `"cd '${pwd}'`""
+}
+
 function RemoveAliasIfExist ($name) {
     # 最初はスクリプトのスコープのエイリアス、次にグローバルのエイリアスを削除する
     while (Test-Path alias:$name) {

@@ -9,7 +9,7 @@ set guioptions-=m " メニューバーを非表示
 
 set guioptions-=e
 
-set guicursor=n-v-sm:block,ci-ve:ver25,r-cr-o:hor20,i:hor10,c:hor15
+set guicursor=n-v-sm:block,ci-ve:ver25,r-cr-o:hor20,i:hor5,c:hor15
 
 command! ThinCursor :set guicursor=n-v-sm:block,ci-ve:ver25,r-cr-o:hor20,i:ver5,c:hor15
 command! MSGothic :set guifont=MS_Gothic:h12 | :set guifontwide=MS_Gothic:h12
@@ -18,14 +18,14 @@ command! MSGothic :set guifont=MS_Gothic:h12 | :set guifontwide=MS_Gothic:h12
 
 "set guifont=Terminus:h11
 "set guifontwide=Cica:h11
-set guifont=Hack:h10
+set guifont=Monaco:h10
 set guifontwide=Ricty_Diminished:h12
 "set guifontwide=Ricty_Diminished:h11
 
 set linespace=0
 
 set undodir=C:/Users/SHINSUKE/undofile
-colo carbonized-light
+colo masuc
 "set bg=dark
 
 hi Pmenu ctermbg=8 guibg=#606060

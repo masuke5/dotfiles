@@ -413,3 +413,6 @@ repo = 'nightsense/simplifysimplify'
 
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
+
+[[plugins]]
+repo = 'masuke5/masuc'
