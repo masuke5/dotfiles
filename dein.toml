@@ -8,7 +8,7 @@ hook_add = '''
     \ 'javascript': ['eslint', 'flow'],
     \ 'typescript': ['tsserver', 'tslint'],
     \ 'python': ['flake8'],
-    \ 'rust': ['rustc']
+    \ 'rust': ['rls']
   \ }
 
   let g:ale_fixers = {
@@ -18,6 +18,8 @@ hook_add = '''
   let g:ale_completion_enabled = 1
 
   let g:ale_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
+
+  let g:ale_rust_rls_toolchain = 'stable'
 
   function! s:lint_on_save()
     let g:ale_lint_on_save = 1
@@ -344,6 +346,12 @@ repo = 'posva/vim-vue'
 
 [[plugins]]
 repo = 'dbmrq/vim-redacted'
+
+[[plugins]]
+repo = 'hdima/python-syntax'
+hook_add = '''
+  let g:python_highlight_all = 1
+'''
 
 [[plugins]]
 repo = 'othree/yajs.vim'

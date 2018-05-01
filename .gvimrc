@@ -13,14 +13,19 @@ set guicursor=n-v-sm:block,ci-ve:ver25,r-cr-o:hor20,i:hor5,c:hor15
 
 command! ThinCursor :set guicursor=n-v-sm:block,ci-ve:ver25,r-cr-o:hor20,i:ver5,c:hor15
 command! MSGothic :set guifont=MS_Gothic:h12 | :set guifontwide=MS_Gothic:h12
+command! DefaultFont :set guifont& | :set guifontwide&
+command! Consolas :set guifont=Consolas:h11 | :set linespace=-1
 
 "set transparency=250
 
 "set guifont=Terminus:h11
 "set guifontwide=Cica:h11
-set guifont=Monaco:h10
-set guifontwide=Ricty_Diminished:h12
+set guifont=Myrica_M:h12
+set guifontwide=Migu_1M:h12
 "set guifontwide=Ricty_Diminished:h11
+
+" フォントを綺麗にする
+set renderoptions=type:directx,geom:1,renmode:5
 
 set linespace=0
 

@@ -1,5 +1,10 @@
 set secure
 
+if $VIM_CYGWIN
+  set shell=cmd
+  set shellcmdflag=/c
+endif
+
 " Encode
 set encoding=UTF-8
 set fileencoding=UTF-8
@@ -165,43 +170,45 @@ if &compatible
   set nocompatible
 endif
 
-" {{{ dein
-let s:dein_dir = expand('~/.vim/dein')
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if !$VIM_TERM_CYGWIN
+  " {{{ dein
+  let s:dein_dir = expand('~/.vim/dein')
+  let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-if &runtimepath !~# '/dein.vim'
-  if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-  endif
-  set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-endif
-
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-
-  let g:rc_dir = expand('~/.vim/rc')
-  let s:toml = g:rc_dir . '/dein.toml'
-  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
-
-  call dein#load_toml(s:toml, {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
-
-  if has('nvim') 
-    call dein#load_toml(g:rc_dir . '/dein_nvim.toml', {'lazy': 0})
+  if &runtimepath !~# '/dein.vim'
+    if !isdirectory(s:dein_repo_dir)
+      execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+    endif
+    set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
   endif
 
-  call dein#end()
-  call dein#save_state()
+  if dein#load_state(s:dein_dir)
+    call dein#begin(s:dein_dir)
+
+    let g:rc_dir = expand('~/.vim/rc')
+    let s:toml = g:rc_dir . '/dein.toml'
+    let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+
+    call dein#load_toml(s:toml, {'lazy': 0})
+    call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+    if has('nvim') 
+      call dein#load_toml(g:rc_dir . '/dein_nvim.toml', {'lazy': 0})
+    endif
+
+    call dein#end()
+    call dein#save_state()
+  endif
+
+  filetype plugin indent on
+  syntax enable
+
+  if dein#check_install()
+    call dein#install()
+  endif
+
+  " }}}
 endif
-
-filetype plugin indent on
-syntax enable
-
-if dein#check_install()
-  call dein#install()
-endif
-
-" }}}
 
 " dein.toml/dein_lazy.toml highlighting
 augroup MyVimrc
