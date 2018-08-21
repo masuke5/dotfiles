@@ -16,15 +16,9 @@ function Dotfile($path, $value) {
     }
 }
 
-Dotfile ~\.bash_profile             .bash_profile
-Dotfile ~\.bashrc                   .bashrc
-Dotfile ~\.gitconfig                .gitconfig
-Dotfile ~\.gvimrc                   .gvimrc
-Dotfile ~\.vimrc                    .vimrc
-Dotfile ~\.vrapperrc                .vrapperrc
-Dotfile ~\_vsvimrc                  _vsvimrc
-Dotfile ~\.vim\rc\dein.toml         dein.toml
-Dotfile ~\.vim\rc\dein_nvim.toml    dein_nvim.toml
-Dotfile ~\.vim\rc\dein_lazy.toml    dein_lazy.toml
-Dotfile ~\.vim\ginit.vim            ginit.vim
-Dotfile $profile                    profile.ps1
+Dotfile $env:HOME\.gitconfig .gitconfig
+Dotfile $env:HOME\.gvimrc .gvimrc
+Dotfile $env:HOME\.vimrc .vimrc
+Dotfile $env:LOCALAPPDATA\nvim\init.vim .vimrc
+Dotfile $env:LOCALAPPDATA\nvim\ginit.vim ginit.vim
+Dotfile $profile profile.ps1

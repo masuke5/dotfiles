@@ -1,62 +1,12 @@
-[user]
-	name = masuke5
-	email = s.zerogoichi@gmail.com
-[filter "hawser"]
-	clean = git hawser clean %f
-	smudge = git hawser smudge %f
-	required = true
-[filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-[core]
-	autoCRLF = false
-	excludesfile = C:\\Users\\SHINSUKE\\Documents\\gitignore_global.txt
-	editor = vim --noplugin
-	pager = less
-	trustctime = false
-	filemode = false
 [alias]
-    s = status
-    ss = status -s
-    co = checkout
-    tree = log --graph --date=short --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
-    windiff = difftool -y -d -t WinMerge
-    winmerge = mergetool -y -t WinMerge
-	ignore = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
-    l = log --date=format:\"%Y/%m/%d %H:%M:%S %z\"
-	last = log -1 --stat
-	st = status -sb
-	br = branch
-	unstage = reset HEAD --
-	dc = diff --cached
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative --all
-[diff]
-    tool = WinMerge
-    guitool = WinMerge
-[difftool "WinMerge"]
-    path = C:/Program Files/WinMerge/WinMergeU.exe
-    cmd = \"C:/Program Files/WinMerge/WinMergeU.exe\" -f \"*.*\" -e -u -r \"$LOCAL\" \"$REMOTE\"
-    trustExitCode = false
-[merge]
-    ff = false
-    tool = WinMerge
-[mergetool "WinMerge"]
-    path = C:/Program Files/WinMerge/WinMergeU.exe
-    cmd = \"C:/Program Files/WinMerge/WinMergeU.exe\" -e -u \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
-[pull]
-	ff = only
-[gui]
-	recentrepo = C:/Users/SHINSUKE/dev/console/naito
-[push]
-	default = matching
-[color]
-	ui = true
-[credential]
-	helper = cache --timeout=3600
-[mergetool]
-	keeptemporaries = false
-	keepbackups = false
-	prompt = false
-	trustexitcode = false
+	ss = status -s
+	s = status
+	sss = status -s
+	comit = commit
+	co = checkout
+	tree = log --graph --all --format='%x09%C(cyan bold)%an%Creset%x09%C(yellow)%h%Creset %C(magenta reverse)%d%Creset %s'
+[user]
+	email = s.zerogoichi@gmail.com
+	name = masuke5
+[core]
+	editor = nvim

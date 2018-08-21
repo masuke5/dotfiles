@@ -1,68 +1,18 @@
-function fclone {
-    C:\Program` Files\ConEmu\ConEmu64.exe /Single -cmd "powershell.exe -NoLogo -NoExit `"cd '${pwd}'`""
-}
+ï»¿$env:GIT_PAGER= "LESSCHARSET=utf-8 less"
+
+Import-Module posh-git
+$GitPromptSettings.DefaultPromptPrefix = '$(Get-Date -f "HH:mm:ss") '
+$GitPromptSettings.DefaultPromptPrefix.ForegroundColor = [ConsoleColor]::Green
+$GitPromptSettings.DefaultPromptPath.ForegroundColor = [ConsoleColor]::Yellow
+$GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
+
+Set-PSReadlineOption -BellStyle None
+
+Set-Alias -name python2 -value "C:\PL\Python27\python.exe"
 
 function RemoveAliasIfExist ($name) {
-    # Å‰‚ÍƒXƒNƒŠƒvƒg‚ÌƒXƒR[ƒv‚ÌƒGƒCƒŠƒAƒXAŸ‚ÉƒOƒ[ƒoƒ‹‚ÌƒGƒCƒŠƒAƒX‚ğíœ‚·‚é
+    # æœ€åˆã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ã‚¹ã‚³ãƒ¼ãƒ—ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã€æ¬¡ã«ã‚°ãƒ­ãƒ¼ãƒãƒ«ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’å‰Šé™¤ã™ã‚‹
     while (Test-Path alias:$name) {
         Remove-Item -Path alias:$name -Force
     }
-}
-
-RemoveAliasIfExist "mp"
-
-function mp { cd "~\Programming\Projects" }
-function mpd { cd "~\Documents\Projects" }
-function vi { vim --noplugin $args }
-
-function prompt {
-    $datetime = Get-Date -Format "HH:mm:ss"
-
-    Write-Host $datetime -NoNewLine -ForegroundColor Green
-    Write-Host " " -NoNewLine
-
-    $newpwd = $pwd -replace [regex]::escape($env:USERPROFILE), "~"
-    Write-Host $newpwd -NoNewLine -ForegroundColor Yellow
-
-    # git
-    if (Test-Path ".git") {
-        Write-Host " [" -NoNewline -ForegroundColor Yellow
-
-        $gitstatus = git status --long
-
-        $color = "DarkCyan"
-        $info = ""
-
-        $currentBranch = ""
-        if ($gitstatus[2] -match "No commits yet") {
-            $currentBranch = "no branch"
-        } else {
-            # Œ»İ‚Ìƒuƒ‰ƒ“ƒ`‚ğæ“¾
-            $currentBranch = git branch --color=never | where { $_ -match "^\*" } # Œ»İ‚Ìƒuƒ‰ƒ“ƒ`‚ğæ“¾
-            $currentBranch = [string]::Join("", $currentBranch) -replace "`n", "" # •¶š—ñ‚É•ÏŠ·
-            $currentBranch = ($currentBranch -replace "^\*", "").Trim() # ƒAƒXƒ^ƒŠƒXƒN‚ğíœ
-        }
-
-        if ($gitstatus[1] -match "^Your branch is ahead of") {
-            $color = "Green"
-
-            # ƒvƒbƒVƒ…‚µ‚Ä‚¢‚È‚¢ƒRƒ~ƒbƒg”‚ğæ“¾
-            $notPushedCommits = [regex]::match($gitstatus[1], "by (\d+) commits\.$").Groups[1].Value
-            $info += " ª$notPushedCommits"
-        }
-        if ($gitstatus[1] -match "have diverged\,$") {
-            $color = "Magenta"
-
-            $matches = [regex]::match($gitstatus[2], "(\d+) and (\d+) different commits")
-            $commits = $matches.Groups[1].Value
-            $differents = $matches.Groups[2].Value
-            $info += " «$commits ª$differents"
-        }
-
-        Write-Host "$currentBranch$info" -NoNewline -ForegroundColor $color
-
-        Write-Host "]" -NoNewline -ForegroundColor Yellow
-    }
-
-    return "# "
 }
