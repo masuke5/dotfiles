@@ -10,3 +10,5 @@
 	name = masuke5
 [core]
 	editor = nvim
+[credential]
+	helper = wincred
