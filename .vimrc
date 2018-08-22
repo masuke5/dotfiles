@@ -133,8 +133,12 @@ Plug 'zchee/deoplete-go'
 
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
+Plug 'flazz/vim-colorschemes'
 
 call plug#end()
+
+" Python3 executable
+let g:python3_host_prog = 'C:/Users/Shinsuke/Anaconda3/python.exe'
 
 " ALE
 let g:ale_linters = {
@@ -150,6 +154,8 @@ let g:ale_linters = {
 let g:ale_completion_enabled = 1
 " Japanese error message
 let g:ale_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
+let g:ale_rust_cargo_check_tests = 1
+
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
