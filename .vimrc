@@ -139,6 +139,8 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': '!powershell ./install.ps1',
     \ }
 
+Plug 'leafgarland/typescript-vim'
+
 call plug#end()
 
 " Python3 executable
