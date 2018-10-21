@@ -12,6 +12,7 @@ set ambiwidth=double
 
 " File
 set autoread
+set fileformat=unix
 
 " Backup
 set backupdir=$HOME/.vim/backup
@@ -38,7 +39,6 @@ set autoindent
 set backspace=indent,eol,start
 
 " View
-colorscheme murphy
 set number
 set laststatus=2  " show status bar
 set splitbelow
@@ -67,6 +67,9 @@ augroup FileTypeIndnet
   autocmd FileType toml call s:set_tabwidth(2)
   autocmd FileType json call s:set_tabwidth(2)
   autocmd FileType yaml call s:set_tabwidth(2)
+  autocmd FileType vue call s:set_tabwidth(2)
+  autocmd FileType javascript call s:set_tabwidth(2)
+  autocmd FileType typescript call s:set_tabwidth(2)
 augroup END
 
 " Leader
@@ -81,6 +84,8 @@ nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 " Paste from clipboard
 nnoremap <leader>p "+p 
+" Execute current line
+nnoremap <leader>ve :exec getline('.')<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -140,6 +145,10 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 
 Plug 'leafgarland/typescript-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'wakatime/vim-wakatime'
 
 call plug#end()
 
@@ -154,10 +163,10 @@ let g:ale_linters = {
   \ 'javascript': ['eslint', 'flow'],
   \ 'typescript': ['tsserver', 'tslint'],
   \ 'python': ['flake8'],
-  \ 'rust': []
+  \ 'rust': [],
+  \ 'vue': ['vls'],
 \ }
 
-let g:ale_completion_enabled = 1
 " Japanese error message
 let g:ale_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
 "let g:ale_rust_cargo_check_tests = 1
@@ -188,3 +197,8 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
 nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+" tanishi
+nnoremap <leader>t o<ESC>i<C-R>=strftime("created %Y/%m/%d %H:%M")<CR><CR>
+
+colorscheme koehler

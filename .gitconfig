@@ -9,6 +9,7 @@
 	email = s.zerogoichi@gmail.com
 	name = masuke5
 [core]
-	editor = nvim
+	editor = vim --noplugin
+	autoCRLF = false
 [credential]
 	helper = wincred
