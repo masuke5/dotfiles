@@ -13,3 +13,5 @@
 	autoCRLF = false
 [credential]
 	helper = wincred
+[gui]
+	recentrepo = C:/Users/Shinsuke/dev/backend/krat

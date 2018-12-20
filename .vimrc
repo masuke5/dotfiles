@@ -17,9 +17,9 @@ set fileformat=unix
 " Backup
 set backupdir=$HOME/.vim/backup
 set browsedir=buffer
-set directory=$HOME/.vim/backup,/c/temp
+set directory=$HOME/.vim/backup
 set history=1000
-set undodir=$HOME/undofile
+set undodir=$HOME/.vim/undofile
 set backup
 
 " Search
@@ -34,17 +34,18 @@ set gdefault
 set expandtab
 set textwidth=0
 set formatoptions=q
-set belloff=all  " disable all bell
+set belloff=all
 set autoindent
 set backspace=indent,eol,start
 
 " View
 set number
-set laststatus=2  " show status bar
+set laststatus=2
 set splitbelow
 if !has('nvim')
-  set ballooneval  " Enable balloon
+  set ballooneval
 endif
+set noshowmode  " echodoc.vim
 
 " Indent
 set breakindent
@@ -55,12 +56,12 @@ function! s:set_tabwidth(width) abort
   let &softtabstop = a:width
 endfunction
 
-" Default tab width
+" デフォルトのタブ幅
 call s:set_tabwidth(4)
 
+" ファイルの種類に応じてタブ幅を変える
 augroup FileTypeIndnet
   autocmd!
-
   autocmd FileType vim call s:set_tabwidth(2)
   autocmd FileType ruby call s:set_tabwidth(2)
   autocmd FileType nim call s:set_tabwidth(2)
@@ -70,6 +71,13 @@ augroup FileTypeIndnet
   autocmd FileType vue call s:set_tabwidth(2)
   autocmd FileType javascript call s:set_tabwidth(2)
   autocmd FileType typescript call s:set_tabwidth(2)
+  autocmd FileType html call s:set_tabwidth(2)
+  autocmd FileType pug call s:set_tabwidth(2)
+augroup END
+
+augroup ExtensionFileType
+  autocmd!
+  autocmd BufNewFile,BufRead *.ejs set ft=html
 augroup END
 
 " Leader
@@ -79,30 +87,25 @@ let g:mapleader = "\<Space>"
 let g:mamplocalleader = '\'
 
 " Shortcut
-" Yank to clipboard
+" クリップボードにヤンクする
 nnoremap <leader>y "+y  
 vnoremap <leader>y "+y
-" Paste from clipboard
+" クリップボードから貼り付ける
 nnoremap <leader>p "+p 
-" Execute current line
+" 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
+nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
 
 " Alias
 command! Uv source ~/.vimrc
 command! Ov e ~/.vimrc
-" Show highlight group of text cursor position
+" カーソル上のハイライトグループを表示する
 command! Hg echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
 
 " Syntax
 syntax on
 
-" Set filetype
-augroup Filetype
-  autocmd!
-  autocmd BufRead,BufNewFile *.tanishi set filetype=tanishi
-augroup END
-
-" JSON formatting (call jq)
+" JSON のフォーマット (jq)
 command! -nargs=? Jq call s:Jq(<f-args>)
 function! s:Jq(...)
   if 0 == a:0
@@ -116,16 +119,11 @@ endfunction
 " Plugin
 call plug#begin('~/.vim/plugged')
 
-" My colorscheme
 Plug 'masuke5/masuc'
-" Syntax check
 Plug 'w0rp/ale'
-" Show git diff
 Plug 'airblade/vim-gitgutter'
-" Golang
 Plug 'fatih/vim-go'
 
-" Autocompletion
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -148,32 +146,44 @@ Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'posva/vim-vue'
 Plug 'cakebaker/scss-syntax.vim'
-Plug 'wakatime/vim-wakatime'
+"Plug 'wakatime/vim-wakatime'
+Plug 'Shougo/denite.nvim'
+Plug 'digitaltoad/vim-pug'
+Plug 'PProvost/vim-ps1'
+Plug 'Shougo/echodoc.vim'
 
 call plug#end()
 
+set completeopt-=preview
+
 " Python3 executable
-let g:python3_host_prog = 'C:/Users/Shinsuke/Anaconda3/python.exe'
+if has('win32')
+  let g:python3_host_prog = $USERPROFILE . '/Anaconda3/python.exe'
+else
+  let g:python3_host_prog = '/usr/bin/python3'
+endif
 
 " ALE
 let g:ale_linters = {
   \ 'c': [],
   \ 'cpp': [],
-  \ 'go': [],
+  \ 'go': ['gometalinter'],
   \ 'javascript': ['eslint', 'flow'],
   \ 'typescript': ['tsserver', 'tslint'],
   \ 'python': ['flake8'],
-  \ 'rust': [],
-  \ 'vue': ['vls'],
+  \ 'rust': ['cargo'],
+  \ 'vue': ['tslint'],
+  \ 'html': [],
 \ }
 
-" Japanese error message
+" Java で日本語のエラーメッセージを文字化けしないようにする
 let g:ale_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
-"let g:ale_rust_cargo_check_tests = 1
 
+let g:ale_go_gometalinter_options = '--fast'
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
+call deoplete#custom#source('LanguageClient', 'input_pattern', '\S+$')
 
 " LanguageClient-neovim
 set hidden
@@ -181,15 +191,19 @@ set hidden
 let g:LanguageClient_serverCommands = {
     \ 'cpp': ['cquery', '--log-file=c:/temp/cq.log'],
     \ 'c': ['cquery', '--log-file=c:/temp/cq.log'],
-    \ 'rust': ['C:/Users/Shinsuke/.cargo/bin/rls.exe'],
+    \ 'go': ['go-langserver'],
+    \ 'typescript': ['C:\Users\Shinsuke\AppData\Roaming\npm\javascript-typescript-stdio.cmd'],
     \ }
+
+"\ 'rust': ['C:/Users/Shinsuke/.cargo/bin/rls.exe'],
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
 let g:LanguageClient_settingsPath = 'C:/Users/Shinsuke/AppData/Local/nvim/settings.json'
-set completefunc=LanguageClient#complete
-set formatexpr=LanguageClient_textDocument_rangeFormatting()
+let g:LanguageClient_diagnosticsEnable = 0
+"set completefunc=LanguageClient#complete
+"set formatexpr=LanguageClient_textDocument_rangeFormatting()
 
 " Maps K to hover, gd to goto definition, F2 to rename
 nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
@@ -198,7 +212,14 @@ nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
 nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
-" tanishi
-nnoremap <leader>t o<ESC>i<C-R>=strftime("created %Y/%m/%d %H:%M")<CR><CR>
+" Denite
+call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+call denite#custom#var('grep', 'command', ['ag'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
 
-colorscheme koehler
+nnoremap <silent> <C-m> :<C-u>Denite file_rec<CR>
+
+" echodoc
+let g:echodoc_enable_at_startup = 1
