@@ -10,7 +10,7 @@
 	name = masuke5
 [core]
 	editor = vim --noplugin
-	autoCRLF = false
+	autocrlf = input
 [credential]
 	helper = wincred
 [gui]
