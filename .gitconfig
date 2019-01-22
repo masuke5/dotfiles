@@ -11,5 +11,3 @@
 [core]
 	editor = vim --noplugin
 	autoCRLF = false
-[credential]
-	helper = wincred
