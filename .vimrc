@@ -4,6 +4,13 @@ if &compatible
   set nocompatible
 endif
 
+function! s:auto_mkdir(dir, force)
+  if !isdirectory(a:dir) && (a:force ||
+  \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+  endif
+endfunction
+
 " Encoding
 set encoding=utf-8
 set fileencoding=utf-8
@@ -15,7 +22,8 @@ set autoread
 set fileformat=unix
 
 " Backup
-set backupdir=$HOME/.vim/backup
+call s:auto_mkdir(expand('$HOME/.vim/backup'), 0)
+call s:auto_mkdir(expand('$HOME/.vim/undofile'), 0)
 set browsedir=buffer
 set directory=$HOME/.vim/backup
 set history=1000
@@ -39,6 +47,8 @@ set autoindent
 set backspace=indent,eol,start
 
 " View
+set pumheight=10
+set noshowmode
 set number
 set laststatus=2
 set splitbelow
@@ -104,6 +114,8 @@ command! Hg echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
 
 " Syntax
 syntax on
+" Enable doxygen syntax highlight
+let g:load_doxygen_syntax = 1
 
 " JSON のフォーマット (jq)
 command! -nargs=? Jq call s:Jq(<f-args>)
@@ -137,20 +149,30 @@ Plug 'zchee/deoplete-go'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'autozimu/LanguageClient-neovim', {
+if has('win32')
+  Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': '!powershell ./install.ps1',
     \ }
+else
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+endif
 
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'posva/vim-vue'
 Plug 'cakebaker/scss-syntax.vim'
-"Plug 'wakatime/vim-wakatime'
 Plug 'Shougo/denite.nvim'
 Plug 'digitaltoad/vim-pug'
 Plug 'PProvost/vim-ps1'
 Plug 'Shougo/echodoc.vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'scrooloose/nerdtree'
+"Plug 'prabirshrestha/async.vim'
+"Plug 'prabirshrestha/vim-lsp'
 
 call plug#end()
 
@@ -184,26 +206,50 @@ let g:ale_go_gometalinter_options = '--fast'
 " deoplete
 let g:deoplete#enable_at_startup = 1
 call deoplete#custom#source('LanguageClient', 'input_pattern', '\S+$')
+call deoplete#custom#option({
+  \ 'ignore_sources': {
+    \ 'c': ['buffer'],
+    \ 'cpp': ['buffer', 'around'],
+    \ },
+  \ })
+
+" vim-lsp
+"if executable('cquery')
+"  au User lsp_setup call lsp#register_server({
+"    \ 'name': 'cquery',
+"    \ 'cmd': {server_info->['cquery']},
+"    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+"    \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery' },
+"    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+"    \ })
+"endif
 
 " LanguageClient-neovim
 set hidden
 
 let g:LanguageClient_serverCommands = {
-    \ 'cpp': ['cquery', '--log-file=c:/temp/cq.log'],
-    \ 'c': ['cquery', '--log-file=c:/temp/cq.log'],
     \ 'go': ['go-langserver'],
-    \ 'typescript': ['C:\Users\Shinsuke\AppData\Roaming\npm\javascript-typescript-stdio.cmd'],
+    \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
+    \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
+    \ 'rust': ['C:/Users/Shinsuke/.cargo/bin/rls.exe'],
     \ }
-
-"\ 'rust': ['C:/Users/Shinsuke/.cargo/bin/rls.exe'],
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
 let g:LanguageClient_settingsPath = 'C:/Users/Shinsuke/AppData/Local/nvim/settings.json'
-let g:LanguageClient_diagnosticsEnable = 0
+"let g:LanguageClient_diagnosticsEnable = 0
 "set completefunc=LanguageClient#complete
 "set formatexpr=LanguageClient_textDocument_rangeFormatting()
+
+if has('win32')
+  let g:LanguageClient_settingsPath = expand('$LOCALAPPDATA/nvim/settings.json');
+else
+  let g:LanguageClient_settingsPath = expand('$HOME/.config/nvim/settings.json')
+endif
+let g:LanguageClient_diagnosticsEnable = 0
+set completefunc=LanguageClient#complete
+set formatexpr=LanguageClient_textDocument_rangeFormatting()
 
 " Maps K to hover, gd to goto definition, F2 to rename
 nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
@@ -223,3 +269,15 @@ nnoremap <silent> <C-m> :<C-u>Denite file_rec<CR>
 
 " echodoc
 let g:echodoc_enable_at_startup = 1
+
+" NERDTree
+map <leader>n :NERDTreeToggle<CR>
+
+" C++ highlight
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+
+colorscheme koehler
