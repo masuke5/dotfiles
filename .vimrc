@@ -243,7 +243,7 @@ let g:LanguageClient_settingsPath = 'C:/Users/Shinsuke/AppData/Local/nvim/settin
 "set formatexpr=LanguageClient_textDocument_rangeFormatting()
 
 if has('win32')
-  let g:LanguageClient_settingsPath = expand('$LOCALAPPDATA/nvim/settings.json');
+  let g:LanguageClient_settingsPath = expand('$LOCALAPPDATA/nvim/settings.json')
 else
   let g:LanguageClient_settingsPath = expand('$HOME/.config/nvim/settings.json')
 endif
