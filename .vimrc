@@ -28,6 +28,7 @@ set browsedir=buffer
 set directory=$HOME/.vim/backup
 set history=1000
 set undodir=$HOME/.vim/undofile
+set backupdir=$HOME/.vim/backup
 set backup
 
 " Search
@@ -227,27 +228,28 @@ call deoplete#custom#option({
 " LanguageClient-neovim
 set hidden
 
+if has('win32')
+  let s:cquery_logfile = 'C:/temp/cq.log'
+else
+  let s:cquery_logfile = '/tmp/cq.log'
+endif
+
 let g:LanguageClient_serverCommands = {
     \ 'go': ['go-langserver'],
-    \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
-    \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
+    \ 'cpp': ['cquery', '--log-file=' . s:cquery_logfile],
+    \ 'c': ['cquery', '--log-file=' . s:cquery_logfile],
     \ 'rust': ['C:/Users/Shinsuke/.cargo/bin/rls.exe'],
     \ }
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
-let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
-let g:LanguageClient_settingsPath = 'C:/Users/Shinsuke/AppData/Local/nvim/settings.json'
-"let g:LanguageClient_diagnosticsEnable = 0
-"set completefunc=LanguageClient#complete
-"set formatexpr=LanguageClient_textDocument_rangeFormatting()
-
+let g:LanguageClient_loadSettings = 1
 if has('win32')
   let g:LanguageClient_settingsPath = expand('$LOCALAPPDATA/nvim/settings.json')
 else
   let g:LanguageClient_settingsPath = expand('$HOME/.config/nvim/settings.json')
 endif
-let g:LanguageClient_diagnosticsEnable = 0
+let g:LanguageClient_diagnosticsEnable = 1
 set completefunc=LanguageClient#complete
 set formatexpr=LanguageClient_textDocument_rangeFormatting()
 
@@ -281,3 +283,10 @@ let g:cpp_experimental_simple_template_highlight = 1
 let g:cpp_experimental_template_highlight = 1
 
 colorscheme koehler
+
+" Emmet
+let g:user_emmet_settings = {
+  \ 'variables': {
+      \ 'lang': 'ja',
+  \ },
+\ }
