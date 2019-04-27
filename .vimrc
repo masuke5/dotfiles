@@ -46,8 +46,11 @@ set formatoptions=q
 set belloff=all
 set autoindent
 set backspace=indent,eol,start
+set updatetime=300
 
 " View
+set hidden
+set signcolumn=yes
 set pumheight=10
 set noshowmode
 set number
@@ -57,6 +60,8 @@ if !has('nvim')
   set ballooneval
 endif
 set noshowmode  " echodoc.vim
+set shortmess+=c
+set cmdheight=1
 
 " Indent
 set breakindent
@@ -98,11 +103,6 @@ let g:mapleader = "\<Space>"
 let g:mamplocalleader = '\'
 
 " Shortcut
-" クリップボードにヤンクする
-nnoremap <leader>y "+y  
-vnoremap <leader>y "+y
-" クリップボードから貼り付ける
-nnoremap <leader>p "+p 
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
 nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
@@ -149,18 +149,6 @@ Plug 'zchee/deoplete-go'
 
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
-Plug 'flazz/vim-colorschemes'
-if has('win32')
-  Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': '!powershell ./install.ps1',
-    \ }
-else
-  Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-endif
 
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
@@ -172,12 +160,17 @@ Plug 'PProvost/vim-ps1'
 Plug 'Shougo/echodoc.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'
-"Plug 'prabirshrestha/async.vim'
-"Plug 'prabirshrestha/vim-lsp'
+Plug 'ElmCast/elm-vim'
+Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'romainl/Apprentice'
+Plug 'jacoborus/tender.vim'
+Plug 'Haron-Prime/Antares'
 
 call plug#end()
 
-set completeopt-=preview
+set completeopt=menu,preview
 
 " Python3 executable
 if has('win32')
@@ -190,13 +183,9 @@ endif
 let g:ale_linters = {
   \ 'c': [],
   \ 'cpp': [],
-  \ 'go': ['gometalinter'],
-  \ 'javascript': ['eslint', 'flow'],
-  \ 'typescript': ['tsserver', 'tslint'],
-  \ 'python': ['flake8'],
-  \ 'rust': ['cargo'],
-  \ 'vue': ['tslint'],
+  \ 'go': ['golint', 'govet'],
   \ 'html': [],
+  \ 'typescript': ['tsserver', 'tslint'],
 \ }
 
 " Java で日本語のエラーメッセージを文字化けしないようにする
@@ -213,52 +202,6 @@ call deoplete#custom#option({
     \ 'cpp': ['buffer', 'around'],
     \ },
   \ })
-
-" vim-lsp
-"if executable('cquery')
-"  au User lsp_setup call lsp#register_server({
-"    \ 'name': 'cquery',
-"    \ 'cmd': {server_info->['cquery']},
-"    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-"    \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery' },
-"    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-"    \ })
-"endif
-
-" LanguageClient-neovim
-set hidden
-
-if has('win32')
-  let s:cquery_logfile = 'C:/temp/cq.log'
-else
-  let s:cquery_logfile = '/tmp/cq.log'
-endif
-
-let g:LanguageClient_serverCommands = {
-    \ 'go': ['go-langserver'],
-    \ 'cpp': ['cquery', '--log-file=' . s:cquery_logfile],
-    \ 'c': ['cquery', '--log-file=' . s:cquery_logfile],
-    \ 'rust': ['C:/Users/Shinsuke/.cargo/bin/rls.exe'],
-    \ }
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_loadSettings = 1
-if has('win32')
-  let g:LanguageClient_settingsPath = expand('$LOCALAPPDATA/nvim/settings.json')
-else
-  let g:LanguageClient_settingsPath = expand('$HOME/.config/nvim/settings.json')
-endif
-let g:LanguageClient_diagnosticsEnable = 1
-set completefunc=LanguageClient#complete
-set formatexpr=LanguageClient_textDocument_rangeFormatting()
-
-" Maps K to hover, gd to goto definition, F2 to rename
-nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
-nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " Denite
 call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
@@ -290,3 +233,56 @@ let g:user_emmet_settings = {
       \ 'lang': 'ja',
   \ },
 \ }
+
+" Golang syntax highlighting
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_highlight_variable_assignments = 1
+
+" lightline.vim
+let g:lightline = {
+  \ 'colorscheme': 'wombat',
+  \ 'active': {
+  \   'left': [['mode', 'paste'],
+  \            ['cocstatus', 'readonly', 'filename', 'modified']],
+  \   'right': [['lineinfo'],
+  \             ['percent'],
+  \             ['fileformat', 'fileencoding', 'filetype']]
+  \ },
+  \ 'component': {
+  \   'charvaluehex': '0x%B'
+  \ },
+  \ 'component_function': {
+  \   'cocstatus': 'coc#status'
+  \ }
+  \ }
+
+" tsuquyomi
+let g:tsuquyomi_completion_detail = 1
+
+" coc.nvim
+nmap <slient> <leader>n <Plug>(coc-diagnostic-prev)
+nmap <slient> <leader>p <Plug>(coc-diagnostic-next)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+nnoremap <slient> <leader>a :<C-u>CocList diagnostics<CR>

@@ -10,6 +10,7 @@ function RemoveAliasIfExist ($name) {
 }
 
 RemoveAliasIfExist ls
+RemoveAliasIfExist gin
 
 Set-Alias -name python2 -value "C:\PL\Python27\python.exe"
 
