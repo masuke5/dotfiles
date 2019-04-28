@@ -10,12 +10,5 @@
 	email = s.zerogoichi@gmail.com
 	name = masuke5
 [core]
-	editor = vim --noplugin
+	editor = nvim --noplugin
 	autocrlf = input
-[credential]
-	helper = wincred
-[difftool "sourcetree"]
-	cmd = '' \"$LOCAL\" \"$REMOTE\"
-[mergetool "sourcetree"]
-	cmd = "'' "
-	trustExitCode = true

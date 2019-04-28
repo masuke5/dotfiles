@@ -1,12 +1,10 @@
-" set secure
-
 if &compatible
   set nocompatible
 endif
 
 function! s:auto_mkdir(dir, force)
   if !isdirectory(a:dir) && (a:force ||
-  \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+  \    input(printf('"%s" does not exist. Create? [y/N] ', a:dir)) =~? '^y\%[es]$')
     call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
   endif
 endfunction
@@ -50,18 +48,19 @@ set updatetime=300
 
 " View
 set hidden
-set signcolumn=yes
 set pumheight=10
 set noshowmode
 set number
 set laststatus=2
 set splitbelow
+set shortmess+=c
+set cmdheight=2
+set completeopt=menu,preview
 if !has('nvim')
   set ballooneval
+else
+  set inccommand=split
 endif
-set noshowmode  " echodoc.vim
-set shortmess+=c
-set cmdheight=1
 
 " Indent
 set breakindent
@@ -91,9 +90,26 @@ augroup FileTypeIndnet
   autocmd FileType pug call s:set_tabwidth(2)
 augroup END
 
+" filetype を設定する
 augroup ExtensionFileType
   autocmd!
   autocmd BufNewFile,BufRead *.ejs set ft=html
+augroup END
+
+augroup Terminal
+  autocmd!
+
+  " ターミナルを開いたら行番号を隠す
+  function! s:hide_linenumber_if_terminal()
+    if &buftype == 'terminal'
+      set nonumber
+    else
+      set number
+    endif
+  endfunction
+  autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
+  " ファイル書き込み時にディレクトリを作成する
+  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
 
 " Leader
@@ -130,47 +146,55 @@ function! s:Jq(...)
 endfunction
 
 " Plugin
-call plug#begin('~/.vim/plugged')
-
-Plug 'masuke5/masuc'
-Plug 'w0rp/ale'
-Plug 'airblade/vim-gitgutter'
-Plug 'fatih/vim-go'
-
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+if has('nvim') && has('win32')
+  let s:vim_plug_path = $LOCALAPPDATA . '/nvim/autoload/plug.vim'
+elseif has('nvim') && has('unix')
+  let s:vim_plug_path = '~/.local/share/nvim/site/autoload/plug.vim'
+elseif has('win32')
+  let s:vim_plug_path = '~/.vimfiles/autoload/plug.vim'
+elseif has('unix')
+  let s:vim_plug_path = '~/.vim/autoload/plug.vim'
 endif
 
-Plug 'zchee/deoplete-go'
+if empty(glob(s:vim_plug_path))
+  echoerr 'vim-plug をインストールしていません'
+else
+  call plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-surround'
-Plug 'mattn/emmet-vim'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'fatih/vim-go'
+  Plug 'tpope/vim-surround'
+  Plug 'mattn/emmet-vim'
+  Plug 'scrooloose/nerdtree'
+  Plug 'itchyny/lightline.vim'
+  Plug 'itchyny/vim-gitbranch'
 
-Plug 'leafgarland/typescript-vim'
-Plug 'pangloss/vim-javascript'
-Plug 'posva/vim-vue'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'Shougo/denite.nvim'
-Plug 'digitaltoad/vim-pug'
-Plug 'PProvost/vim-ps1'
-Plug 'Shougo/echodoc.vim'
-Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'scrooloose/nerdtree'
-Plug 'ElmCast/elm-vim'
-Plug 'itchyny/lightline.vim'
-Plug 'itchyny/vim-gitbranch'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-Plug 'romainl/Apprentice'
-Plug 'jacoborus/tender.vim'
-Plug 'Haron-Prime/Antares'
+  " Syntax highlight
+  Plug 'octol/vim-cpp-enhanced-highlight'
+  Plug 'ElmCast/elm-vim'
+  Plug 'cakebaker/scss-syntax.vim'
+  Plug 'digitaltoad/vim-pug'
+  Plug 'leafgarland/typescript-vim'
+  Plug 'pangloss/vim-javascript'
+  Plug 'posva/vim-vue'
+  Plug 'PProvost/vim-ps1'
+  Plug 'justinmk/vim-syntax-extra'
 
-call plug#end()
+  " Colorscheme
+  Plug 'masuke5/masuc'
+  Plug 'romainl/Apprentice'
+  Plug 'jacoborus/tender.vim'
+  Plug 'Haron-Prime/Antares'
+  Plug 'tomasr/molokai'
 
-set completeopt=menu,preview
+  if has('win32')
+    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+  else
+    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+  endif
+
+  call plug#end()
+endif
 
 " Python3 executable
 if has('win32')
@@ -178,42 +202,6 @@ if has('win32')
 else
   let g:python3_host_prog = '/usr/bin/python3'
 endif
-
-" ALE
-let g:ale_linters = {
-  \ 'c': [],
-  \ 'cpp': [],
-  \ 'go': ['golint', 'govet'],
-  \ 'html': [],
-  \ 'typescript': ['tsserver', 'tslint'],
-\ }
-
-" Java で日本語のエラーメッセージを文字化けしないようにする
-let g:ale_java_javac_options = "-Xlint -J-Dfile.encoding=UTF8"
-
-let g:ale_go_gometalinter_options = '--fast'
-
-" deoplete
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#source('LanguageClient', 'input_pattern', '\S+$')
-call deoplete#custom#option({
-  \ 'ignore_sources': {
-    \ 'c': ['buffer'],
-    \ 'cpp': ['buffer', 'around'],
-    \ },
-  \ })
-
-" Denite
-call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
-
-nnoremap <silent> <C-m> :<C-u>Denite file_rec<CR>
-
-" echodoc
-let g:echodoc_enable_at_startup = 1
 
 " NERDTree
 map <leader>n :NERDTreeToggle<CR>
@@ -224,8 +212,6 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_experimental_simple_template_highlight = 1
 let g:cpp_experimental_template_highlight = 1
-
-colorscheme koehler
 
 " Emmet
 let g:user_emmet_settings = {
@@ -286,3 +272,14 @@ function! s:show_documentation()
 endfunction
 
 nnoremap <slient> <leader>a :<C-u>CocList diagnostics<CR>
+
+" Colorscheme
+let g:molokai_original = 1
+
+let s:colorscheme_file = '~/.vim-colorscheme'
+if !empty(glob(s:colorscheme_file))
+  let s:colorscheme = readfile(expand(s:colorscheme_file))
+  if !exists('g:colors_name') || g:colors_name == 'default'
+    execute 'colorscheme' s:colorscheme[0]
+  endif
+endif
