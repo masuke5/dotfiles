@@ -1,7 +1,6 @@
 "Guifont! Lucida\ Sans\ TypeWriter:h10
-Guifont BDF\ UM+\ OUTLINE:h10
-colorscheme masuc
+Guifont Consolas\ for\ Powerline:h10
 
-command! Ogv :e $LOCALAPPDATA/nvim/ginit.vim
-command! Ugv :so $LOCALAPPDATA/nvim/ginit.vim
+command! Ogv :e ~/.config/nvim/ginit.vim
+command! Ugv :so ~/.config/nvim/ginit.vim
 

@@ -14,6 +14,7 @@ set encoding=utf-8
 set fileencoding=utf-8
 set termencoding=utf-8
 set ambiwidth=double
+scriptencoding utf-8
 
 " File
 set autoread
@@ -56,6 +57,7 @@ set splitbelow
 set shortmess+=c
 set cmdheight=2
 set completeopt=menu,preview
+set shortmess+=c
 if !has('nvim')
   set ballooneval
 else
@@ -88,12 +90,16 @@ augroup FileTypeIndnet
   autocmd FileType typescript call s:set_tabwidth(2)
   autocmd FileType html call s:set_tabwidth(2)
   autocmd FileType pug call s:set_tabwidth(2)
+  autocmd FileType ketos call s:set_tabwidth(2)
+  autocmd FileType jinja call s:set_tabwidth(2)
 augroup END
 
 " filetype を設定する
 augroup ExtensionFileType
   autocmd!
   autocmd BufNewFile,BufRead *.ejs set ft=html
+  autocmd BufNewFile,BufRead *.ket set ft=ketos
+  autocmd BufNewFile,BufRead *.html.tera set ft=jinja.html
 augroup END
 
 augroup Terminal
@@ -122,6 +128,7 @@ let g:mamplocalleader = '\'
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
 nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
+nnoremap <leader><Tab> ddO
 
 " Alias
 command! Uv source ~/.vimrc
@@ -130,7 +137,6 @@ command! Ov e ~/.vimrc
 command! Hg echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
 
 " Syntax
-syntax on
 " Enable doxygen syntax highlight
 let g:load_doxygen_syntax = 1
 
@@ -179,6 +185,7 @@ else
   Plug 'posva/vim-vue'
   Plug 'PProvost/vim-ps1'
   Plug 'justinmk/vim-syntax-extra'
+  Plug 'Glench/Vim-Jinja2-Syntax'
 
   " Colorscheme
   Plug 'masuke5/masuc'
@@ -186,6 +193,7 @@ else
   Plug 'jacoborus/tender.vim'
   Plug 'Haron-Prime/Antares'
   Plug 'tomasr/molokai'
+  Plug 'w0ng/vim-hybrid'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -233,19 +241,22 @@ let g:go_highlight_variable_assignments = 1
 
 " lightline.vim
 let g:lightline = {
-  \ 'colorscheme': 'wombat',
+  \ 'colorscheme': 'powerline',
   \ 'active': {
   \   'left': [['mode', 'paste'],
-  \            ['cocstatus', 'readonly', 'filename', 'modified']],
+  \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
   \   'right': [['lineinfo'],
   \             ['percent'],
   \             ['fileformat', 'fileencoding', 'filetype']]
   \ },
+  \ 'separator': { 'left': "", 'right': "" },
+  \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
   \ 'component': {
   \   'charvaluehex': '0x%B'
   \ },
   \ 'component_function': {
-  \   'cocstatus': 'coc#status'
+  \   'cocstatus': 'coc#status',
+  \   'gitbranch': 'gitbranch#name'
   \ }
   \ }
 
@@ -283,3 +294,7 @@ if !empty(glob(s:colorscheme_file))
     execute 'colorscheme' s:colorscheme[0]
   endif
 endif
+set ambiwidth=single
+
+" Enable syntax highlight
+syntax on
