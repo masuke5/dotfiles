@@ -157,7 +157,7 @@ if has('nvim') && has('win32')
 elseif has('nvim') && has('unix')
   let s:vim_plug_path = '~/.local/share/nvim/site/autoload/plug.vim'
 elseif has('win32')
-  let s:vim_plug_path = '~/.vimfiles/autoload/plug.vim'
+  let s:vim_plug_path = $USERPROFILE . '\vimfiles\autoload\plug.vim'
 elseif has('unix')
   let s:vim_plug_path = '~/.vim/autoload/plug.vim'
 endif
