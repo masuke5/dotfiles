@@ -174,6 +174,10 @@ else
   Plug 'scrooloose/nerdtree'
   Plug 'itchyny/lightline.vim'
   Plug 'itchyny/vim-gitbranch'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'osyo-manga/vim-textobj-blockwise'
+  Plug 'junegunn/goyo.vim'
+  Plug 'kshenoy/vim-signature'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -194,6 +198,7 @@ else
   Plug 'Haron-Prime/Antares'
   Plug 'tomasr/molokai'
   Plug 'w0ng/vim-hybrid'
+  Plug 'morhetz/gruvbox'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -283,6 +288,9 @@ function! s:show_documentation()
 endfunction
 
 nnoremap <slient> <leader>a :<C-u>CocList diagnostics<CR>
+
+" NERDCommenter
+let g:NERDSpaceDelims = 1
 
 " Colorscheme
 let g:molokai_original = 1
