@@ -14,12 +14,39 @@ RemoveAliasIfExist gin
 
 Set-Alias -name python2 -value "C:\PL\Python27\python.exe"
 
-function ls {
-    foreach ($dir in (Get-ChildItem -Name -Directory) -split "`n") {
-        Write-Host "$dir" -NoNewLine -ForegroundColor Blue
-        Write-Host "  " -NoNewLine
+function ls($path) {
+    if ($path -eq "") {
+        $path = Get-Location
     }
-    (Get-ChildItem -Name -File) -split "`n" -join "  "
+
+    $space = 2
+    $width = 70
+    $dirs = (Get-ChildItem $path -Name -Directory) -split "`n"
+    $files = (Get-ChildItem $path -Name -File) -split "`n"
+
+    $maxCharCount = ($dirs + $files | Measure-Object -Maximum -Property Length).Maximum
+
+    $num = 0
+    function Show-Entries($entries, $color) {
+        $num = 0
+        foreach ($entry in $entries) {
+            $text = $entry.PadRight($maxCharCount + $space, " ")
+            Write-Host $text -NoNewLine -ForegroundColor $color
+            $num += $maxCharCount + $space
+            if ($num -gt $width) {
+                $num = 0
+                Write-Host ""
+            }
+        }
+    }
+    
+    Show-Entries $dirs Magenta
+
+    if ($num -ne 0) {
+        Write-Host ""
+    }
+
+    Show-Entries $files (Get-Host).ui.rawui.ForegroundColor
 }
 
 function prompt {
