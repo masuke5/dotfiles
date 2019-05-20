@@ -26,7 +26,6 @@ function ls($path) {
 
     $maxCharCount = ($dirs + $files | Measure-Object -Maximum -Property Length).Maximum
 
-    $num = 0
     function Show-Entries($entries, $color) {
         $num = 0
         foreach ($entry in $entries) {
@@ -38,15 +37,16 @@ function ls($path) {
                 Write-Host ""
             }
         }
+        return $num
     }
     
-    Show-Entries $dirs Magenta
+    $num = Show-Entries $dirs Magenta
 
     if ($num -ne 0) {
         Write-Host ""
     }
 
-    Show-Entries $files (Get-Host).ui.rawui.ForegroundColor
+    $num = Show-Entries $files (Get-Host).ui.rawui.ForegroundColor
 }
 
 function prompt {
