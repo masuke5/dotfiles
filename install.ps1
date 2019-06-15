@@ -21,5 +21,5 @@ Dotfile $env:HOME\.gvimrc .gvimrc
 Dotfile $env:HOME\.vimrc .vimrc
 Dotfile $env:LOCALAPPDATA\nvim\init.vim .vimrc
 Dotfile $env:LOCALAPPDATA\nvim\ginit.vim ginit.vim
-Dotfile $env:HOME\AppData\Local\nvim\coc-settings.json coc-settings.json
+Dotfile $env:HOME\vimfiles\coc-settings.json coc-settings.json
 Dotfile $profile profile.ps1

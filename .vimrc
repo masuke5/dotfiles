@@ -18,7 +18,7 @@ scriptencoding utf-8
 
 " File
 set autoread
-set fileformat=unix
+set fileformats=unix,dos
 
 " Backup
 call s:auto_mkdir(expand('$HOME/.vim/backup'), 0)
@@ -129,6 +129,7 @@ let g:mamplocalleader = '\'
 nnoremap <leader>ve :exec getline('.')<CR>
 nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
 nnoremap <leader><Tab> ddO
+nnoremap <leader>c :call popup_clear()<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -178,6 +179,7 @@ else
   Plug 'osyo-manga/vim-textobj-blockwise'
   Plug 'junegunn/goyo.vim'
   Plug 'kshenoy/vim-signature'
+  Plug 'vim-scripts/taglist.vim'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -201,7 +203,7 @@ else
   Plug 'morhetz/gruvbox'
 
   if has('win32')
-    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+    Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': { -> coc#util#install()}}
   else
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
   endif
@@ -254,8 +256,6 @@ let g:lightline = {
   \             ['percent'],
   \             ['fileformat', 'fileencoding', 'filetype']]
   \ },
-  \ 'separator': { 'left': "", 'right': "" },
-  \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
   \ 'component': {
   \   'charvaluehex': '0x%B'
   \ },
@@ -300,6 +300,7 @@ if !empty(glob(s:colorscheme_file))
   let s:colorscheme = readfile(expand(s:colorscheme_file))
   if !exists('g:colors_name') || g:colors_name == 'default'
     execute 'colorscheme' s:colorscheme[0]
+    let &bg = s:colorscheme[1]
   endif
 endif
 set ambiwidth=single

@@ -10,5 +10,8 @@
         }
       }
     }
-  }
+  },
+  "coc.preferences.extensionUpdateCheck": "never",
+  "signature.enable": false,
+  "signature.target": "echo"
 }
