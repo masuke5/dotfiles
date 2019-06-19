@@ -55,7 +55,7 @@ set number
 set laststatus=2
 set splitbelow
 set shortmess+=c
-set cmdheight=2
+set cmdheight=1
 set completeopt=menu,preview
 set shortmess+=c
 if !has('nvim')
@@ -127,9 +127,11 @@ let g:mamplocalleader = '\'
 " Shortcut
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
+" 現在のタブでPowershellを実行する
 nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
 nnoremap <leader><Tab> ddO
-nnoremap <leader>c :call popup_clear()<CR>
+" すべてのポップアップウィンドウを消す
+nnoremap <silent> <leader>a :call popup_clear()<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -176,7 +178,6 @@ else
   Plug 'itchyny/lightline.vim'
   Plug 'itchyny/vim-gitbranch'
   Plug 'scrooloose/nerdcommenter'
-  Plug 'osyo-manga/vim-textobj-blockwise'
   Plug 'junegunn/goyo.vim'
   Plug 'kshenoy/vim-signature'
   Plug 'vim-scripts/taglist.vim'
@@ -201,6 +202,10 @@ else
   Plug 'tomasr/molokai'
   Plug 'w0ng/vim-hybrid'
   Plug 'morhetz/gruvbox'
+  Plug 'JaySandhu/xcode-vim'
+  Plug 'nelstrom/vim-mac-classic-theme'
+  Plug 'endel/vim-github-colorscheme'
+  Plug 'fabi1cazenave/kalahari.vim'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': { -> coc#util#install()}}
@@ -254,7 +259,7 @@ let g:lightline = {
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
   \   'right': [['lineinfo'],
   \             ['percent'],
-  \             ['fileformat', 'fileencoding', 'filetype']]
+  \             ['charvaluehex', 'fileformat', 'fileencoding', 'filetype']]
   \ },
   \ 'component': {
   \   'charvaluehex': '0x%B'

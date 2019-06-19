@@ -1,6 +1,6 @@
 if has('win32')
-  set guifont=Dejavu_Sans_Mono_for_Powerline:h10
-  set guifontwide=更紗等幅ゴシック_J:h10
+  set guifont=Terminus:h11
+  set guifontwide=Cica:h11
   "set renderoptions=type:directx,renmode:0
 else
   set guifont=Menlo\ 10
