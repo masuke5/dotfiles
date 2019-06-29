@@ -131,7 +131,7 @@ nnoremap <leader>ve :exec getline('.')<CR>
 nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
 nnoremap <leader><Tab> ddO
 " すべてのポップアップウィンドウを消す
-nnoremap <silent> <leader>a :call popup_clear()<CR>
+nnoremap <silent> <leader>q :call popup_clear()<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -153,6 +153,48 @@ function! s:Jq(...)
   endif
   execute "%! jq \"" . l:arg . "\""
 endfunction
+
+" tabline
+function! s:tabpage_label(n)
+  let hi = a:n is tabpagenr() ? '%#TabLineSel#' : '%#TabLine#'
+
+  " タブページ内のバッファのリスト
+  let bufnrs = tabpagebuflist(a:n)
+
+  let mod = len(filter(copy(bufnrs), 'getbufvar(v:val, "&modified")')) ? ' +' : ''
+
+  " カレントバッファのファイル名
+  let curbufnr = bufnrs[tabpagewinnr(a:n) - 1]
+  let fname = fnamemodify(bufname(curbufnr), ':t')
+  if fname == ''
+      let fname = '[無名]'
+  endif
+
+  let label = a:n . ' ' . fname . mod
+
+  return '%' . a:n . 'T' . hi . ' ' . label . ' %T%#TabLineFill#'
+endfunction
+
+function! MakeTabLine()
+  let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val)')
+  let sep = ''
+  let tabpages = join(titles, sep) . sep . '%#TabLineFill#%T'
+
+  " 選択しているタブページのカレントバッファのディレクトリ
+  let bufnrs = tabpagebuflist(tabpagenr())
+  let curbufnr = bufnrs[tabpagewinnr(tabpagenr()) - 1]
+  let dname = fnamemodify(bufname(curbufnr), ':p:h')
+  let cwd = fnamemodify(dname, ":~")
+  if has('win32')
+    let cwd = substitute(cwd, escape($USERPROFILE, '\'), 'W~', '')
+    let cwd = substitute(cwd, '\\', '/', 'g')
+  endif
+
+  let info = cwd
+  return tabpages . '%=' . info
+endfunction
+
+set tabline=%!MakeTabLine()
 
 " Plugin
 if has('nvim') && has('win32')
@@ -267,6 +309,10 @@ let g:lightline = {
   \ 'component_function': {
   \   'cocstatus': 'coc#status',
   \   'gitbranch': 'gitbranch#name'
+  \ },
+  \ 'enable': {
+  \   'statusline': 1,
+  \   'tabline': 0
   \ }
   \ }
 
@@ -283,6 +329,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> <leader>a :<C-u>CocList diagnostics<CR>
 
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -291,8 +338,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-nnoremap <slient> <leader>a :<C-u>CocList diagnostics<CR>
 
 " NERDCommenter
 let g:NERDSpaceDelims = 1
@@ -312,3 +357,9 @@ set ambiwidth=single
 
 " Enable syntax highlight
 syntax on
+
+" 下線を無効にする
+highlight TabLine term=NONE gui=NONE
+" 太字を無効にする
+highlight TabLineSel term=NONE gui=NONE
+
