@@ -1,7 +1,7 @@
 if has('win32')
-  set guifont=Terminus:h11
+  set guifont=Monaco:h9
   set guifontwide=Cica:h11
-  "set renderoptions=type:directx,renmode:0
+  set renderoptions=type:directx,renmode:5
 else
   set guifont=Menlo\ 10
 endif
@@ -14,6 +14,9 @@ endif
 "set guioptions-=T " ツールバーを表示しない
 "set guioptions-=r " スクロールバーを表示しない
 set guioptions=
+
+hi Cursor guifg=black guibg=cyan
+set cursorline
 
 command! Ogv :e ~/.gvimrc
 command! Ugv :source ~/.gvimrc
