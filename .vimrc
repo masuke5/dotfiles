@@ -132,6 +132,7 @@ nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
 nnoremap <leader><Tab> ddO
 " すべてのポップアップウィンドウを消す
 nnoremap <silent> <leader>q :call popup_clear()<CR>
+nnoremap <silent> <leader>p "+p
 
 " Alias
 command! Uv source ~/.vimrc
@@ -223,6 +224,8 @@ else
   Plug 'junegunn/goyo.vim'
   Plug 'kshenoy/vim-signature'
   Plug 'vim-scripts/taglist.vim'
+  Plug 't9md/vim-quickhl'
+  Plug 'nicwest/vim-http'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -248,9 +251,11 @@ else
   Plug 'nelstrom/vim-mac-classic-theme'
   Plug 'endel/vim-github-colorscheme'
   Plug 'fabi1cazenave/kalahari.vim'
+  Plug 'thinkpixellab/flatland'
+  Plug 'joshdick/onedark.vim'
 
   if has('win32')
-    Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': { -> coc#util#install()}}
+    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
   else
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
   endif
@@ -329,7 +334,10 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <silent> <leader>a :<C-u>CocList diagnostics<CR>
+nnoremap <silent> <leader>ad :<C-u>CocList diagnostics<CR>
+nnoremap <silent> <space>ac  :<C-u>CocList commands<cr>
+nnoremap <silent> <space>ao  :<C-u>CocList outline<cr>
+nnoremap <silent> <space>as  :<C-u>CocList -I symbols<cr>
 
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -342,8 +350,14 @@ endfunction
 " NERDCommenter
 let g:NERDSpaceDelims = 1
 
+" quickhl
+nmap <Space>m <Plug>(quickhl-manual-this)
+xmap <Space>m <Plug>(quickhl-manual-this)
+nmap <Space>M <Plug>(quickhl-manual-reset)
+xmap <Space>M <Plug>(quickhl-manual-reset)
+
 " Colorscheme
-let g:molokai_original = 1
+"let g:molokai_original = 1
 
 let s:colorscheme_file = '~/.vim-colorscheme'
 if !empty(glob(s:colorscheme_file))
@@ -362,4 +376,5 @@ syntax on
 highlight TabLine term=NONE gui=NONE
 " 太字を無効にする
 highlight TabLineSel term=NONE gui=NONE
+
 

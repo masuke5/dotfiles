@@ -1,5 +1,5 @@
 if has('win32')
-  set guifont=Monaco:h9
+  set guifont=Dejavu_Sans_Mono:h9
   set guifontwide=Cica:h11
   set renderoptions=type:directx,renmode:5
 else
@@ -16,7 +16,7 @@ endif
 set guioptions=
 
 hi Cursor guifg=black guibg=cyan
-set cursorline
+"set cursorline
 
 command! Ogv :e ~/.gvimrc
 command! Ugv :source ~/.gvimrc
