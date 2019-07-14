@@ -36,7 +36,6 @@ set hlsearch
 set ignorecase
 set smartcase
 set wrapscan
-set gdefault
 
 " Input
 set expandtab
@@ -253,6 +252,8 @@ else
   Plug 'fabi1cazenave/kalahari.vim'
   Plug 'thinkpixellab/flatland'
   Plug 'joshdick/onedark.vim'
+  Plug 'mrkn/mrkn256.vim'
+  Plug 'jonathanfilip/vim-lucius'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -325,6 +326,12 @@ let g:lightline = {
 let g:tsuquyomi_completion_detail = 1
 
 " coc.nvim
+augroup Coc
+  autocmd!
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup END
+
+nmap <F2> <Plug>(coc-rename)
 nmap <slient> <leader>n <Plug>(coc-diagnostic-prev)
 nmap <slient> <leader>p <Plug>(coc-diagnostic-next)
 

@@ -15,8 +15,8 @@ endif
 "set guioptions-=r " スクロールバーを表示しない
 set guioptions=
 
-hi Cursor guifg=black guibg=cyan
-"set cursorline
+" hi Cursor guifg=black guibg=cyan
+" set cursorline
 
 command! Ogv :e ~/.gvimrc
 command! Ugv :source ~/.gvimrc
