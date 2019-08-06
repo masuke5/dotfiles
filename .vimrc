@@ -138,6 +138,7 @@ command! Uv source ~/.vimrc
 command! Ov e ~/.vimrc
 " カーソル上のハイライトグループを表示する
 command! Hg echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+command! DeleteAnsi %s/\[[0-9;]*m//g
 
 " Syntax
 " Enable doxygen syntax highlight
@@ -225,6 +226,9 @@ else
   Plug 'vim-scripts/taglist.vim'
   Plug 't9md/vim-quickhl'
   Plug 'nicwest/vim-http'
+  Plug 'michaeljsmith/vim-indent-object'
+  Plug 'junegunn/vim-peekaboo'
+  Plug 'Shirk/vim-gas'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -248,12 +252,12 @@ else
   Plug 'morhetz/gruvbox'
   Plug 'JaySandhu/xcode-vim'
   Plug 'nelstrom/vim-mac-classic-theme'
-  Plug 'endel/vim-github-colorscheme'
   Plug 'fabi1cazenave/kalahari.vim'
   Plug 'thinkpixellab/flatland'
   Plug 'joshdick/onedark.vim'
   Plug 'mrkn/mrkn256.vim'
   Plug 'jonathanfilip/vim-lucius'
+  Plug 'cormacrelf/vim-colors-github'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -301,7 +305,7 @@ let g:go_highlight_variable_assignments = 1
 
 " lightline.vim
 let g:lightline = {
-  \ 'colorscheme': 'powerline',
+  \ 'colorscheme': 'PaperColor_light',
   \ 'active': {
   \   'left': [['mode', 'paste'],
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
