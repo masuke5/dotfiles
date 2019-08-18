@@ -45,6 +45,9 @@ set belloff=all
 set autoindent
 set backspace=indent,eol,start
 set updatetime=300
+set showmatch
+set matchtime=1
+set matchpairs+=<:>
 
 " View
 set hidden
@@ -227,8 +230,11 @@ else
   Plug 't9md/vim-quickhl'
   Plug 'nicwest/vim-http'
   Plug 'michaeljsmith/vim-indent-object'
-  Plug 'junegunn/vim-peekaboo'
   Plug 'Shirk/vim-gas'
+  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+  Plug 'godlygeek/tabular'
+  Plug 'plasticboy/vim-markdown'
+  Plug 'machakann/vim-swap'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -367,25 +373,15 @@ xmap <Space>m <Plug>(quickhl-manual-this)
 nmap <Space>M <Plug>(quickhl-manual-reset)
 xmap <Space>M <Plug>(quickhl-manual-reset)
 
-" Colorscheme
-"let g:molokai_original = 1
-
-let s:colorscheme_file = '~/.vim-colorscheme'
-if !empty(glob(s:colorscheme_file))
-  let s:colorscheme = readfile(expand(s:colorscheme_file))
-  if !exists('g:colors_name') || g:colors_name == 'default'
-    execute 'colorscheme' s:colorscheme[0]
-    let &bg = s:colorscheme[1]
-  endif
-endif
-set ambiwidth=single
+" Preference
+source $HOME/.vim-preference
 
 " Enable syntax highlight
 syntax on
 
-" 下線を無効にする
+" Disable underline in tabline
 highlight TabLine term=NONE gui=NONE
-" 太字を無効にする
+" Disable bold in tabline
 highlight TabLineSel term=NONE gui=NONE
 
 
