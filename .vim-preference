@@ -1,0 +1,21 @@
+" vim: set ft=vim:
+
+if has('gui') && has('win32')
+  " GVim on Windows
+  set guifont=Hack:h9
+  set guifontwide=HackGen:h10
+  set renderoptions=type:directx,renmode:5
+
+  colorscheme lucius
+  set background=dark
+else
+  " Command prompt
+  colorscheme default
+  set background=dark
+endif
+
+" Change cursor color on insert mode to lime
+" hi CursorInsert guifg=black guibg=lime
+
+" Change cursor shape on insert mode to block
+" set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:block-CursorInsert/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175

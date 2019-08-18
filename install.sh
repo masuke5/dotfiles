@@ -32,9 +32,28 @@ function link() {
   fi
 }
 
+function default() {
+  if [ -z "$2" ]; then
+    to=$HOME/$1
+  else
+    to=$2
+  fi
+
+  from=${cwd}/$1
+
+  if [ -e $to ]; then
+    echo "$toは既に存在します"
+  else
+    cp $from $to
+    echo "$fromをコピーしました"
+  fi
+}
+
 link .vimrc
 link .gvimrc
+link .vim-preference
 link .gitconfig
 link ginit.vim ~/.config/nvim/ginit.vim
 link .vimrc ~/.config/nvim/init.vim
 link coc-settings.json $HOME/.config/nvim/coc-settings.json
+default .vim-preference
