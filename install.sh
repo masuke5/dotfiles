@@ -56,4 +56,5 @@ link .gitconfig
 link ginit.vim ~/.config/nvim/ginit.vim
 link .vimrc ~/.config/nvim/init.vim
 link coc-settings.json $HOME/.config/nvim/coc-settings.json
+link .zshrc
 default .vim-preference

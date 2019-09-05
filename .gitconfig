@@ -13,3 +13,7 @@
 [core]
 	editor = nvim
 	autocrlf = input
+[grep]
+	lineNumber = true
+[credential]
+    helper = cache
