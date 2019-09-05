@@ -11,5 +11,5 @@
 	email = s.zerogoichi@gmail.com
 	name = masuke5
 [core]
-	editor = vim
+	editor = nvim
 	autocrlf = input

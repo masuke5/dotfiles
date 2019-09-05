@@ -59,7 +59,6 @@ set splitbelow
 set shortmess+=c
 set cmdheight=1
 set completeopt=menu,preview
-set shortmess+=c
 if !has('nvim')
   set ballooneval
 else
@@ -135,6 +134,7 @@ nnoremap <leader><Tab> ddO
 " すべてのポップアップウィンドウを消す
 nnoremap <silent> <leader>q :call popup_clear()<CR>
 nnoremap <silent> <leader>p "+p
+inoremap <C-@> <ESC>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -235,6 +235,9 @@ else
   Plug 'godlygeek/tabular'
   Plug 'plasticboy/vim-markdown'
   Plug 'machakann/vim-swap'
+  Plug 'rust-lang/rust.vim'
+  Plug 'masuke5/doisa-vim'
+  Plug 'javier-lopez/sml.vim'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -264,6 +267,8 @@ else
   Plug 'mrkn/mrkn256.vim'
   Plug 'jonathanfilip/vim-lucius'
   Plug 'cormacrelf/vim-colors-github'
+  Plug 'dracula/vim'
+  Plug 'vim-scripts/Wombat'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -282,7 +287,7 @@ else
 endif
 
 " NERDTree
-map <leader>n :NERDTreeToggle<CR>
+map <leader>j :NERDTreeToggle<CR>
 
 " C++ highlight
 let g:cpp_class_scope_highlight = 1
@@ -311,7 +316,7 @@ let g:go_highlight_variable_assignments = 1
 
 " lightline.vim
 let g:lightline = {
-  \ 'colorscheme': 'PaperColor_light',
+  \ 'colorscheme': 'seoul256',
   \ 'active': {
   \   'left': [['mode', 'paste'],
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
@@ -340,6 +345,8 @@ augroup Coc
   autocmd!
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup END
+
+inoremap <silent><expr> <C-space> coc#refresh()
 
 nmap <F2> <Plug>(coc-rename)
 nmap <slient> <leader>n <Plug>(coc-diagnostic-prev)
