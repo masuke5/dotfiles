@@ -53,7 +53,7 @@ set matchpairs+=<:>
 set hidden
 set pumheight=10
 set noshowmode
-set number
+set nonumber
 set laststatus=2
 set splitbelow
 set shortmess+=c
@@ -111,7 +111,7 @@ augroup Terminal
     if &buftype == 'terminal'
       set nonumber
     else
-      set number
+      set nonumber
     endif
   endfunction
   autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
@@ -218,7 +218,8 @@ else
 
   Plug 'airblade/vim-gitgutter'
   Plug 'fatih/vim-go'
-  Plug 'tpope/vim-surround'
+  " Plug 'tpope/vim-surround'
+  Plug 'machakann/vim-sandwich'
   Plug 'mattn/emmet-vim'
   Plug 'scrooloose/nerdtree'
   Plug 'itchyny/lightline.vim'
@@ -237,7 +238,7 @@ else
   Plug 'machakann/vim-swap'
   Plug 'rust-lang/rust.vim'
   Plug 'masuke5/doisa-vim'
-  Plug 'javier-lopez/sml.vim'
+  Plug 'jez/vim-better-sml'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -269,6 +270,7 @@ else
   Plug 'cormacrelf/vim-colors-github'
   Plug 'dracula/vim'
   Plug 'vim-scripts/Wombat'
+  Plug 'altercation/vim-colors-solarized'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -315,8 +317,10 @@ let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
 
 " lightline.vim
+" dark: seoul256
+" light: PaperColor_light
 let g:lightline = {
-  \ 'colorscheme': 'seoul256',
+  \ 'colorscheme': 'powerline',
   \ 'active': {
   \   'left': [['mode', 'paste'],
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
@@ -380,6 +384,16 @@ xmap <Space>m <Plug>(quickhl-manual-this)
 nmap <Space>M <Plug>(quickhl-manual-reset)
 xmap <Space>M <Plug>(quickhl-manual-reset)
 
+" sandwich.vim
+let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+let g:sandwich#recipes += [
+      \   {
+      \     'buns': ['(*', '*)'],
+      \     'filetype': ['sml', 'ocaml'],
+      \     'nesting': 0,
+      \   },
+      \ ]
+
 " Preference
 source $HOME/.vim-preference
 
@@ -390,5 +404,3 @@ syntax on
 highlight TabLine term=NONE gui=NONE
 " Disable bold in tabline
 highlight TabLineSel term=NONE gui=NONE
-
-
