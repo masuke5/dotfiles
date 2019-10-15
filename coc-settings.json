@@ -3,7 +3,7 @@
     "cquery": {
       "command": "cquery",
       "args": ["--log-file=/tmp/cq.log"],
-      "filetypes": [],
+      "filetypes": ["c", "cpp"],
       "rootPatterns": [".cquery", "compile_commands.json", ".vim/", ".git/", ".hg/"],
       "initializationOptions": {
         "cacheDirectory": "/tmp/cquery"

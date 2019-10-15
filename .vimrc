@@ -93,6 +93,7 @@ augroup FileTypeIndnet
   autocmd FileType pug call s:set_tabwidth(2)
   autocmd FileType ketos call s:set_tabwidth(2)
   autocmd FileType jinja call s:set_tabwidth(2)
+  autocmd FileType sml call s:set_tabwidth(2)
 augroup END
 
 " filetype を設定する
@@ -126,6 +127,16 @@ let g:mapleader = "\<Space>"
 let g:mamplocalleader = '\'
 
 " Shortcut
+function! Toggle_file()
+  let l:ext = expand('%:e')
+  let l:curfile = expand('%:p:r')
+  if l:ext ==# 'h'
+    execute 'e ' . l:curfile . '.cpp'
+  elseif l:ext ==# 'cpp'
+    execute 'e ' . l:curfile . '.h'
+  endif
+endfunction
+
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
 " 現在のタブでPowershellを実行する
@@ -135,6 +146,8 @@ nnoremap <leader><Tab> ddO
 nnoremap <silent> <leader>q :call popup_clear()<CR>
 nnoremap <silent> <leader>p "+p
 inoremap <C-@> <ESC>
+" 同じディレクトリの同じファイル名のヘッダ・ソース・ファイルを開く
+nnoremap <silent> <leader>g :call Toggle_file()<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -238,7 +251,7 @@ else
   Plug 'machakann/vim-swap'
   Plug 'rust-lang/rust.vim'
   Plug 'masuke5/doisa-vim'
-  Plug 'jez/vim-better-sml'
+  "Plug 'jez/vim-better-sml'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
@@ -271,6 +284,12 @@ else
   Plug 'dracula/vim'
   Plug 'vim-scripts/Wombat'
   Plug 'altercation/vim-colors-solarized'
+  Plug 'Rigellute/rigel'
+  Plug 'sainnhe/edge'
+  Plug 'sainnhe/gruvbox-material'
+  Plug 'nightsense/cosmic_latte'
+  Plug 'nightsense/snow'
+  Plug 'arcticicestudio/nord-vim'
 
   if has('win32')
     Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -320,7 +339,7 @@ let g:go_highlight_variable_assignments = 1
 " dark: seoul256
 " light: PaperColor_light
 let g:lightline = {
-  \ 'colorscheme': 'powerline',
+  \ 'colorscheme': 'seoul256',
   \ 'active': {
   \   'left': [['mode', 'paste'],
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
@@ -389,10 +408,15 @@ let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
 let g:sandwich#recipes += [
       \   {
       \     'buns': ['(*', '*)'],
+      \     'input': ['l'],
       \     'filetype': ['sml', 'ocaml'],
-      \     'nesting': 0,
+      \     'match_syntax': 1,
+      \     'nesting': 1,
       \   },
       \ ]
+
+" python-syntax
+let g:python_highlight_all = 1
 
 " Preference
 source $HOME/.vim-preference
