@@ -148,6 +148,8 @@ nnoremap <silent> <leader>p "+p
 inoremap <C-@> <ESC>
 " 同じディレクトリの同じファイル名のヘッダ・ソース・ファイルを開く
 nnoremap <silent> <leader>g :call Toggle_file()<CR>
+" タブを閉じる
+nnoremap <silent> <leader>w :tabclose<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -424,7 +426,10 @@ source $HOME/.vim-preference
 " Enable syntax highlight
 syntax on
 
-" Disable underline in tabline
-highlight TabLine term=NONE gui=NONE
-" Disable bold in tabline
-highlight TabLineSel term=NONE gui=NONE
+function! s:highlight()
+  " Disable underline in tabline
+  highlight TabLine term=NONE gui=NONE
+  " Disable bold in tabline
+  highlight TabLineSel term=NONE gui=NONE
+endfunction
+autocmd! ColorScheme * call s:highlight()
