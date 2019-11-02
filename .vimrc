@@ -253,7 +253,7 @@ else
   Plug 'machakann/vim-swap'
   Plug 'rust-lang/rust.vim'
   Plug 'masuke5/doisa-vim'
-  "Plug 'jez/vim-better-sml'
+  Plug 'jez/vim-better-sml'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight'
