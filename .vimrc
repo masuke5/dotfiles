@@ -9,6 +9,11 @@ function! s:auto_mkdir(dir, force)
   endif
 endfunction
 
+" Shell
+if has('win32')
+  set shell=pwsh
+endif
+
 " Encoding
 set encoding=utf-8
 set fileencoding=utf-8
@@ -80,27 +85,26 @@ call s:set_tabwidth(4)
 " ファイルの種類に応じてタブ幅を変える
 augroup FileTypeIndnet
   autocmd!
-  autocmd FileType vim call s:set_tabwidth(2)
-  autocmd FileType ruby call s:set_tabwidth(2)
-  autocmd FileType nim call s:set_tabwidth(2)
-  autocmd FileType toml call s:set_tabwidth(2)
-  autocmd FileType json call s:set_tabwidth(2)
-  autocmd FileType yaml call s:set_tabwidth(2)
-  autocmd FileType vue call s:set_tabwidth(2)
-  autocmd FileType javascript call s:set_tabwidth(2)
-  autocmd FileType typescript call s:set_tabwidth(2)
-  autocmd FileType html call s:set_tabwidth(2)
-  autocmd FileType pug call s:set_tabwidth(2)
-  autocmd FileType ketos call s:set_tabwidth(2)
-  autocmd FileType jinja call s:set_tabwidth(2)
-  autocmd FileType sml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.vim call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.ruby call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.nim call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.toml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.json call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.yaml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.vue call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.js call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.ts call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.html call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.pug call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.html.tera call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.sml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.css call s:set_tabwidth(2)
 augroup END
 
 " filetype を設定する
 augroup ExtensionFileType
   autocmd!
   autocmd BufNewFile,BufRead *.ejs set ft=html
-  autocmd BufNewFile,BufRead *.ket set ft=ketos
   autocmd BufNewFile,BufRead *.html.tera set ft=jinja.html
 augroup END
 
@@ -232,7 +236,7 @@ else
   call plug#begin('~/.vim/plugged')
 
   Plug 'airblade/vim-gitgutter'
-  Plug 'fatih/vim-go'
+  Plug 'fatih/vim-go', { 'for': 'go' }
   " Plug 'tpope/vim-surround'
   Plug 'machakann/vim-sandwich'
   Plug 'mattn/emmet-vim'
@@ -249,23 +253,25 @@ else
   Plug 'Shirk/vim-gas'
   Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
   Plug 'godlygeek/tabular'
-  Plug 'plasticboy/vim-markdown'
+  Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'machakann/vim-swap'
-  Plug 'rust-lang/rust.vim'
+  Plug 'rust-lang/rust.vim', { 'for': 'rust' }
   Plug 'masuke5/doisa-vim'
-  Plug 'jez/vim-better-sml'
+  Plug 'jez/vim-better-sml', { 'for': 'sml' }
+  Plug 'KabbAmine/vCoolor.vim'
 
   " Syntax highlight
-  Plug 'octol/vim-cpp-enhanced-highlight'
-  Plug 'ElmCast/elm-vim'
-  Plug 'cakebaker/scss-syntax.vim'
-  Plug 'digitaltoad/vim-pug'
-  Plug 'leafgarland/typescript-vim'
-  Plug 'pangloss/vim-javascript'
-  Plug 'posva/vim-vue'
-  Plug 'PProvost/vim-ps1'
+  Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
+  Plug 'ElmCast/elm-vim', { 'for': 'elm' }
+  Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
+  Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+  Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'javascript' }
+  Plug 'posva/vim-vue', { 'for': 'vue' }
+  Plug 'PProvost/vim-ps1', { 'for': 'ps1' }
   Plug 'justinmk/vim-syntax-extra'
-  Plug 'Glench/Vim-Jinja2-Syntax'
+  Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
 
   " Colorscheme
   Plug 'masuke5/masuc'
