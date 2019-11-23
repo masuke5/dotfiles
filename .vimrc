@@ -18,7 +18,7 @@ endif
 set encoding=utf-8
 set fileencoding=utf-8
 set termencoding=utf-8
-set ambiwidth=double
+set ambiwidth=single
 scriptencoding utf-8
 
 " File
@@ -38,7 +38,6 @@ set backup
 " Search
 set incsearch
 set hlsearch
-set ignorecase
 set smartcase
 set wrapscan
 
@@ -235,7 +234,7 @@ if empty(glob(s:vim_plug_path))
 else
   call plug#begin('~/.vim/plugged')
 
-  Plug 'airblade/vim-gitgutter'
+  " Plug 'airblade/vim-gitgutter'
   Plug 'fatih/vim-go', { 'for': 'go' }
   " Plug 'tpope/vim-surround'
   Plug 'machakann/vim-sandwich'
@@ -259,6 +258,7 @@ else
   Plug 'masuke5/doisa-vim'
   Plug 'jez/vim-better-sml', { 'for': 'sml' }
   Plug 'KabbAmine/vCoolor.vim'
+  Plug 'osyo-manga/vim-over'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
@@ -272,6 +272,7 @@ else
   Plug 'PProvost/vim-ps1', { 'for': 'ps1' }
   Plug 'justinmk/vim-syntax-extra'
   Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
+  Plug 'masuke5/lang2.vim', { 'for': 'lang2' }
 
   " Colorscheme
   Plug 'masuke5/masuc'
@@ -347,7 +348,7 @@ let g:go_highlight_variable_assignments = 1
 " dark: seoul256
 " light: PaperColor_light
 let g:lightline = {
-  \ 'colorscheme': 'seoul256',
+  \ 'colorscheme': 'PaperColor_light',
   \ 'active': {
   \   'left': [['mode', 'paste'],
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
@@ -380,8 +381,8 @@ augroup END
 inoremap <silent><expr> <C-space> coc#refresh()
 
 nmap <F2> <Plug>(coc-rename)
-nmap <slient> <leader>n <Plug>(coc-diagnostic-prev)
-nmap <slient> <leader>p <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>an <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>ap <Plug>(coc-diagnostic-next)
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
