@@ -26,6 +26,7 @@ function Default($dest, $path) {
 }
 
 Dotfile $env:HOME\.gitconfig .gitconfig
+Dotfile $env:HOME\.gitconfig.os .gitconfig.win
 Dotfile $env:HOME\.gvimrc .gvimrc
 Dotfile $env:HOME\.vimrc .vimrc
 Dotfile $env:LOCALAPPDATA\nvim\init.vim .vimrc

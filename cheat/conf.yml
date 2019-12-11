@@ -1,0 +1,10 @@
+---
+editor: vim
+colorize: true
+style: monokai
+formatter: terminal256
+cheatpaths:
+  - name: unix
+    path: ~/.config/cheat/unix
+    tags: [ unix ]
+    readonly: false

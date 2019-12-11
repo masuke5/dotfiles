@@ -38,6 +38,7 @@ set backup
 " Search
 set incsearch
 set hlsearch
+set ignorecase
 set smartcase
 set wrapscan
 
@@ -52,6 +53,7 @@ set updatetime=300
 set showmatch
 set matchtime=1
 set matchpairs+=<:>
+set ttimeoutlen=10 " Remove ESC key lag
 
 " View
 set hidden
@@ -142,8 +144,7 @@ endfunction
 
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
-" 現在のタブでPowershellを実行する
-nnoremap <leader>t :terminal ++close ++curwin pwsh<CR>
+nnoremap <leader>t gt
 nnoremap <leader><Tab> ddO
 " すべてのポップアップウィンドウを消す
 nnoremap <silent> <leader>q :call popup_clear()<CR>
@@ -151,8 +152,11 @@ nnoremap <silent> <leader>p "+p
 inoremap <C-@> <ESC>
 " 同じディレクトリの同じファイル名のヘッダ・ソース・ファイルを開く
 nnoremap <silent> <leader>g :call Toggle_file()<CR>
-" タブを閉じる
-nnoremap <silent> <leader>w :tabclose<CR>
+" fzf.vim
+nnoremap <leader>j :GFiles<CR>
+nnoremap <leader>w :Rg<CR>
+nnoremap <leader>h :History<CR>
+nnoremap <leader>k :History:<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -239,7 +243,6 @@ else
   " Plug 'tpope/vim-surround'
   Plug 'machakann/vim-sandwich'
   Plug 'mattn/emmet-vim'
-  Plug 'scrooloose/nerdtree'
   Plug 'itchyny/lightline.vim'
   Plug 'itchyny/vim-gitbranch'
   Plug 'scrooloose/nerdcommenter'
@@ -259,6 +262,8 @@ else
   Plug 'jez/vim-better-sml', { 'for': 'sml' }
   Plug 'KabbAmine/vCoolor.vim'
   Plug 'osyo-manga/vim-over'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
 
   " Syntax highlight
   Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
@@ -316,9 +321,6 @@ else
   let g:python3_host_prog = '/usr/bin/python3'
 endif
 
-" NERDTree
-map <leader>j :NERDTreeToggle<CR>
-
 " C++ highlight
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
@@ -348,7 +350,7 @@ let g:go_highlight_variable_assignments = 1
 " dark: seoul256
 " light: PaperColor_light
 let g:lightline = {
-  \ 'colorscheme': 'PaperColor_light',
+  \ 'colorscheme': 'seoul256',
   \ 'active': {
   \   'left': [['mode', 'paste'],
   \            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],

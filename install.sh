@@ -49,12 +49,20 @@ function default() {
   fi
 }
 
+# Vim
 link .vimrc
 link .gvimrc
 link .vim-preference
-link .gitconfig
+default .vim-preference
+
+# NeoVim
+mkdir -p ~/.config/nvim
 link ginit.vim ~/.config/nvim/ginit.vim
 link .vimrc ~/.config/nvim/init.vim
 link coc-settings.json $HOME/.config/nvim/coc-settings.json
+
+# Other
+link .gitconfig
+link .gitconfig.linux ~/.gitconfig.os
 link .zshrc
-default .vim-preference
+link cheat ~/.config/cheat

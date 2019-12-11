@@ -1,3 +1,5 @@
+[include]
+    path = .gitconfig.os
 [alias]
 	ss = status -s
 	s = status
@@ -11,12 +13,10 @@
 	email = s.zerogoichi@gmail.com
 	name = masuke5
 [core]
-	editor = nvim
+	editor = vim
 	autocrlf = input
 [grep]
 	lineNumber = true
-[credential]
-    helper = cache
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
