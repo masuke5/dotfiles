@@ -17,11 +17,12 @@ colors
 autoload -Uz compinit
 compinit
 
+export HISTFILE=~/.zsh_history
 export HISTSIZE=1000
 export SAVEHIST=10000
 setopt hist_ignore_dups
 setopt share_history
-setopt append_history
+setopt inc_append_history
 setopt hist_no_store
 setopt auto_pushd
 setopt pushd_ignore_dups
@@ -32,6 +33,9 @@ PROMPT="%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}# %{$reset_color%}"
 bindkey -e
 
 export WDEV=/mnt/c/users/shinsuke/dev
-export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$PATH
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# OPAM configuration
+. /home/shinsuke/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

@@ -1,0 +1,11 @@
+# N個まで引数を渡す
+xargs -nN command
+
+# N行まで引数を渡す
+xargs -LN command
+
+# XXXに引数を展開する（-xと-L1が自動で設定される）
+xargs -IXXX command XXX --option
+
+# 一行ごとに確認しながら実行する
+xargs -p command
