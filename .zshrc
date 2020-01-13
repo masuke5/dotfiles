@@ -6,6 +6,8 @@ zplug load
 alias ls='ls --color=auto'
 alias la='ls --color=auto -a'
 alias ll='ls --color=auto -al'
+alias clip='xclip -selection clipboard'
+alias rmswp='rm ~/.vim/backup/*.swp'
 
 function gvim() {
     /mnt/c/vim/vim81/gvim.exe $* &
@@ -33,7 +35,8 @@ PROMPT="%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}# %{$reset_color%}"
 bindkey -e
 
 export WDEV=/mnt/c/users/shinsuke/dev
-export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$PATH
+export GOROOT=$HOME/go
+export PATH=$GOROOT/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

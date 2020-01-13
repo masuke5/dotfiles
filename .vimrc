@@ -1,12 +1,12 @@
 if &compatible
-set nocompatible
+  set nocompatible
 endif
 
 function! s:auto_mkdir(dir, force)
-if !isdirectory(a:dir) && (a:force ||
-\    input(printf('"%s" does not exist. Create? [y/N] ', a:dir)) =~? '^y\%[es]$')
-  call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-endif
+  if !isdirectory(a:dir) && (a:force ||
+  \    input(printf('"%s" does not exist. Create? [y/N] ', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+  endif
 endfunction
 
 " Shell
@@ -67,6 +67,7 @@ set cmdheight=1
 set completeopt=menu,preview
 if !has('nvim')
 set ballooneval
+set showcmd
 else
 set inccommand=split
 endif
@@ -75,9 +76,9 @@ endif
 set breakindent
 
 function! s:set_tabwidth(width) abort
-let &tabstop = a:width
-let &shiftwidth = a:width
-let &softtabstop = a:width
+  let &tabstop = a:width
+  let &shiftwidth = a:width
+  let &softtabstop = a:width
 endfunction
 
 " デフォルトのタブ幅
@@ -85,44 +86,45 @@ call s:set_tabwidth(4)
 
 " ファイルの種類に応じてタブ幅を変える
 augroup FileTypeIndnet
-autocmd!
-autocmd BufRead,BufNewFile,BufEnter *.vim call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.ruby call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.nim call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.toml call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.json call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.yaml call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.vue call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.js call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.ts call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.html call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.pug call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.html.tera call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.sml call s:set_tabwidth(2)
-autocmd BufRead,BufNewFile,BufEnter *.css call s:set_tabwidth(2)
+  autocmd!
+  autocmd BufRead,BufNewFile,BufEnter *.vim call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.ruby call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.nim call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.toml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.json call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.yaml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.vue call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.js call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.ts call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.html call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.pug call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.html.tera call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.sml call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.css call s:set_tabwidth(2)
 augroup END
 
 " filetype を設定する
 augroup ExtensionFileType
-autocmd!
-autocmd BufNewFile,BufRead *.ejs set ft=html
-autocmd BufNewFile,BufRead *.html.tera set ft=jinja.html
+  autocmd!
+  autocmd BufNewFile,BufRead *.ejs set ft=html
+  autocmd BufNewFile,BufRead *.html.tera set ft=jinja.html
 augroup END
 
 augroup Terminal
-autocmd!
-
-" ターミナルを開いたら行番号を隠す
-function! s:hide_linenumber_if_terminal()
-  if &buftype == 'terminal'
-    set nonumber
-  else
-    set nonumber
-  endif
-endfunction
-autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
-" ファイル書き込み時にディレクトリを作成する
-autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+  autocmd!
+  
+  " ターミナルを開いたら行番号を隠す
+  function! s:hide_linenumber_if_terminal()
+    if &buftype == 'terminal'
+      set nonumber
+    else
+      set nonumber
+    endif
+  endfunction
+  " FIXME: これを追加するとVimのタイトルが表示されない
+  " autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
+  " ファイル書き込み時にディレクトリを作成する
+  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
 
 " Leader
@@ -156,8 +158,8 @@ nnoremap <leader>j :Files<CR>
 nnoremap <leader>w :Rg<CR>
 nnoremap <leader>h :History<CR>
 nnoremap <leader>k :History:<CR>
+nnoremap <leader>l :GFiles<CR>
 " タブ関連
-nnoremap <leader>l gt
 nnoremap <leader>t :tabnew<CR>
 
 " Alias
@@ -174,70 +176,71 @@ let g:load_doxygen_syntax = 1
 " JSON のフォーマット (jq)
 command! -nargs=? Jq call s:Jq(<f-args>)
 function! s:Jq(...)
-if 0 == a:0
-  let l:arg = "."
-else
-  let l:arg = a:1
-endif
-execute "%! jq \"" . l:arg . "\""
+  if 0 == a:0
+    let l:arg = "."
+  else
+    let l:arg = a:1
+  endif
+  execute "%! jq \"" . l:arg . "\""
 endfunction
 
 " tabline
 function! s:tabpage_label(n)
-let hi = a:n is tabpagenr() ? '%#TabLineSel#' : '%#TabLine#'
-
-" タブページ内のバッファのリスト
-let bufnrs = tabpagebuflist(a:n)
-
-let mod = len(filter(copy(bufnrs), 'getbufvar(v:val, "&modified")')) ? ' +' : ''
-
-" カレントバッファのファイル名
-let curbufnr = bufnrs[tabpagewinnr(a:n) - 1]
-let fname = fnamemodify(bufname(curbufnr), ':t')
-if fname == ''
-    let fname = '[無名]'
-endif
-
-let label = a:n . ' ' . fname . mod
-
-return '%' . a:n . 'T' . hi . ' ' . label . ' %T%#TabLineFill#'
+  let hi = a:n is tabpagenr() ? '%#TabLineSel#' : '%#TabLine#'
+  
+  " タブページ内のバッファのリスト
+  let bufnrs = tabpagebuflist(a:n)
+  
+  let mod = len(filter(copy(bufnrs), 'getbufvar(v:val, "&modified")')) ? ' +' : ''
+  
+  " カレントバッファのファイル名
+  let curbufnr = bufnrs[tabpagewinnr(a:n) - 1]
+  let fname = fnamemodify(bufname(curbufnr), ':t')
+  if fname == ''
+      let fname = '[無名]'
+  endif
+  
+  let label = a:n . ' ' . fname . mod
+  
+  return '%' . a:n . 'T' . hi . ' ' . label . ' %T%#TabLineFill#'
 endfunction
 
 function! MakeTabLine()
-let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val)')
-let sep = ''
-let tabpages = join(titles, sep) . sep . '%#TabLineFill#%T'
-
-" 選択しているタブページのカレントバッファのディレクトリ
-let bufnrs = tabpagebuflist(tabpagenr())
-let curbufnr = bufnrs[tabpagewinnr(tabpagenr()) - 1]
-let dname = fnamemodify(bufname(curbufnr), ':p:h')
-let cwd = fnamemodify(dname, ":~")
-if has('win32')
-  let cwd = substitute(cwd, escape($USERPROFILE, '\'), 'W~', '')
-  let cwd = substitute(cwd, '\\', '/', 'g')
-endif
-
-let info = cwd
-return tabpages . '%=' . info
+  let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val)')
+  let sep = ''
+  let tabpages = join(titles, sep) . sep . '%#TabLineFill#%T'
+  
+  " 選択しているタブページのカレントバッファのディレクトリ
+  let bufnrs = tabpagebuflist(tabpagenr())
+  let curbufnr = bufnrs[tabpagewinnr(tabpagenr()) - 1]
+  let dname = fnamemodify(bufname(curbufnr), ':p:h')
+  let cwd = fnamemodify(dname, ":~")
+  if has('win32')
+    let cwd = substitute(cwd, escape($USERPROFILE, '\'), 'W~', '')
+    let cwd = substitute(cwd, '\\', '/', 'g')
+  endif
+  
+  let info = cwd
+  return tabpages . '%=' . info
 endfunction
 
 set tabline=%!MakeTabLine()
 
 " Plugin
 if has('nvim') && has('win32')
-let s:vim_plug_path = $LOCALAPPDATA . '/nvim/autoload/plug.vim'
+  let s:vim_plug_path = $LOCALAPPDATA . '/nvim/autoload/plug.vim'
 elseif has('nvim') && has('unix')
-let s:vim_plug_path = '~/.local/share/nvim/site/autoload/plug.vim'
+  let s:vim_plug_path = '~/.local/share/nvim/site/autoload/plug.vim'
 elseif has('win32')
-let s:vim_plug_path = $USERPROFILE . '\vimfiles\autoload\plug.vim'
+  let s:vim_plug_path = $USERPROFILE . '\vimfiles\autoload\plug.vim'
 elseif has('unix')
-let s:vim_plug_path = '~/.vim/autoload/plug.vim'
+  let s:vim_plug_path = '~/.vim/autoload/plug.vim'
 endif
 
 if empty(glob(s:vim_plug_path))
-echoerr 'vim-plug をインストールしていません'
+  echoerr 'vim-plug をインストールしていません'
 else
+
 call plug#begin('~/.vim/plugged')
 
 " Plug 'airblade/vim-gitgutter'
@@ -247,11 +250,9 @@ Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
-Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/goyo.vim'
 Plug 'kshenoy/vim-signature'
 Plug 'vim-scripts/taglist.vim'
-Plug 't9md/vim-quickhl'
 Plug 'nicwest/vim-http'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'Shirk/vim-gas'
@@ -266,9 +267,10 @@ Plug 'KabbAmine/vCoolor.vim'
 Plug 'osyo-manga/vim-over'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'wakatime/vim-wakatime'
 
 " Syntax highlight
-Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
+" Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
@@ -313,6 +315,11 @@ else
   Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 endif
 
+" firenvim
+if has('nvim')
+  Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+endif
+
 call plug#end()
 endif
 
@@ -328,7 +335,7 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_experimental_simple_template_highlight = 1
-let g:cpp_experimental_template_highlight = 1
+" let g:cpp_experimental_template_highlight = 1
 
 " Emmet
 let g:user_emmet_settings = {
@@ -373,9 +380,6 @@ let g:lightline = {
 \ }
 \ }
 
-" tsuquyomi
-let g:tsuquyomi_completion_detail = 1
-
 " coc.nvim
 augroup Coc
 autocmd!
@@ -385,8 +389,8 @@ augroup END
 inoremap <silent><expr> <C-j> coc#refresh()
 
 nmap <F2> <Plug>(coc-rename)
-nmap <silent> <leader>an <Plug>(coc-diagnostic-prev)
-nmap <silent> <leader>ap <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>an <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>ap <Plug>(coc-diagnostic-prev)
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -400,21 +404,11 @@ nnoremap <silent> <space>ao  :<C-u>CocList outline<cr>
 nnoremap <silent> <space>as  :<C-u>CocList -I symbols<cr>
 
 function! s:show_documentation()
-if &filetype == 'vim'
-execute 'h '.expand('<cword>')
-else
-call CocAction('doHover')
-endif
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
 endfunction
-
-" NERDCommenter
-let g:NERDSpaceDelims = 1
-
-" quickhl
-nmap <Space>m <Plug>(quickhl-manual-this)
-xmap <Space>m <Plug>(quickhl-manual-this)
-nmap <Space>M <Plug>(quickhl-manual-reset)
-xmap <Space>M <Plug>(quickhl-manual-reset)
 
 " sandwich.vim
 let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
@@ -430,6 +424,16 @@ let g:sandwich#recipes += [
 
 " python-syntax
 let g:python_highlight_all = 1
+
+" firenvim
+let g:firenvim_config = {
+    \ 'localSettings': {
+        \ '.*': {
+            \ 'selector': 'textarea, div[role="textbox"]',
+            \ 'priority': 0,
+        \ }
+    \ }
+\ }
 
 " Preference
 source $HOME/.vim-preference

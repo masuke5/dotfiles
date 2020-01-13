@@ -66,3 +66,4 @@ link .gitconfig
 link .gitconfig.linux ~/.gitconfig.os
 link .zshrc
 link cheat ~/.config/cheat
+link .Xresources

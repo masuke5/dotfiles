@@ -1,0 +1,5 @@
+# tar.xz形式に圧縮
+tar -Jcvf /path/to/dir
+
+# 展開先を指定
+tar -xvf /path/to/dir -C /path/to/dist
