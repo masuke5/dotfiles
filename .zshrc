@@ -29,6 +29,7 @@ setopt hist_no_store
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt auto_menu
+setopt no_beep
 
 PROMPT="%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}# %{$reset_color%}"
 

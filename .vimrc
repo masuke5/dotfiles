@@ -268,6 +268,8 @@ Plug 'osyo-manga/vim-over'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
+Plug 'Sirver/ultisnips'
+Plug 'honza/vim-snippets'
 
 " Syntax highlight
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
@@ -434,6 +436,13 @@ let g:firenvim_config = {
         \ }
     \ }
 \ }
+
+" coc-snippets
+let g:UltiSnipsExpandTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+
+let g:UltiSnipsEditSplit="vertical"
 
 " Preference
 source $HOME/.vim-preference
