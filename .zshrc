@@ -1,7 +1,7 @@
-source ~/.zplug/init.zsh
+# source ~/.zplug/init.zsh
 
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug load
+# zplug "zsh-users/zsh-syntax-highlighting", defer:2
+# zplug load
 
 alias ls='ls --color=auto'
 alias la='ls --color=auto -a'
@@ -26,7 +26,6 @@ setopt hist_ignore_dups
 setopt share_history
 setopt inc_append_history
 setopt hist_no_store
-setopt auto_pushd
 setopt pushd_ignore_dups
 setopt auto_menu
 setopt no_beep

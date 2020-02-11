@@ -1,19 +1,36 @@
 " vim: set ft=vim:
 
-function! s:highlight()
-  "highlight CocErrorHighlight term=undercurl
-  "highlight CocWarningHighlight term=undercurl
+function! s:set_lightline_colorscheme(name) abort
+  let g:lightline.colorscheme = a:name
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
 endfunction
 
-autocmd Colorscheme * call s:highlight()
+function! s:highlight()
+  " backgroundの値に応じてlightlineのカラースキームを変える
+  if &background ==# 'dark'
+    call s:set_lightline_colorscheme('seoul256')
+  else
+    call s:set_lightline_colorscheme('PaperColor_light')
+  endif
 
-colorscheme hybrid
+  " coc.nvimのエラーの下線を波線にする
+  " hi CocErrorHighlight term=undercurl
+  " hi CocWarningHighlight term=undercurl
+
+  " Change cursor color on insert mode to lime
+  " hi CursorInsert ctermfg=lightgreen ctermbg=lightgreen
+endfunction
+
+autocmd! Colorscheme * call s:highlight()
+
+set t_Co=256
+let g:molokai_original = 1
+colorscheme gruvbox
 set background=dark
 
 command! Opv e ~/.vim-preference
-
-" Change cursor color on insert mode to lime
-" hi CursorInsert guifg=black guibg=lime
 
 " Change cursor shape on insert mode to block
 " set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:block-CursorInsert/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175

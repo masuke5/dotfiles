@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 if &compatible
   set nocompatible
 endif
@@ -19,7 +21,6 @@ set encoding=utf-8
 set fileencoding=utf-8
 set termencoding=utf-8
 set ambiwidth=single
-scriptencoding utf-8
 
 " File
 set autoread
@@ -59,7 +60,7 @@ set ttimeoutlen=10 " Remove ESC key lag
 set hidden
 set pumheight=10
 set noshowmode
-set nonumber
+set relativenumber
 set laststatus=2
 set splitbelow
 set shortmess+=c
@@ -155,12 +156,16 @@ inoremap <C-@> <ESC>
 nnoremap <silent> <leader>g :call Toggle_file()<CR>
 " fzf.vim
 nnoremap <leader>j :Files<CR>
-nnoremap <leader>w :Rg<CR>
+nnoremap <leader>w :RG<CR>
 nnoremap <leader>h :History<CR>
 nnoremap <leader>k :History:<CR>
 nnoremap <leader>l :GFiles<CR>
 " タブ関連
 nnoremap <leader>t :tabnew<CR>
+" gitgutter-vim
+nnoremap <leader>go :GitGutter<CR>
+nnoremap <leader>gn :GitGutterNextHunk<CR>
+nnoremap <leader>gp :GitGutterPrevHunk<CR>
 
 " Alias
 command! Uv source ~/.vimrc
@@ -243,7 +248,7 @@ else
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go', { 'for': 'go' }
 " Plug 'tpope/vim-surround'
 Plug 'machakann/vim-sandwich'
@@ -310,6 +315,8 @@ Plug 'sainnhe/gruvbox-material'
 Plug 'nightsense/cosmic_latte'
 Plug 'nightsense/snow'
 Plug 'arcticicestudio/nord-vim'
+Plug 'sjl/badwolf'
+Plug 'ayu-theme/ayu-vim'
 
 if has('win32')
   Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -443,6 +450,17 @@ let g:UltiSnipsJumpForwardTrigger="<c-l>"
 let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 
 let g:UltiSnipsEditSplit="vertical"
+
+" fzf.vim
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -g "!package-lock.json"  %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 " Preference
 source $HOME/.vim-preference
