@@ -82,6 +82,11 @@ function! s:set_tabwidth(width) abort
   let &softtabstop = a:width
 endfunction
 
+function s:set_rust_options()
+  setlocal textwidth=100
+  setlocal colorcolumn=+1
+endfunction
+
 " デフォルトのタブ幅
 call s:set_tabwidth(4)
 
@@ -102,6 +107,7 @@ augroup FileTypeIndnet
   autocmd BufRead,BufNewFile,BufEnter *.html.tera call s:set_tabwidth(2)
   autocmd BufRead,BufNewFile,BufEnter *.sml call s:set_tabwidth(2)
   autocmd BufRead,BufNewFile,BufEnter *.css call s:set_tabwidth(2)
+  autocmd BufRead,BufNewFile,BufEnter *.rs call s:set_rust_options()
 augroup END
 
 " filetype を設定する
@@ -461,6 +467,8 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
 
 " Preference
 source $HOME/.vim-preference
