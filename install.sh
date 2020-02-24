@@ -53,7 +53,7 @@ function default() {
 link .vimrc
 link .gvimrc
 link .vim-preference
-default .vim-preference
+link vim-config
 
 # NeoVim
 mkdir -p ~/.config/nvim
