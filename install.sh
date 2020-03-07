@@ -50,10 +50,11 @@ function default() {
 }
 
 # Vim
+mkdir -p ~/.vim
 link .vimrc
 link .gvimrc
-link .vim-preference
 link vim-config
+link coc-settings.json $HOME/.vim/coc-settings.json
 
 # NeoVim
 mkdir -p ~/.config/nvim

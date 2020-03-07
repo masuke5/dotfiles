@@ -1,14 +1,3 @@
 {
-  "languageserver": {
-    "cquery": {
-      "command": "cquery",
-      "args": ["--log-file=/tmp/cq.log"],
-      "filetypes": ["c", "cpp"],
-      "rootPatterns": [".cquery", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-      "initializationOptions": {
-        "cacheDirectory": "/tmp/cquery"
-      }
-    }
-  },
-  "coc.preferences.extensionUpdateCheck": "never"
+  "diagnostic.virtualText": false
 }

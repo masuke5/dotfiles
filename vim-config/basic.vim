@@ -59,7 +59,7 @@ set wrapscan
 
 set expandtab
 set textwidth=0
-set formatoptions=q
+set formatoptions=qB
 set belloff=all
 set autoindent
 set backspace=indent,eol,start
@@ -106,15 +106,18 @@ function s:set_rust_options()
 endfunction
 
 " デフォルトのタブ幅
-call s:set_tabwidth(4)
+let s:def_tabwidth = 4
+let &tabstop = s:def_tabwidth
+let &shiftwidth = s:def_tabwidth
+let &softtabstop = s:def_tabwidth
 
 " ファイルの種類ごとの設定
 augroup SettingsPerFileType
   autocmd!
   " タブ幅を2にする
-  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,js,ts,html,pug,jinja,sml,css call s:set_tabwidth(2)
+  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css call s:set_tabwidth(2)
 
-  autocmd FileType rs call s:set_rust_options()
+  autocmd FileType rust call s:set_rust_options()
 augroup END
 
 " 拡張子を元にfiletypeを設定する

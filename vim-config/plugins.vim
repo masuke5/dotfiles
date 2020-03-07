@@ -44,6 +44,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
 Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'antoinemadec/coc-fzf'
 
 " Syntax highlight
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
@@ -86,6 +87,7 @@ Plug 'nightsense/snow'
 Plug 'arcticicestudio/nord-vim'
 Plug 'sjl/badwolf'
 Plug 'ayu-theme/ayu-vim'
+Plug 'whatyouhide/vim-gotham'
 
 call plug#end()
 
@@ -155,7 +157,7 @@ autocmd!
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup END
 
-inoremap <silent><expr> <C-j> coc#refresh()
+inoremap <silent><expr> <C-s> coc#refresh()
 
 nmap <F2> <Plug>(coc-rename)
 nmap <silent> <leader>an <Plug>(coc-diagnostic-next)
@@ -171,6 +173,7 @@ nnoremap <silent> <leader>ad :<C-u>CocList diagnostics<CR>
 nnoremap <silent> <space>ac  :<C-u>CocList commands<cr>
 nnoremap <silent> <space>ao  :<C-u>CocList outline<cr>
 nnoremap <silent> <space>as  :<C-u>CocList -I symbols<cr>
+nmap <silent> <leader>al <Plug>(coc-codelens-action)
 
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -205,7 +208,7 @@ let g:firenvim_config = {
 \ }
 
 " coc-snippets
-imap <C-j> <Plug>(coc-snippets-expand)
+imap <C-k> <Plug>(coc-snippets-expand)
 vmap <C-l> <Plug>(coc-snippets-select)
 
 let g:coc_snippet_next = '<c-l>'
@@ -231,9 +234,12 @@ nnoremap <leader>k :History:<CR>
 nnoremap <leader>l :GFiles<CR>
 
 " popup windowでfzfを開く
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal', 'border': 'sharp' } }
 
 " gitgutter-vim
 nnoremap <leader>go :GitGutter<CR>
 nnoremap <leader>gn :GitGutterNextHunk<CR>
 nnoremap <leader>gp :GitGutterPrevHunk<CR>
+
+" rust.vim
+let g:rustfmt_autosave = 1
