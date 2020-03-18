@@ -88,6 +88,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'sjl/badwolf'
 Plug 'ayu-theme/ayu-vim'
 Plug 'whatyouhide/vim-gotham'
+Plug 'NLKNguyen/papercolor-theme'
 
 call plug#end()
 
@@ -240,6 +241,7 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Norm
 nnoremap <leader>go :GitGutter<CR>
 nnoremap <leader>gn :GitGutterNextHunk<CR>
 nnoremap <leader>gp :GitGutterPrevHunk<CR>
+nnoremap <leader>gu :GitGutterUndoHunk<CR>
 
 " rust.vim
 let g:rustfmt_autosave = 1

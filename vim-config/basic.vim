@@ -158,13 +158,41 @@ let g:mamplocalleader = '\'
 " Shortcuts
 " --------------------------------------
 
-function! s:toggle_file()
+function! Toggle_file()
+  let l:source_exts = ['cpp', 'c', 'cxx']
+  let l:header_exts = ['h', 'hpp', 'hxx']
+
   let l:ext = expand('%:e')
   let l:curfile = expand('%:p:r')
-  if l:ext ==# 'h'
-    execute 'e ' . l:curfile . '.cpp'
-  elseif l:ext ==# 'cpp'
-    execute 'e ' . l:curfile . '.h'
+
+  " Header
+  let l:index = index(l:header_exts, l:ext)
+  if l:index >= 0
+    for ext in l:source_exts
+      let l:filename = l:curfile . '.' . ext
+      if !empty(glob(l:filename))
+        execute 'e ' . l:filename
+        return
+      endif
+    endfor
+
+    execute 'e ' . l:curfile . '.' . l:source_exts[0]
+    return
+  endif
+
+  " Source
+  let l:index = index(l:source_exts, l:ext)
+  if l:index >= 0
+    for ext in l:header_exts
+      let l:filename = l:curfile . '.' . ext
+      if !empty(glob(l:filename))
+        execute 'e ' . l:filename
+        return
+      endif
+    endfor
+
+    execute 'e ' . l:curfile . '.' . l:header_exts[0]
+    return
   endif
 endfunction
 
@@ -176,7 +204,7 @@ nnoremap <silent> <leader>q :call popup_clear()<CR>
 nnoremap <silent> <leader>p "+p
 inoremap <C-@> <ESC>
 " 同じディレクトリの同じファイル名のヘッダファイルかソースファイルを開く
-nnoremap <silent> <leader>g :call s:toggle_file()<CR>
+nnoremap <silent> <leader>f :call Toggle_file()<CR>
 " タブ関連
 nnoremap <leader>t :tabnew<CR>
 

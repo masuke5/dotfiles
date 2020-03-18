@@ -25,20 +25,20 @@ function! s:highlight()
 
   " 透過
   if &background ==# 'dark'
-    highlight Normal ctermbg=NONE guibg=NONE
-    highlight Todo ctermbg=NONE guibg=NONE
-    highlight NonText ctermbg=NONE guibg=NONE
-    highlight EndOfBuffer ctermbg=NONE guibg=NONE
-    highlight Folded ctermbg=NONE guibg=NONE
-    highlight LineNr ctermbg=NONE guibg=NONE
-    highlight CursorLineNr ctermbg=NONE guibg=NONE
-    highlight SpecialKey ctermbg=NONE guibg=NONE
-    highlight ALEErrorSign ctermbg=NONE guibg=NONE
-    highlight ALEWarningSign ctermbg=NONE guibg=NONE
-    highlight GitGutterAdd ctermbg=NONE guibg=NONE
-    highlight GitGutterChange ctermbg=NONE guibg=NONE
-    highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
-    highlight GitGutterDelete ctermbg=NONE guibg=NONE
+    " highlight Normal ctermbg=NONE guibg=NONE
+    " highlight Todo ctermbg=NONE guibg=NONE
+    " highlight NonText ctermbg=NONE guibg=NONE
+    " highlight EndOfBuffer ctermbg=NONE guibg=NONE
+    " highlight Folded ctermbg=NONE guibg=NONE
+    " highlight LineNr ctermbg=NONE guibg=NONE
+    " highlight CursorLineNr ctermbg=NONE guibg=NONE
+    " highlight SpecialKey ctermbg=NONE guibg=NONE
+    " highlight ALEErrorSign ctermbg=NONE guibg=NONE
+    " highlight ALEWarningSign ctermbg=NONE guibg=NONE
+    " highlight GitGutterAdd ctermbg=NONE guibg=NONE
+    " highlight GitGutterChange ctermbg=NONE guibg=NONE
+    " highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
+    " highlight GitGutterDelete ctermbg=NONE guibg=NONE
   endif
 endfunction
 
@@ -47,7 +47,7 @@ autocmd! Colorscheme * call s:highlight()
 set t_Co=256
 let g:molokai_original = 1
 
-colorscheme badwolf 
+colorscheme PaperColor
 set background=dark
 
 " Change cursor shape
