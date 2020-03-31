@@ -1,24 +1,31 @@
 [include]
     path = .gitconfig.os
 [alias]
-	ss = status -s
-	s = status
-	sss = status -s
-	comit = commit
-	co = checkout
-	tree = log --graph --all --format='%x09%C(cyan bold)%an%Creset%x09%C(yellow)%h%Creset %C(magenta reverse)%d%Creset %s'
-	comiit = commit
+    ss = status -s
+    s = status
+    co = checkout
+    cm = commit
+    cma = commit --amend
+    rmo = "!sh -c 'git remote add origin git@github.com:masuke5/$1.git' -"
+
+    # new
+    tree = log --graph --all --format='%x09%C(cyan bold)%an%Creset%x09%C(yellow)%h%Creset %C(magenta reverse)%d%Creset %s'
     lo = log --oneline -n 15
+
+    # miss
+    sss = status -s
+    comit = commit
+    comiit = commit
 [user]
-	email = s.zerogoichi@gmail.com
-	name = masuke5
+    email = s.zerogoichi@gmail.com
+    name = masuke5
 [core]
-	editor = vim
-	autocrlf = input
+    editor = vim
+    autocrlf = input
 [grep]
-	lineNumber = true
+    lineNumber = true
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
