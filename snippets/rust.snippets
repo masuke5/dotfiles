@@ -1,0 +1,111 @@
+# impl "im"
+
+snippet imd "impl Display" b
+impl fmt::Display for ${1} {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		$2
+	}
+}
+endsnippet
+
+snippet imde "impl Debug" b
+impl fmt::Debug for ${1} {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		$2
+	}
+}
+endsnippet
+
+snippet imdf "impl Default" b
+impl Default for ${1} {
+	fn default() -> Self {
+		${2}
+	}
+}
+endsnippet
+
+snippet imn "impl with new" b
+impl ${1} {
+	pub fn new() -> Self {
+		$2
+	}
+}
+endsnippet
+
+# 構造体 "st"
+
+snippet stdat "data structure" b
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct ${1} {
+}
+endsnippet
+
+snippet stwr "wrapper structure" b
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct ${1}(${2});
+endsnippet
+
+snippet stwrl "lightweight wrapper structure" b
+#[derive(Debug, Clone, Copy, PartialEq, Eq,  Hash)]
+struct ${1}(${2});
+endsnippet
+
+snippet stgl "global" b
+use std::sync::atomic::{Atomic${2/^(.).*/\U$0/}, Ordering};
+
+pub static NEXT_${1}: Atomic${2} = Atomic${2}::new(0);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct ${1}(${2});
+
+impl ${1} {
+	pub fn new() -> Self {
+		Self(NEXT_${1}.fetch_add(1, Ordering::AcqRel))
+	}
+
+	pub fn raw(&self) -> ${2} {
+		self.0
+	}
+}
+endsnippet
+
+
+# マクロ
+
+snippet wri "write macro"
+write!(f, "${1}")
+endsnippet
+
+# 関数定義 "f"
+
+snippet fnew "define new function" b
+pub fn new() -> Self {
+	$1
+}
+endsnippet
+
+# Statement
+
+snippet ifle "if let"
+if let ${1} = ${2} {
+	$3
+}
+endsnippet
+
+snippet ifles "if let Some"
+if let Some(${1}) = ${2} {
+	$3
+}
+endsnippet
+
+snippet iflee "if let Err"
+if let Err(${1}) = ${2} {
+	$3
+}
+endsnippet
+
+snippet ifleo "if let Ok"
+if let Ok(${1}) = ${2} {
+	$3
+}
+endsnippet

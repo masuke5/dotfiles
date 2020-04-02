@@ -105,6 +105,12 @@ function s:set_rust_options()
   setlocal colorcolumn=+1
 endfunction
 
+function s:set_python_options()
+  setlocal textwidth=80
+  setlocal colorcolumn=+1
+endfunction
+
+
 " デフォルトのタブ幅
 let s:def_tabwidth = 4
 let &tabstop = s:def_tabwidth
@@ -115,9 +121,10 @@ let &softtabstop = s:def_tabwidth
 augroup SettingsPerFileType
   autocmd!
   " タブ幅を2にする
-  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css call s:set_tabwidth(2)
+  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,ocaml,css call s:set_tabwidth(2)
 
   autocmd FileType rust call s:set_rust_options()
+  autocmd FileType python call s:set_python_options()
 augroup END
 
 " 拡張子を元にfiletypeを設定する
@@ -207,6 +214,7 @@ inoremap <C-@> <ESC>
 nnoremap <silent> <leader>f :call Toggle_file()<CR>
 " タブ関連
 nnoremap <leader>t :tabnew<CR>
+nnoremap U @
 
 " Aliases
 " --------------------------------

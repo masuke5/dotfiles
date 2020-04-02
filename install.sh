@@ -55,12 +55,14 @@ link .vimrc
 link .gvimrc
 link vim-config
 link coc-settings.json $HOME/.vim/coc-settings.json
+link snippets $HOME/.vim/UltiSnips
 
 # NeoVim
 mkdir -p ~/.config/nvim
 link ginit.vim ~/.config/nvim/ginit.vim
 link .vimrc ~/.config/nvim/init.vim
 link coc-settings.json $HOME/.config/nvim/coc-settings.json
+link snippets $HOME/.config/nvim/UltiSnips
 
 # Other
 link .gitconfig

@@ -53,3 +53,8 @@ set background=dark
 " Change cursor shape
 " set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:block-CursorInsert/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
 set guicursor=
+
+" アクティブでないウィンドウの明かりを消す
+" autocmd ColorScheme * highlight NormalNC guifg=#a0a0a0 guibg=#121212
+" autocmd WinEnter,BufWinEnter * setlocal wincolor=
+" autocmd WinLeave * setlocal wincolor=NormalNC

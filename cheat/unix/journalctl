@@ -1,0 +1,11 @@
+# すべてのログを表示
+journalctl
+
+# 特定サービスのログだけを表示
+journalctl -u サービス名
+
+# ログを監視する
+journalctl -f
+
+# 実際に出力されたログをそのまま表示
+journalctl -o cat

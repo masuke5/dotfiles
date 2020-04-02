@@ -42,9 +42,11 @@ Plug 'osyo-manga/vim-over'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
-Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'antoinemadec/coc-fzf'
+Plug 'easymotion/vim-easymotion'
+Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 
 " Syntax highlight
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
@@ -59,6 +61,8 @@ Plug 'PProvost/vim-ps1', { 'for': 'ps1' }
 Plug 'justinmk/vim-syntax-extra'
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
 Plug 'masuke5/lang2.vim', { 'for': 'lang2' }
+Plug 'vim-python/python-syntax', { 'for': 'python' }
+Plug 'cespare/vim-toml', { 'for': 'toml' }
 
 " Colorscheme
 Plug 'masuke5/masuc'
@@ -209,13 +213,20 @@ let g:firenvim_config = {
 \ }
 
 " coc-snippets
-imap <C-k> <Plug>(coc-snippets-expand)
-vmap <C-l> <Plug>(coc-snippets-select)
+" imap <C-k> <Plug>(coc-snippets-expand)
+" vmap <C-l> <Plug>(coc-snippets-select)
+" 
+" let g:coc_snippet_next = '<c-l>'
+" let g:coc_snippet_prev = '<c-h>'
+" 
+" imap <C-l> <Plug>(coc-snippets-expand-jump)
 
-let g:coc_snippet_next = '<c-l>'
-let g:coc_snippet_prev = '<c-h>'
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 
-imap <C-l> <Plug>(coc-snippets-expand-jump)
+nnoremap <silent> <space>ue :UltiSnipsEdit<CR>
 
 " fzf.vim
 function! RipgrepFzf(query, fullscreen)
@@ -245,3 +256,7 @@ nnoremap <leader>gu :GitGutterUndoHunk<CR>
 
 " rust.vim
 let g:rustfmt_autosave = 1
+
+" easymotion
+map <leader>e <Plug>(easymotion-w)
+map <leader>s <Plug>(easymotion-s)
