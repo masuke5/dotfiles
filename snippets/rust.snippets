@@ -109,3 +109,54 @@ if let Ok(${1}) = ${2} {
 	$3
 }
 endsnippet
+
+snippet box "Box::new"
+Box::new(${1})
+endsnippet
+
+snippet modtest "define test module"
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	$1
+}
+endsnippet
+
+snippet sfo "String::from"
+String::from(${1})
+endsnippet
+
+snippet state "State" b
+use std::any::Any;
+use std::io::Write;
+
+use termion::event::{Event, Key};
+
+use crate::state::{State, UpdateResult};
+
+pub struct ${1} {}
+
+impl ${1} {
+	pub fn new() -> Self {
+		Self {}
+	}
+}
+
+impl State for ${1} {
+	fn event(&mut self, _: &mut dyn Any, event: Event) -> UpdateResult {
+		match event {
+			Event::Key(Key::Char('1')) => UpdateResult::Pop,
+			_ => UpdateResult::DoNothing,
+		}
+	}
+
+	fn update(&mut self, _: &mut dyn Any) -> UpdateResult {
+		UpdateResult::DoNothing
+	}
+
+	fn print(&self, _: &dyn Any, stdout: &mut dyn Write) {
+		rwriteln!(stdout, "not implemented");
+	}
+}
+endsnippet

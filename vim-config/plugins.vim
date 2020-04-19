@@ -47,6 +47,7 @@ Plug 'antoinemadec/coc-fzf'
 Plug 'easymotion/vim-easymotion'
 Plug 'SirVer/ultisnips'
 " Plug 'honza/vim-snippets'
+Plug 'lambdalisue/fern.vim'
 
 " Syntax highlight
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
@@ -63,6 +64,7 @@ Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
 Plug 'masuke5/lang2.vim', { 'for': 'lang2' }
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
+Plug 'aklt/plantuml-syntax'
 
 " Colorscheme
 Plug 'masuke5/masuc'
@@ -93,6 +95,7 @@ Plug 'sjl/badwolf'
 Plug 'ayu-theme/ayu-vim'
 Plug 'whatyouhide/vim-gotham'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'fcpg/vim-orbital'
 
 call plug#end()
 
@@ -234,7 +237,7 @@ function! RipgrepFzf(query, fullscreen)
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  call fzf#vim#grep(initial_command, 1, spec, a:fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
@@ -249,10 +252,10 @@ nnoremap <leader>l :GFiles<CR>
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal', 'border': 'sharp' } }
 
 " gitgutter-vim
-nnoremap <leader>go :GitGutter<CR>
-nnoremap <leader>gn :GitGutterNextHunk<CR>
-nnoremap <leader>gp :GitGutterPrevHunk<CR>
-nnoremap <leader>gu :GitGutterUndoHunk<CR>
+nnoremap <silent> <leader>go :GitGutter<CR>
+nnoremap <silent> <leader>gn :GitGutterNextHunk<CR>
+nnoremap <silent> <leader>gp :GitGutterPrevHunk<CR>
+nnoremap <silent> <leader>gu :GitGutterUndoHunk<CR>
 
 " rust.vim
 let g:rustfmt_autosave = 1
@@ -260,3 +263,9 @@ let g:rustfmt_autosave = 1
 " easymotion
 map <leader>e <Plug>(easymotion-w)
 map <leader>s <Plug>(easymotion-s)
+
+" markdown-preview
+nnoremap <leader>m :MarkdownPreview<CR>
+
+" fern.vim
+nnoremap <leader>f :Fern . -reveal=% -drawer -toggle<CR>

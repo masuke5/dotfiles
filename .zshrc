@@ -33,6 +33,10 @@ function ytmp3() {
     youtube-dl "$1" -x --audio-format mp3 --audio-quality 128k
 }
 
+function tw() {
+    youtube-dl "$1" -o '%(uploader_id)s-%(id)s.%(ext)s' -x --audio-format mp3 --audio-quality 256k -k
+}
+
 function downblob() {
  ffmpeg -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" -i "$1" -movflags faststart -c copy -bsf:a aac_adtstoasc "$2"
 }
@@ -93,4 +97,3 @@ export PATH=$GOROOT/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PAT
 
 # OPAM configuration
 . /home/shinsuke/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
