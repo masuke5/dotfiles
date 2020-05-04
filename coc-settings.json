@@ -1,3 +1,12 @@
 {
-  "diagnostic.virtualText": false
+  "diagnostic.virtualText": false,
+  "languageserver": {
+    // "rust": {
+    //   "command": "rust-analyzer",
+    //   "filetypes": ["rust"],
+    //   "rootPatterns": ["Cargo.toml"]
+    // }
+  },
+  "rust-analyzer.inlayHints.chainingHints": true,
+  "codeLens.enable": true
 }

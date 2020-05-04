@@ -269,3 +269,9 @@ nnoremap <leader>m :MarkdownPreview<CR>
 
 " fern.vim
 nnoremap <leader>f :Fern . -reveal=% -drawer -toggle<CR>
+	nmap <buffer><expr>
+	      \ <Plug>(fern-expand-or-enter)
+	      \ fern#smart#drawer(
+	      \   "\<Plug>(fern-action-expand)",
+	      \   "\<Plug>(fern-action-enter)",
+	      \ )

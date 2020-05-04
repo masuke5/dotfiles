@@ -40,6 +40,8 @@ function! s:highlight()
     " highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
     " highlight GitGutterDelete ctermbg=NONE guibg=NONE
   endif
+
+  highlight link CocRustChainingHint Comment
 endfunction
 
 autocmd! Colorscheme * call s:highlight()
