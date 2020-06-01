@@ -1,12 +1,11 @@
 {
   "diagnostic.virtualText": false,
   "languageserver": {
-    // "rust": {
-    //   "command": "rust-analyzer",
-    //   "filetypes": ["rust"],
-    //   "rootPatterns": ["Cargo.toml"]
-    // }
+    "ocaml": {
+      "command": "opam",
+      "args": ["config", "exec", "--", "ocamllsp"],
+      "filetypes": ["ocaml", "reason"]
+    }
   },
-  "rust-analyzer.inlayHints.chainingHints": true,
-  "codeLens.enable": true
+  "rust-analyzer.inlayHints.chainingHints": true
 }

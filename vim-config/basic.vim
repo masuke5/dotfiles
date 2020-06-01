@@ -105,6 +105,12 @@ function s:set_rust_options()
   setlocal colorcolumn=+1
 endfunction
 
+function s:set_ocaml_options()
+  setlocal textwidth=100
+  setlocal colorcolumn=+1
+  call s:set_tabwidth(2)
+endfunction
+
 function s:set_python_options()
   setlocal textwidth=80
   setlocal colorcolumn=+1
@@ -121,10 +127,11 @@ let &softtabstop = s:def_tabwidth
 augroup SettingsPerFileType
   autocmd!
   " タブ幅を2にする
-  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,ocaml,css call s:set_tabwidth(2)
+  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css call s:set_tabwidth(2)
 
   autocmd FileType rust call s:set_rust_options()
   autocmd FileType python call s:set_python_options()
+  autocmd FileType ocaml call s:set_ocaml_options()
 augroup END
 
 " 拡張子を元にfiletypeを設定する

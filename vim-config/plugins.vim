@@ -52,11 +52,12 @@ Plug 'lambdalisue/fern.vim'
 " Syntax highlight
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
+Plug 'JulesWang/css.vim', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'javascript' }
+" Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+" Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'javascript' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'PProvost/vim-ps1', { 'for': 'ps1' }
 Plug 'justinmk/vim-syntax-extra'
@@ -65,6 +66,7 @@ Plug 'masuke5/lang2.vim', { 'for': 'lang2' }
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'aklt/plantuml-syntax'
+Plug 'othree/yajs.vim', { 'for': 'javascript' }
 
 " Colorscheme
 Plug 'masuke5/masuc'
@@ -96,6 +98,7 @@ Plug 'ayu-theme/ayu-vim'
 Plug 'whatyouhide/vim-gotham'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'fcpg/vim-orbital'
+Plug 'cocopon/iceberg.vim'
 
 call plug#end()
 
@@ -177,10 +180,10 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <silent> <leader>ad :<C-u>CocList diagnostics<CR>
-nnoremap <silent> <space>ac  :<C-u>CocList commands<cr>
-nnoremap <silent> <space>ao  :<C-u>CocList outline<cr>
-nnoremap <silent> <space>as  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>ad :<C-u>CocFzfList diagnostics<CR>
+nnoremap <silent> <space>ac  :<C-u>CocFzfList commands<cr>
+nnoremap <silent> <space>ao  :<C-u>CocFzfList outline<cr>
+nnoremap <silent> <space>as  :<C-u>CocFzfList -I symbols<cr>
 nmap <silent> <leader>al <Plug>(coc-codelens-action)
 
 function! s:show_documentation()
@@ -265,13 +268,19 @@ map <leader>e <Plug>(easymotion-w)
 map <leader>s <Plug>(easymotion-s)
 
 " markdown-preview
-nnoremap <leader>m :MarkdownPreview<CR>
+nnoremap <leader>mp :MarkdownPreview<CR>
+
+" markdown.vim
+nnoremap <leader>mt :TableFormat<CR>
 
 " fern.vim
+function s:init_fern() abort
+  nmap <buffer> u <Plug>(fern-action-expand)
+endfunction
+
+augroup Fern
+  autocmd!
+  autocmd FileType fern call s:init_fern()
+augroup END
+
 nnoremap <leader>f :Fern . -reveal=% -drawer -toggle<CR>
-	nmap <buffer><expr>
-	      \ <Plug>(fern-expand-or-enter)
-	      \ fern#smart#drawer(
-	      \   "\<Plug>(fern-action-expand)",
-	      \   "\<Plug>(fern-action-enter)",
-	      \ )

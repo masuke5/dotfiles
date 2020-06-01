@@ -24,33 +24,38 @@ function! s:highlight()
   " hi CursorInsert ctermfg=lightgreen ctermbg=lightgreen
 
   " 透過
-  if &background ==# 'dark'
-    " highlight Normal ctermbg=NONE guibg=NONE
-    " highlight Todo ctermbg=NONE guibg=NONE
-    " highlight NonText ctermbg=NONE guibg=NONE
-    " highlight EndOfBuffer ctermbg=NONE guibg=NONE
-    " highlight Folded ctermbg=NONE guibg=NONE
-    " highlight LineNr ctermbg=NONE guibg=NONE
-    " highlight CursorLineNr ctermbg=NONE guibg=NONE
-    " highlight SpecialKey ctermbg=NONE guibg=NONE
-    " highlight ALEErrorSign ctermbg=NONE guibg=NONE
-    " highlight ALEWarningSign ctermbg=NONE guibg=NONE
-    " highlight GitGutterAdd ctermbg=NONE guibg=NONE
-    " highlight GitGutterChange ctermbg=NONE guibg=NONE
-    " highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
-    " highlight GitGutterDelete ctermbg=NONE guibg=NONE
-  endif
+  " if &background ==# 'dark'
+  "   highlight Normal ctermbg=NONE guibg=NONE
+  "   highlight Todo ctermbg=NONE guibg=NONE
+  "   highlight NonText ctermbg=NONE guibg=NONE
+  "   highlight EndOfBuffer ctermbg=NONE guibg=NONE
+  "   highlight Folded ctermbg=NONE guibg=NONE
+  "   highlight LineNr ctermbg=NONE guibg=NONE
+  "   highlight CursorLineNr ctermbg=NONE guibg=NONE
+  "   highlight SpecialKey ctermbg=NONE guibg=NONE
+  "   highlight ALEErrorSign ctermbg=NONE guibg=NONE
+  "   highlight ALEWarningSign ctermbg=NONE guibg=NONE
+  "   highlight GitGutterAdd ctermbg=NONE guibg=NONE
+  "   highlight GitGutterChange ctermbg=NONE guibg=NONE
+  "   highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
+  "   highlight GitGutterDelete ctermbg=NONE guibg=NONE
+  " endif
 
   highlight link CocRustChainingHint Comment
 endfunction
 
 autocmd! Colorscheme * call s:highlight()
 
+" カラースキーム
 set t_Co=256
 let g:molokai_original = 1
 
 colorscheme PaperColor
 set background=dark
+
+" undercurl
+" let &t_Cs = "\e[4:3m"
+" let &t_Ce = "\e[4:0m"
 
 " Change cursor shape
 " set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:block-CursorInsert/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
