@@ -41,6 +41,10 @@ function downblob() {
  ffmpeg -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" -i "$1" -movflags faststart -c copy -bsf:a aac_adtstoasc "$2"
 }
 
+function hubclone() {
+    git clone "https://github.com/$1"
+}
+
 autoload -Uz colors
 colors
 
@@ -91,9 +95,9 @@ zle -N dir_back
 bindkey '^H' dir_back
 
 export WDEV=/mnt/c/users/shinsuke/dev
-export GOROOT=$HOME/go
 export GOPATH=$HOME/dev/go
-export PATH=$GOROOT/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH
+export PATH=$GOPATH/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --no-ignore-vcs --ignore-file $HOME/.fdignore"
 
 # OPAM configuration
 . /home/shinsuke/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

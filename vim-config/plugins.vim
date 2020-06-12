@@ -19,45 +19,56 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'airblade/vim-gitgutter'
-Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'junegunn/goyo.vim'
 Plug 'kshenoy/vim-signature'
-Plug 'vim-scripts/taglist.vim'
 Plug 'nicwest/vim-http'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'Shirk/vim-gas'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'machakann/vim-swap'
-Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'masuke5/doisa-vim'
-Plug 'jez/vim-better-sml', { 'for': 'sml' }
-Plug 'KabbAmine/vCoolor.vim'
-Plug 'osyo-manga/vim-over'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'antoinemadec/coc-fzf'
-Plug 'easymotion/vim-easymotion'
 Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 Plug 'lambdalisue/fern.vim'
+Plug 'kana/vim-textobj-user'
+Plug 'sgur/vim-textobj-parameter'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'cohama/lexima.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'liuchengxu/vista.vim'
+Plug 'lighttiger2505/deoplete-vim-lsp'
+Plug 'ncm2/float-preview.nvim'
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+" Language
+Plug 'jez/vim-better-sml', { 'for': 'sml' }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': { -> mkdp#util#install() } }
+Plug 'godlygeek/tabular' " vim-markdownが依存
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'fatih/vim-go', { 'for': 'go' }
 
 " Syntax highlight
+" STLの型名がハイライトされるのが嫌
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp'] }
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 Plug 'JulesWang/css.vim', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-" Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-" Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'javascript' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'PProvost/vim-ps1', { 'for': 'ps1' }
 Plug 'justinmk/vim-syntax-extra'
@@ -67,6 +78,7 @@ Plug 'vim-python/python-syntax', { 'for': 'python' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'aklt/plantuml-syntax'
 Plug 'othree/yajs.vim', { 'for': 'javascript' }
+Plug 'Shirk/vim-gas', { 'for': 'gas' }
 
 " Colorscheme
 Plug 'masuke5/masuc'
@@ -138,13 +150,10 @@ let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
 
 " lightline.vim
-" dark: seoul256
-" light: PaperColor_light
 let g:lightline = {
-\ 'colorscheme': 'seoul256',
 \ 'active': {
 \   'left': [['mode', 'paste'],
-\            ['gitbranch', 'cocstatus', 'readonly', 'filename', 'modified']],
+\            ['gitbranch', 'lspstatus', 'readonly', 'filename', 'modified']],
 \   'right': [['lineinfo'],
 \             ['percent'],
 \             ['charvaluehex', 'fileformat', 'fileencoding', 'filetype']]
@@ -153,7 +162,7 @@ let g:lightline = {
 \   'charvaluehex': '0x%B'
 \ },
 \ 'component_function': {
-\   'cocstatus': 'coc#status',
+\   'lspstatus': 'LspStatus',
 \   'gitbranch': 'gitbranch#name'
 \ },
 \ 'enable': {
@@ -162,35 +171,31 @@ let g:lightline = {
 \ }
 \ }
 
-" coc.nvim
-augroup Coc
-autocmd!
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup END
+function LspStatus()
+  let l:counts = lsp#get_buffer_diagnostics_counts()
+  let l:result = ''
 
-inoremap <silent><expr> <C-s> coc#refresh()
+  let l:count = l:counts['information']
+  if l:count > 0
+    let l:result = l:result . ' I' . l:count
+  endif
 
-nmap <F2> <Plug>(coc-rename)
-nmap <silent> <leader>an <Plug>(coc-diagnostic-next)
-nmap <silent> <leader>ap <Plug>(coc-diagnostic-prev)
+  let l:count = l:counts['hint']
+  if l:count > 0
+    let l:result = l:result . ' H' . l:count
+  endif
 
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+  let l:count = l:counts['warning']
+  if l:count > 0
+    let l:result = l:result . ' W' . l:count
+  endif
 
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <silent> <leader>ad :<C-u>CocFzfList diagnostics<CR>
-nnoremap <silent> <space>ac  :<C-u>CocFzfList commands<cr>
-nnoremap <silent> <space>ao  :<C-u>CocFzfList outline<cr>
-nnoremap <silent> <space>as  :<C-u>CocFzfList -I symbols<cr>
-nmap <silent> <leader>al <Plug>(coc-codelens-action)
+  let l:count = l:counts['error']
+  if l:count > 0
+    let l:result = l:result . ' E' . l:count
+  endif
 
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
+  return l:result[1:]
 endfunction
 
 " sandwich.vim
@@ -217,15 +222,6 @@ let g:firenvim_config = {
         \ }
     \ }
 \ }
-
-" coc-snippets
-" imap <C-k> <Plug>(coc-snippets-expand)
-" vmap <C-l> <Plug>(coc-snippets-select)
-" 
-" let g:coc_snippet_next = '<c-l>'
-" let g:coc_snippet_prev = '<c-h>'
-" 
-" imap <C-l> <Plug>(coc-snippets-expand-jump)
 
 " Ultisnips
 let g:UltiSnipsExpandTrigger="<c-k>"
@@ -255,6 +251,10 @@ nnoremap <leader>l :GFiles<CR>
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal', 'border': 'sharp' } }
 
 " gitgutter-vim
+
+" デフォルトのキーバインドを無効にする
+let g:gitgutter_map_keys = 0
+
 nnoremap <silent> <leader>go :GitGutter<CR>
 nnoremap <silent> <leader>gn :GitGutterNextHunk<CR>
 nnoremap <silent> <leader>gp :GitGutterPrevHunk<CR>
@@ -284,3 +284,57 @@ augroup Fern
 augroup END
 
 nnoremap <leader>f :Fern . -reveal=% -drawer -toggle<CR>
+
+" vim-vue
+
+" 軽くするため
+let g:vue_pre_processors = 'detect_on_enter'
+
+" vim-lsp
+if executable('rust-analyzer')
+  au User lsp_setup call lsp#register_server({
+     \ 'name': 'rust-analyzer',
+     \ 'cmd': {server_info->['rust-analyzer']},
+     \ 'whitelist': ['rust'],
+     \ })
+endif
+
+let g:lsp_diagnostics_float_cursor = 1
+let g:lsp_diagnostics_float_delay = 200
+let g:lsp_virtual_text_enabled = 0
+let g:lsp_semantic_enabled = 1
+
+nnoremap <F2> :LspRename<CR>
+nnoremap <silent> <leader>an :LspNextDiagnostic<CR>
+nnoremap <silent> <leader>ap :LspPrevDiagnostic<CR>
+
+nnoremap <silent> gd :LspDefinition<CR>
+nnoremap <silent> gr :LspReferences<CR>
+
+nnoremap <silent> K :LspHover<CR>
+nnoremap <silent> <leader>ad :LspDocumentDiagnostics<CR>
+nnoremap <silent> <space>ao  :LspDocumentSymbols<cr>
+nnoremap <silent> <leader>al :LspCodeLens<CR>
+
+if !has('nvim')
+  autocmd User lsp_float_opened
+    \ call popup_setoptions(lsp#ui#vim#output#getpreviewwinid(),
+    \              {'border': [0, 0, 0, 0],
+    \               'padding': [1, 1, 1, 1]})
+end
+
+" deoplete.nvim
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option({
+\ 'refresh_always': v:false,
+\ })
+
+inoremap <silent><expr> <C-s> deoplete#manual_complete()
+
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function() abort
+  return deoplete#close_popup() . "\<CR>"
+endfunction
+
+" float_preview
+let g:float_preview#docked = 0

@@ -80,7 +80,7 @@ set laststatus=2
 set splitbelow
 set shortmess+=c
 set cmdheight=1
-set completeopt=menu,preview
+set completeopt=menu
 if !has('nvim')
 set ballooneval
 set showcmd
@@ -276,8 +276,7 @@ endfunction
 
 function! MakeTabLine()
   let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val)')
-  let sep = ''
-  let tabpages = join(titles, sep) . sep . '%#TabLineFill#%T'
+  let tabpages = join(titles, '') . '%#TabLineFill#%T'
   
   " 選択しているタブページのカレントバッファのディレクトリ
   let bufnrs = tabpagebuflist(tabpagenr())

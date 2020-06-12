@@ -11,7 +11,7 @@ endfunction
 function! s:highlight()
   " backgroundの値に応じてlightlineのカラースキームを変える
   if &background ==# 'dark'
-    call s:set_lightline_colorscheme('seoul256')
+    call s:set_lightline_colorscheme('wombat')
   else
     call s:set_lightline_colorscheme('PaperColor_light')
   endif
