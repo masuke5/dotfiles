@@ -69,13 +69,13 @@ PROMPT="%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}$ %{$reset_color%}"
 
 bindkey -e
 
-# C-x C-e
+# BashのC-x C-e
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
 bindkey "^O" autosuggest-accept
 
-# RUST_BACKTRACE=1
+# RUST_BACKTRACE=1を付けたり消したり
 toggleRustBacktrace() {
     text="RUST_BACKTRACE=1 "
     case $BUFFER in
@@ -87,13 +87,17 @@ toggleRustBacktrace() {
 zle -N toggleRustBacktrace
 bindkey '^T' toggleRustBacktrace
 
-dir_back() {
-    cd ..
+# go get
+gobin() {
+    if [[ "$1" =~ ".+/.+" ]]; then
+        curl -sf "https://gobinaries.com/$1" | sh
+    else
+        echo "usage: gobin author/name"
+    fi
 }
 
-zle -N dir_back
-bindkey '^H' dir_back
-
+# 環境変数
+export EDITOR=vim
 export WDEV=/mnt/c/users/shinsuke/dev
 export GOPATH=$HOME/dev/go
 export PATH=$GOPATH/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH

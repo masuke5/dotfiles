@@ -1,0 +1,3 @@
+set noloadplugins
+source $HOME/vim-config/main.vim
+

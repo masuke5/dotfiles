@@ -1,4 +1,4 @@
-" このファイルには見た目に関する設定を記述する。
+" 外観に関する設定
 
 " lightlineのカラースキームを設定する
 function! s:set_lightline_colorscheme(name) abort
@@ -8,60 +8,72 @@ function! s:set_lightline_colorscheme(name) abort
   call lightline#update()
 endfunction
 
-function! s:highlight()
-  " backgroundの値に応じてlightlineのカラースキームを変える
+" backgroundの値に応じてlightlineのカラースキームを変える
+function! s:set_lightline_colorscheme_by_background() abort
   if &background ==# 'dark'
     call s:set_lightline_colorscheme('wombat')
   else
     call s:set_lightline_colorscheme('PaperColor_light')
   endif
-
-  " coc.nvimのエラーの下線を波線にする
-  " hi CocErrorHighlight term=undercurl
-  " hi CocWarningHighlight term=undercurl
-
-  " カーソルの色をインサートモード時に黄緑色にする
-  " hi CursorInsert ctermfg=lightgreen ctermbg=lightgreen
-
-  " 透過
-  " if &background ==# 'dark'
-  "   highlight Normal ctermbg=NONE guibg=NONE
-  "   highlight Todo ctermbg=NONE guibg=NONE
-  "   highlight NonText ctermbg=NONE guibg=NONE
-  "   highlight EndOfBuffer ctermbg=NONE guibg=NONE
-  "   highlight Folded ctermbg=NONE guibg=NONE
-  "   highlight LineNr ctermbg=NONE guibg=NONE
-  "   highlight CursorLineNr ctermbg=NONE guibg=NONE
-  "   highlight SpecialKey ctermbg=NONE guibg=NONE
-  "   highlight ALEErrorSign ctermbg=NONE guibg=NONE
-  "   highlight ALEWarningSign ctermbg=NONE guibg=NONE
-  "   highlight GitGutterAdd ctermbg=NONE guibg=NONE
-  "   highlight GitGutterChange ctermbg=NONE guibg=NONE
-  "   highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
-  "   highlight GitGutterDelete ctermbg=NONE guibg=NONE
-  " endif
-
-  highlight link CocRustChainingHint Comment
 endfunction
 
-autocmd! Colorscheme * call s:highlight()
+" アクティブでないウィンドウの明かりを消す
+function! s:dim_inactive_window() abort
+  autocmd ColorScheme * highlight NormalNC guifg=#a0a0a0 guibg=#121212
+  autocmd WinEnter,BufWinEnter * setlocal wincolor=
+  autocmd WinLeave * setlocal wincolor=NormalNC
+endfunction
+
+" 背景を透過する
+function s:make_transparent() abort
+  if &background ==# 'dark'
+    highlight Normal ctermbg=NONE guibg=NONE
+    highlight Todo ctermbg=NONE guibg=NONE
+    highlight NonText ctermbg=NONE guibg=NONE
+    highlight EndOfBuffer ctermbg=NONE guibg=NONE
+    highlight Folded ctermbg=NONE guibg=NONE
+    highlight LineNr ctermbg=NONE guibg=NONE
+    highlight CursorLineNr ctermbg=NONE guibg=NONE
+    highlight SpecialKey ctermbg=NONE guibg=NONE
+    highlight ALEErrorSign ctermbg=NONE guibg=NONE
+    highlight ALEWarningSign ctermbg=NONE guibg=NONE
+    highlight GitGutterAdd ctermbg=NONE guibg=NONE
+    highlight GitGutterChange ctermbg=NONE guibg=NONE
+    highlight GitGutterChangeDelete ctermbg=NONE guibg=NONE
+    highlight GitGutterDelete ctermbg=NONE guibg=NONE
+  endif
+endfunction
+
+" インサートモード時にカーソルの色を変える（GVimのみ動作）
+function s:set_cursor_color_on_insert() abort
+  if has('gui')
+    hi CursorInsert ctermfg=lightgreen ctermbg=lightgreen
+  endif
+endfunction
+
+function! s:on_highlight()
+  call s:set_lightline_colorscheme_by_background()
+  " call s:make_transparent()
+  call s:set_cursor_color_on_insert()
+  " call s:dim_inactive_window()
+endfunction
+
+autocmd! Colorscheme * call s:on_highlight()
 
 " カラースキーム
-set t_Co=256
+" -----------------------------------------
+
+" それぞれのカラースキームの設定
 let g:molokai_original = 1
 
-colorscheme PaperColor
-set background=dark
+" デフォルトのカラースキーム
+if !exists('g:colors_name')
+  " 設定更新時は変えない
+  colorscheme PaperColor
+  set background=dark
+endif
 
-" undercurl
-" let &t_Cs = "\e[4:3m"
-" let &t_Ce = "\e[4:0m"
-
-" Change cursor shape
-" set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:block-CursorInsert/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-set guicursor=
-
-" アクティブでないウィンドウの明かりを消す
-" autocmd ColorScheme * highlight NormalNC guifg=#a0a0a0 guibg=#121212
-" autocmd WinEnter,BufWinEnter * setlocal wincolor=
-" autocmd WinLeave * setlocal wincolor=NormalNC
+" カーソルの形状を同じにする
+if has('nvim')
+  set guicursor=
+endif

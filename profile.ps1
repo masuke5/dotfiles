@@ -1,7 +1,10 @@
-﻿$env:GIT_PAGER= "LESSCHARSET=utf-8 less"
+﻿# gitの文字化けを修正する
+$env:GIT_PAGER= "LESSCHARSET=utf-8 less"
 
+# ビープ音を無効にする
 Set-PSReadlineOption -BellStyle None
 
+# 全てのエイリアスを削除する
 function RemoveAliasIfExist ($name) {
     # 最初はスクリプトのスコープのエイリアス、次にグローバルのエイリアスを削除する
     while (Test-Path alias:$name) {
@@ -14,6 +17,7 @@ RemoveAliasIfExist gin
 
 Set-Alias -name python2 -value "C:\PL\Python27\python.exe"
 
+# UNIXのls風
 function ls($path) {
     if ($path -eq "") {
         $path = Get-Location
@@ -50,6 +54,9 @@ function ls($path) {
 }
 
 function prompt {
+    # 10:20:30 ~/Documents# cd aho
+    # みたいにする
+
     $datetime = Get-Date -Format "HH:mm:ss"
     Write-Host $datetime -NoNewLine -ForegroundColor Green
     Write-Host " " -NoNewLine

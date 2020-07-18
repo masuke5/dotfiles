@@ -1,4 +1,4 @@
-" このファイルにはプラグインなどに依存しない設定を記述する。
+" プラグインなどに依存しない設定
 
 if &compatible
   set nocompatible
@@ -14,7 +14,7 @@ endfunction
 " Shell
 " ----------------------------
 
-" Windowsではpwshを使う
+" WindowsではPowershell Coreを使う
 if has('win32')
   set shell=pwsh
 endif
@@ -25,6 +25,7 @@ endif
 set encoding=utf-8
 set fileencoding=utf-8
 set termencoding=utf-8
+set fileencodings=utf-8,cp932,euc-jp
 set ambiwidth=single
 
 " File
@@ -59,7 +60,6 @@ set wrapscan
 
 set expandtab
 set textwidth=0
-set formatoptions=qB
 set belloff=all
 set autoindent
 set backspace=indent,eol,start
@@ -67,7 +67,7 @@ set updatetime=300
 set showmatch
 set matchtime=1
 set matchpairs+=<:>
-set ttimeoutlen=10 " Remove ESC key lag
+set ttimeoutlen=10 " ESCキーの遅延を解消
 
 " View
 " -------------------------------
@@ -84,11 +84,12 @@ set completeopt=menu
 if !has('nvim')
 set ballooneval
 set showcmd
+set foldmethod=marker
 else
 set inccommand=split
 endif
 
-" Indent
+" ファイルタイプごとの設定
 " -------------------------------
 
 set breakindent
@@ -112,10 +113,9 @@ function s:set_ocaml_options()
 endfunction
 
 function s:set_python_options()
-  setlocal textwidth=80
+  setlocal textwidth=100
   setlocal colorcolumn=+1
 endfunction
-
 
 " デフォルトのタブ幅
 let s:def_tabwidth = 4
@@ -123,7 +123,7 @@ let &tabstop = s:def_tabwidth
 let &shiftwidth = s:def_tabwidth
 let &softtabstop = s:def_tabwidth
 
-" ファイルの種類ごとの設定
+" ファイルタイプごとの設定
 augroup SettingsPerFileType
   autocmd!
   " タブ幅を2にする
@@ -141,11 +141,10 @@ augroup FileTypeFromExtension
   autocmd BufNewFile,BufRead *.html.tera set ft=jinja.html
 augroup END
 
-" ディレクトリを作成する
-augroup Terminal
+" 現在のバッファがターミナルだったら行番号を隠す
+augroup TerminalNumber
   autocmd!
-  
-  " 現在のバッファがターミナルだったら行番号を隠す
+
   function! s:hide_linenumber_if_terminal()
     if &buftype == 'terminal'
       set nonumber
@@ -156,14 +155,17 @@ augroup Terminal
 
   " FIXME: これを追加すると起動時にVimのタイトルが表示されない
   " autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
+augroup END
 
-  " ファイル書き込み時にディレクトリを作成する
+augroup MkdirWhenWrite
+  " ファイル書き込み時にディレクトリが存在しなかったら作成するかどうか聞く
   autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
 
 " Leader
 " -------------------------------------
 
+" leaderをスペースキーに設定
 noremap <leader> <nop>
 noremap <LocalLeader> <nop>
 let g:mapleader = "\<Space>"
@@ -172,7 +174,8 @@ let g:mamplocalleader = '\'
 " Shortcuts
 " --------------------------------------
 
-function! Toggle_file()
+" C/C++のソースファイルとヘッダファイルを切り替える
+function! ToggleFile()
   let l:source_exts = ['cpp', 'c', 'cxx']
   let l:header_exts = ['h', 'hpp', 'hxx']
 
@@ -210,29 +213,45 @@ function! Toggle_file()
   endif
 endfunction
 
+" TODO: 
+" (a|, b, c)
+" (a|), (b, c), d)
+" (a, '(', c) アポストロフィが識別子に使える言語もある
+function! BackwardArg() abort
+endfunction
+
+function! ForwardArg() abort
+endfunction
+
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
-nnoremap <leader><Tab> ddO
 " すべてのポップアップウィンドウを消す
 nnoremap <silent> <leader>q :call popup_clear()<CR>
-nnoremap <silent> <leader>p "+p
+" JIS配列のときもUS配列と同じ位置でESCできるようにする
 inoremap <C-@> <ESC>
-" 同じディレクトリの同じファイル名のヘッダファイルかソースファイルを開く
-nnoremap <silent> <leader>f :call Toggle_file()<CR>
+" US配列では@キーが押しづらい
+nnoremap U @
+" C/C++のソースファイルとヘッダファイルを切り替える
+nnoremap <silent> <leader>f :call ToggleFile()<CR>
 " タブ関連
 nnoremap <leader>t :tabnew<CR>
-nnoremap U @
+nnoremap <C-h> gT
+nnoremap <C-l> gt
+" 検索キーワードを削除（ハイライトも消える）
+nnoremap <silent> <leader>n :let @/ = ''<CR>
+" 前後の引数に移動する
+nnoremap <silent> [ BackwardArg()
+nnoremap <silent> ] ForwardArg()
 
 " Aliases
 " --------------------------------
 
-" vimrcを再読込
-command! Uv source ~/.vimrc
-command! Ov e ~/.vimrc
 " カーソル上のハイライトグループを表示する
 command! Hg echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
-" ANSI color codeを除去
+" バッファ内のANSI制御文字を除去
 command! DeleteAnsi %s/\[[0-9;]*m//g
+" 打ち間違い
+command! W w
 
 " Syntax
 " ---------------------------------
@@ -256,28 +275,28 @@ endfunction
 
 function! s:tabpage_label(n)
   let hi = a:n is tabpagenr() ? '%#TabLineSel#' : '%#TabLine#'
-  
+
   " タブページ内のバッファのリスト
   let bufnrs = tabpagebuflist(a:n)
-  
+
   let mod = len(filter(copy(bufnrs), 'getbufvar(v:val, "&modified")')) ? ' +' : ''
-  
+
   " カレントバッファのファイル名
   let curbufnr = bufnrs[tabpagewinnr(a:n) - 1]
   let fname = fnamemodify(bufname(curbufnr), ':t')
   if fname == ''
-      let fname = '[無名]'
+    let fname = '[無名]'
   endif
-  
+
   let label = a:n . ' ' . fname . mod
-  
+
   return '%' . a:n . 'T' . hi . ' ' . label . ' %T%#TabLineFill#'
 endfunction
 
 function! MakeTabLine()
   let titles = map(range(1, tabpagenr('$')), 's:tabpage_label(v:val)')
   let tabpages = join(titles, '') . '%#TabLineFill#%T'
-  
+
   " 選択しているタブページのカレントバッファのディレクトリ
   let bufnrs = tabpagebuflist(tabpagenr())
   let curbufnr = bufnrs[tabpagewinnr(tabpagenr()) - 1]
@@ -287,7 +306,7 @@ function! MakeTabLine()
     let cwd = substitute(cwd, escape($USERPROFILE, '\'), 'W~', '')
     let cwd = substitute(cwd, '\\', '/', 'g')
   endif
-  
+
   let info = cwd
   return tabpages . '%=' . info
 endfunction
@@ -295,9 +314,10 @@ endfunction
 set tabline=%!MakeTabLine()
 
 function! s:highlight()
-  " Disable underline in tabline
+  " tablineの下線を無効にする
   highlight TabLine term=NONE gui=NONE
-  " Disable bold in tabline
+  " tablineの太字を無効にする
   highlight TabLineSel term=NONE gui=NONE
 endfunction
+
 autocmd! ColorScheme * call s:highlight()

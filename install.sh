@@ -1,5 +1,11 @@
 #!/bin/bash
 
+user="$(whoami)"
+if [ "$user" = "root" ]; then
+  echo 'rootユーザーでは実行しないでください'
+  exit 1
+fi
+
 cwd=`dirname "${0}"`
 expr "${0}" : "/.*" > /dev/null || cwd=`(cd "${cwd}" && pwd)`
 
@@ -49,6 +55,11 @@ function default() {
   fi
 }
 
+function rootlink() {
+    link .vimrc.root $HOME/.vimrc
+    link vim-config
+}
+
 # Vim
 mkdir -p ~/.vim
 link .vimrc
@@ -71,3 +82,7 @@ link .zshrc
 link cheat ~/.config/cheat
 link .Xresources
 link .tmux.conf
+
+linkfunc=$(declare -f link)
+rootlinkfunc=$(declare -f rootlink)
+sudo bash -c "cwd=$cwd; $linkfunc; $rootlinkfunc; rootlink"

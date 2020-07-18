@@ -7,6 +7,7 @@
     cm = commit
     cma = commit --amend
     rmo = "!sh -c 'git remote add origin git@github.com:masuke5/$1.git' -"
+    pushf = push --force-with-lease
 
     # new
     tree = log --graph --all --format='%x09%C(cyan bold)%an%Creset%x09%C(yellow)%h%Creset %C(magenta reverse)%d%Creset %s'
