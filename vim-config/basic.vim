@@ -213,16 +213,6 @@ function! ToggleFile()
   endif
 endfunction
 
-" TODO: 
-" (a|, b, c)
-" (a|), (b, c), d)
-" (a, '(', c) アポストロフィが識別子に使える言語もある
-function! BackwardArg() abort
-endfunction
-
-function! ForwardArg() abort
-endfunction
-
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
 " すべてのポップアップウィンドウを消す
@@ -232,16 +222,16 @@ inoremap <C-@> <ESC>
 " US配列では@キーが押しづらい
 nnoremap U @
 " C/C++のソースファイルとヘッダファイルを切り替える
-nnoremap <silent> <leader>f :call ToggleFile()<CR>
+" vim-altrにした
+" nnoremap <silent> <leader>f :call ToggleFile()<CR>
 " タブ関連
 nnoremap <leader>t :tabnew<CR>
 nnoremap <C-h> gT
 nnoremap <C-l> gt
+tnoremap <C-h> <C-\><C-n>gT<CR>
+tnoremap <C-l> <C-\><C-n>gt<CR>
 " 検索キーワードを削除（ハイライトも消える）
 nnoremap <silent> <leader>n :let @/ = ''<CR>
-" 前後の引数に移動する
-nnoremap <silent> [ BackwardArg()
-nnoremap <silent> ] ForwardArg()
 
 " Aliases
 " --------------------------------

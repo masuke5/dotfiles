@@ -26,24 +26,10 @@ zinit load junegunn/fzf-bin
 alias ls='ls --color=auto'
 alias la='ls --color=auto -a'
 alias ll='ls --color=auto -al'
+alias dco='docker-compose'
 alias clip='xclip -selection clipboard'
 alias rmswp='rm ~/.vim/backup/*.swp'
-
-function ytmp3() {
-    youtube-dl "$1" -x --audio-format mp3 --audio-quality 128k
-}
-
-function tw() {
-    youtube-dl "$1" -o '%(uploader_id)s-%(id)s.%(ext)s' -x --audio-format mp3 --audio-quality 256k -k
-}
-
-function downblob() {
- ffmpeg -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" -i "$1" -movflags faststart -c copy -bsf:a aac_adtstoasc "$2"
-}
-
-function hubclone() {
-    git clone "https://github.com/$1"
-}
+alias tmuxcolors='for i in {0..255}; do  printf "\x1b[38;5;${i}mcolor%-5i\x1b[0m" $i ; if ! (( ($i + 1 ) % 8 )); then echo ; fi ; done'
 
 autoload -Uz colors
 colors
@@ -98,7 +84,6 @@ gobin() {
 
 # 環境変数
 export EDITOR=vim
-export WDEV=/mnt/c/users/shinsuke/dev
 export GOPATH=$HOME/dev/go
 export PATH=$GOPATH/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --no-ignore-vcs --ignore-file $HOME/.fdignore"

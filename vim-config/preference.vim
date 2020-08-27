@@ -51,11 +51,25 @@ function s:set_cursor_color_on_insert() abort
   endif
 endfunction
 
+" vim-lspのハイライト
+function s:fix_vim_lsp_highlight() abort
+  " エラー、警告を波線にする
+  highlight SWarning cterm=undercurl guisp=Yellow gui=undercurl
+  highlight SError cterm=undercurl guisp=Red gui=undercurl
+  highlight link LspErrorHighlight SError
+  highlight link LspErrorText SError
+  highlight clear LspErrorLine
+  highlight link LspWarningHighlight SWarning
+  highlight link LspWarningText SWarning
+  highlight clear LspWarningLine
+endfunction
+
 function! s:on_highlight()
   call s:set_lightline_colorscheme_by_background()
   " call s:make_transparent()
   call s:set_cursor_color_on_insert()
   " call s:dim_inactive_window()
+  call s:fix_vim_lsp_highlight()
 endfunction
 
 autocmd! Colorscheme * call s:on_highlight()
@@ -66,11 +80,18 @@ autocmd! Colorscheme * call s:on_highlight()
 " それぞれのカラースキームの設定
 let g:molokai_original = 1
 
+" 256色
+set termguicolors
+
+" 波線
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+
 " デフォルトのカラースキーム
 if !exists('g:colors_name')
   " 設定更新時は変えない
-  colorscheme PaperColor
   set background=dark
+  colorscheme ayu
 endif
 
 " カーソルの形状を同じにする

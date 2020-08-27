@@ -5,7 +5,7 @@ if has('win32')
   " TODO:
   " let g:python3_host_prog = $USERPROFILE . '/Anaconda3/python.exe'
 else
-  let g:python3_host_prog = system('which python3')
+  let g:python3_host_prog = trim(system('which python3'))
 endif
 
 " vim-plugのパスを生成
@@ -37,7 +37,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'airblade/vim-gitgutter'
 Plug 'machakann/vim-sandwich'
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': ['vue', 'html', 'jinja'] }
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'junegunn/goyo.vim'
@@ -47,20 +47,24 @@ Plug 'masuke5/doisa-vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
-Plug 'cohama/lexima.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'kana/vim-altr'
 
+" Snippet
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
+" Text object
 Plug 'kana/vim-textobj-user'
 Plug 'sgur/vim-textobj-parameter'
 Plug 'michaeljsmith/vim-indent-object'
 
+" LSP
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'mattn/vim-lsp-settings'
 
 " 言語プラグイン
 Plug 'jez/vim-better-sml', { 'for': 'sml' }
@@ -69,8 +73,10 @@ Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': { -> mkdp#util#i
 Plug 'godlygeek/tabular' " vim-markdownが依存
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'npm install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
-" 言語ごとのシンタックスハイライト
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 Plug 'JulesWang/css.vim', { 'for': ['css', 'scss'] }
 Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
@@ -78,43 +84,31 @@ Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'PProvost/vim-ps1', { 'for': 'ps1' }
-Plug 'justinmk/vim-syntax-extra'
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
 Plug 'masuke5/lang2.vim', { 'for': 'lang2' }
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
-Plug 'aklt/plantuml-syntax'
+Plug 'aklt/plantuml-syntax', { 'for': 'plantuml' }
 Plug 'othree/yajs.vim', { 'for': 'javascript' }
 Plug 'Shirk/vim-gas', { 'for': 'gas' }
+Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': ['c', 'cpp'] }
 
 " カラースキーム
 Plug 'masuke5/masuc'
-Plug 'romainl/Apprentice'
-Plug 'jacoborus/tender.vim'
 Plug 'Haron-Prime/Antares'
 Plug 'tomasr/molokai'
 Plug 'w0ng/vim-hybrid'
 Plug 'morhetz/gruvbox'
 Plug 'JaySandhu/xcode-vim'
-Plug 'nelstrom/vim-mac-classic-theme'
-Plug 'fabi1cazenave/kalahari.vim'
-Plug 'thinkpixellab/flatland'
 Plug 'joshdick/onedark.vim'
-Plug 'mrkn/mrkn256.vim'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'cormacrelf/vim-colors-github'
 Plug 'dracula/vim'
-Plug 'vim-scripts/Wombat'
-Plug 'altercation/vim-colors-solarized'
 Plug 'Rigellute/rigel'
-Plug 'sainnhe/edge'
 Plug 'sainnhe/gruvbox-material'
-Plug 'nightsense/cosmic_latte'
-Plug 'nightsense/snow'
 Plug 'arcticicestudio/nord-vim'
 Plug 'sjl/badwolf'
 Plug 'ayu-theme/ayu-vim'
-Plug 'whatyouhide/vim-gotham'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'fcpg/vim-orbital'
 Plug 'cocopon/iceberg.vim'
@@ -247,9 +241,12 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 nnoremap <leader>j :Files<CR>
 nnoremap <leader>w :RG<CR>
-nnoremap <leader>h :History<CR>
 nnoremap <leader>k :History:<CR>
 nnoremap <leader>l :GFiles<CR>
+inoremap <C-d> <ESC>:Snippets<CR>
+
+nnoremap <leader>fk :History<CR>
+nnoremap <leader>fh :Helptags<CR>
 
 " popup windowでfzfを開く
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal', 'border': 'sharp' } }
@@ -287,21 +284,6 @@ nnoremap <leader>mt :TableFormat<CR>
 
 " }}}
 
-" fern.vim {{{
-
-function s:init_fern() abort
-  nmap <buffer> u <Plug>(fern-action-expand)
-endfunction
-
-augroup Fern
-  autocmd!
-  autocmd FileType fern call s:init_fern()
-augroup END
-
-nnoremap <leader>f :Fern . -reveal=% -drawer -toggle<CR>
-
-" }}}
-
 " vim-vue {{{
 
 " 軽くするため
@@ -329,6 +311,18 @@ nnoremap <silent> <space>ao  :LspDocumentSymbols<cr>
 nnoremap <silent> <leader>al :LspCodeLens<CR>
 nnoremap <silent> <leader>af :LspDocumentFormat<CR>
 
+if executable('ccls')
+   au User lsp_setup call lsp#register_server({
+      \ 'name': 'ccls',
+      \ 'cmd': {server_info->['ccls']},
+      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+      \ 'initialization_options': {
+      \   'highlight': { 'lsRanges' : v:true },
+      \ },
+      \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+      \ })
+endif
+
 if !has('nvim')
   autocmd User lsp_float_opened
     \ call popup_setoptions(lsp#ui#vim#output#getpreviewwinid(),
@@ -341,5 +335,32 @@ end
 " asyncomplete.vim {{{
 
 imap <C-g> <Plug>(asyncomplete_force_refresh)
+
+" }}}
+
+" vim-textobj-parameter {{{
+
+let g:vim_textobj_parameter_mapping = 'h'
+
+" }}}
+
+" vim-altr {{{ 
+
+nmap <leader>h <Plug>(altr-forward)
+call altr#define('include/%.hpp', 'src/%.cpp')
+
+" }}}
+
+" vim-prettier {{{
+
+function! s:execute_prettier()
+  if !empty(glob('.prettierrc.json'))
+    PrettierAsync
+  endif
+endfunction
+
+augroup PrettierAutoFormat
+  autocmd BufWritePre *.ts call s:execute_prettier()
+augroup END
 
 " }}}
