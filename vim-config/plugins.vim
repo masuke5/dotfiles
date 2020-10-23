@@ -47,8 +47,9 @@ Plug 'masuke5/doisa-vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-altr'
+Plug 'lambdalisue/fern.vim'
 
 " Snippet
 Plug 'SirVer/ultisnips'
@@ -65,6 +66,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " 言語プラグイン
 Plug 'jez/vim-better-sml', { 'for': 'sml' }
@@ -112,6 +114,8 @@ Plug 'ayu-theme/ayu-vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'fcpg/vim-orbital'
 Plug 'cocopon/iceberg.vim'
+Plug 'edersonferreira/dalton-vim'
+Plug 'yuttie/hydrangea-vim'
 
 call plug#end()
 
@@ -150,16 +154,17 @@ let g:lightline = {
 \ 'active': {
 \   'left': [['mode', 'paste'],
 \            ['gitbranch', 'lspstatus', 'readonly', 'filename', 'modified']],
-\   'right': [['lineinfo'],
+\   'right': [['searchcount', 'lineinfo'],
 \             ['percent'],
 \             ['charvaluehex', 'fileformat', 'fileencoding', 'filetype']]
 \ },
 \ 'component': {
-\   'charvaluehex': '0x%B'
+\   'charvaluehex': '0x%B',
 \ },
 \ 'component_function': {
-\   'lspstatus': 'LspStatus',
-\   'gitbranch': 'gitbranch#name'
+\   'gitbranch': 'gitbranch#name',
+\   'searchcount': 'SearchCount',
+\   'lspstatus': 'LspStatus'
 \ },
 \ 'enable': {
 \   'statusline': 1,
@@ -167,7 +172,17 @@ let g:lightline = {
 \ }
 \ }
 
-function LspStatus()
+function! SearchCount()
+  let l:sc = searchcount()
+  if !empty(l:sc)
+    return '[' . l:sc['current'] . '/' . l:sc['total'] . ']'
+  else
+    return ''
+  endif
+endfunction
+
+" vim-lsp用
+function! LspStatus()
   let l:counts = lsp#get_buffer_diagnostics_counts()
   let l:result = ''
 
@@ -237,7 +252,16 @@ function! RipgrepFzf(query, fullscreen)
   call fzf#vim#grep(initial_command, 1, spec, a:fullscreen)
 endfunction
 
+function! VimLspDocumentSymbol(query, fullscreen)
+  let opt = {
+\   'source': ['abc', 'bca', 'def', 'ef', 'baka', 'kasu'],
+\ }
+
+  call fzf#run(fzf#wrap(opt, a:fullscreen))
+endfunction
+
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+command! -nargs=* -bang VimLspDS call VimLspDocumentSymbol(<q-args>, <bang>0)
 
 nnoremap <leader>j :Files<CR>
 nnoremap <leader>w :RG<CR>
@@ -247,6 +271,7 @@ inoremap <C-d> <ESC>:Snippets<CR>
 
 nnoremap <leader>fk :History<CR>
 nnoremap <leader>fh :Helptags<CR>
+nnoremap <leader>fd :VimLspDS<CR>
 
 " popup windowでfzfを開く
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal', 'border': 'sharp' } }
@@ -296,7 +321,7 @@ let g:vue_pre_processors = 'detect_on_enter'
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 200
 let g:lsp_virtual_text_enabled = 0
-let g:lsp_semantic_enabled = 1
+" let g:lsp_semantic_enabled = 1
 
 nnoremap <F2> :LspRename<CR>
 nnoremap <silent> <leader>an :LspNextDiagnostic<CR>
@@ -330,6 +355,10 @@ if !has('nvim')
     \               'padding': [1, 1, 1, 1]})
 end
 
+command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')        
+
+let g:lsp_settings_filetype_vue = ['eslint-language-server', 'vls']
+
 " }}}
 
 " asyncomplete.vim {{{
@@ -361,6 +390,21 @@ endfunction
 
 augroup PrettierAutoFormat
   autocmd BufWritePre *.ts call s:execute_prettier()
+augroup END
+
+" }}}
+
+" {{{ fern.vim
+
+nnoremap <leader>f :Fern . -drawer -reveal=%<CR>
+
+function! s:init_fern() abort
+  nmap <buffer> o <Plug>(fern-action-expand)
+endfunction
+
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
 augroup END
 
 " }}}

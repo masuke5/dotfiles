@@ -74,6 +74,10 @@ endfunction
 
 autocmd! Colorscheme * call s:on_highlight()
 
+" マウスを使う
+set mouse=a
+set ttymouse=xterm2
+
 " カラースキーム
 " -----------------------------------------
 
@@ -82,6 +86,11 @@ let g:molokai_original = 1
 
 " 256色
 set termguicolors
+
+" tatebou cursor
+" let &t_SI .= "\e[6 q"
+" let &t_EI .= "\e[2 q"
+" let &t_SR .= "\e[4 q"
 
 " 波線
 let &t_Cs = "\e[4:3m"

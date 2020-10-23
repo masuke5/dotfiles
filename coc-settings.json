@@ -8,5 +8,6 @@
     }
   },
   "rust-analyzer.inlayHints.chainingHints": true,
-  "eslint.filetypes": ["javascript", "typescript", "vue"]
+  "eslint.filetypes": ["javascript", "typescript", "vue"],
+  "omnisharp.useGlobalMono": "always"
 }

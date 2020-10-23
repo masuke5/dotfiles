@@ -87,6 +87,13 @@ export EDITOR=vim
 export GOPATH=$HOME/dev/go
 export PATH=$GOPATH/bin:/usr/local/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --no-ignore-vcs --ignore-file $HOME/.fdignore"
+export GTK_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export QT_IM_MODULE=fcitx
+
+if which ruby >/dev/null && which gem >/dev/null; then
+    PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
 
 # OPAM configuration
 . /home/shinsuke/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

@@ -1,4 +1,4 @@
-" プラグインなどに依存しない設定
+" プラグインに依存しない設定
 
 if &compatible
   set nocompatible
@@ -147,14 +147,12 @@ augroup TerminalNumber
 
   function! s:hide_linenumber_if_terminal()
     if &buftype == 'terminal'
-      set nonumber
-    else
-      set nonumber
+      setlocal nonumber
+      setlocal norelativenumber
     endif
   endfunction
 
-  " FIXME: これを追加すると起動時にVimのタイトルが表示されない
-  " autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
+  autocmd BufEnter * call timer_start(0, { -> s:hide_linenumber_if_terminal() })
 augroup END
 
 augroup MkdirWhenWrite
@@ -174,45 +172,6 @@ let g:mamplocalleader = '\'
 " Shortcuts
 " --------------------------------------
 
-" C/C++のソースファイルとヘッダファイルを切り替える
-function! ToggleFile()
-  let l:source_exts = ['cpp', 'c', 'cxx']
-  let l:header_exts = ['h', 'hpp', 'hxx']
-
-  let l:ext = expand('%:e')
-  let l:curfile = expand('%:p:r')
-
-  " Header
-  let l:index = index(l:header_exts, l:ext)
-  if l:index >= 0
-    for ext in l:source_exts
-      let l:filename = l:curfile . '.' . ext
-      if !empty(glob(l:filename))
-        execute 'e ' . l:filename
-        return
-      endif
-    endfor
-
-    execute 'e ' . l:curfile . '.' . l:source_exts[0]
-    return
-  endif
-
-  " Source
-  let l:index = index(l:source_exts, l:ext)
-  if l:index >= 0
-    for ext in l:header_exts
-      let l:filename = l:curfile . '.' . ext
-      if !empty(glob(l:filename))
-        execute 'e ' . l:filename
-        return
-      endif
-    endfor
-
-    execute 'e ' . l:curfile . '.' . l:header_exts[0]
-    return
-  endif
-endfunction
-
 " 現在行の Vim script を実行する
 nnoremap <leader>ve :exec getline('.')<CR>
 " すべてのポップアップウィンドウを消す
@@ -221,9 +180,6 @@ nnoremap <silent> <leader>q :call popup_clear()<CR>
 inoremap <C-@> <ESC>
 " US配列では@キーが押しづらい
 nnoremap U @
-" C/C++のソースファイルとヘッダファイルを切り替える
-" vim-altrにした
-" nnoremap <silent> <leader>f :call ToggleFile()<CR>
 " タブ関連
 nnoremap <leader>t :tabnew<CR>
 nnoremap <C-h> gT
@@ -232,6 +188,17 @@ tnoremap <C-h> <C-\><C-n>gT<CR>
 tnoremap <C-l> <C-\><C-n>gt<CR>
 " 検索キーワードを削除（ハイライトも消える）
 nnoremap <silent> <leader>n :let @/ = ''<CR>
+inoremap <C-j> <nop>
+" C-wは押しづらいので
+nnoremap <C-j> <C-w>
+tnoremap <C-j> <C-w>
+" ターミナル関連
+nnoremap <leader>rn :terminal ++curwin<CR>
+" 矢印キーでウィンドウのサイズを操作
+nnoremap <Up> <C-w>+
+nnoremap <Down> <C-w>-
+nnoremap <Left> <C-w><
+nnoremap <Right> <C-w>>
 
 " Aliases
 " --------------------------------

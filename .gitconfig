@@ -8,10 +8,12 @@
     cma = commit --amend
     rmo = "!sh -c 'git remote add origin git@github.com:masuke5/$1.git' -"
     pushf = push --force-with-lease
+    si = switch
 
     # new
     tree = log --graph --all --format='%x09%C(cyan bold)%an%Creset%x09%C(yellow)%h%Creset %C(magenta reverse)%d%Creset %s'
     lo = log --oneline -n 15
+    checkout-permission = "!git diff --numstat | awk '{if (($1 == '0' && $2 == '0') || ($1 == '-' && $2 == '-')) print $3}' | xargs git checkout HEAD"
 
     # miss
     sss = status -s
@@ -23,6 +25,7 @@
 [core]
     editor = vim
     autocrlf = input
+	filemode = false
 [grep]
     lineNumber = true
 [filter "lfs"]
