@@ -21,7 +21,6 @@ zinit ice from"gh-r" as"program"
 zinit load junegunn/fzf-bin
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-
 # エイリアス
 alias ls='ls --color=auto'
 alias la='ls --color=auto -a'
@@ -42,6 +41,7 @@ autoload -Uz edit-command-line
 export HISTFILE=~/.zsh_history
 export HISTSIZE=1000
 export SAVEHIST=10000
+setopt correct
 setopt hist_ignore_dups
 setopt share_history
 setopt inc_append_history
@@ -51,7 +51,7 @@ setopt auto_menu
 
 PROMPT="%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}$ %{$reset_color%}"
 
-# shortcut
+## shortcut
 
 bindkey -e
 
@@ -59,6 +59,7 @@ bindkey -e
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
+# zsh-autosuggestionsの候補を確定
 bindkey "^O" autosuggest-accept
 
 # RUST_BACKTRACE=1を付けたり消したり
@@ -72,6 +73,8 @@ toggleRustBacktrace() {
 
 zle -N toggleRustBacktrace
 bindkey '^T' toggleRustBacktrace
+
+## コマンド
 
 # go get
 gobin() {

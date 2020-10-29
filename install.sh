@@ -82,6 +82,7 @@ link .zshrc
 link cheat ~/.config/cheat
 link .Xresources
 link .tmux.conf
+link .fdignore
 
 linkfunc=$(declare -f link)
 rootlinkfunc=$(declare -f rootlink)

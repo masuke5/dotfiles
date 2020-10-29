@@ -184,8 +184,8 @@ nnoremap U @
 nnoremap <leader>t :tabnew<CR>
 nnoremap <C-h> gT
 nnoremap <C-l> gt
-tnoremap <C-h> <C-\><C-n>gT<CR>
-tnoremap <C-l> <C-\><C-n>gt<CR>
+tnoremap <C-h> <C-w>gT
+tnoremap <C-l> <C-w>gt
 " 検索キーワードを削除（ハイライトも消える）
 nnoremap <silent> <leader>n :let @/ = ''<CR>
 inoremap <C-j> <nop>
