@@ -6,7 +6,7 @@ endif
 
 function! s:auto_mkdir(dir, force)
   if !isdirectory(a:dir) && (a:force ||
-  \    input(printf('"%s" does not exist. Create? [y/N] ', a:dir)) =~? '^y\%[es]$')
+    \ input(printf('"%s" does not exist. Create? [y/N] ', a:dir)) =~? '^y\%[es]$')
     call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
   endif
 endfunction
@@ -101,19 +101,8 @@ function! s:set_tabwidth(width) abort
   let &l:softtabstop = a:width
 endfunction
 
-function s:set_rust_options()
-  setlocal textwidth=100
-  setlocal colorcolumn=+1
-endfunction
-
-function s:set_ocaml_options()
-  setlocal textwidth=100
-  setlocal colorcolumn=+1
-  call s:set_tabwidth(2)
-endfunction
-
-function s:set_python_options()
-  setlocal textwidth=100
+function! s:set_vertical_line_at(width)
+  let &l:textwidth = a:width
   setlocal colorcolumn=+1
 endfunction
 
@@ -127,11 +116,11 @@ let &softtabstop = s:def_tabwidth
 augroup SettingsPerFileType
   autocmd!
   " タブ幅を2にする
-  autocmd FileType vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css call s:set_tabwidth(2)
-
-  autocmd FileType rust call s:set_rust_options()
-  autocmd FileType python call s:set_python_options()
-  autocmd FileType ocaml call s:set_ocaml_options()
+  autocmd FileType
+    \ vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css,ocaml
+    \ call s:set_tabwidth(2)
+  " 100列目に縦線を表示
+  autocmd FileType vim,rust,python,ocaml,c,cpp call s:set_vertical_line_at(100)
 augroup END
 
 " 拡張子を元にfiletypeを設定する
@@ -141,7 +130,7 @@ augroup FileTypeFromExtension
   autocmd BufNewFile,BufRead *.html.tera set ft=jinja.html
 augroup END
 
-" 現在のバッファがターミナルだったら行番号を隠す
+" ターミナルバッファではノーマルモードでも行番号を隠す
 augroup TerminalNumber
   autocmd!
 
@@ -159,6 +148,22 @@ augroup MkdirWhenWrite
   " ファイル書き込み時にディレクトリが存在しなかったら作成するかどうか聞く
   autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
+
+" Session
+" -------------------------------------
+
+let g:session_dir = expand('$HOME/.vim/sessions')
+call s:auto_mkdir(g:session_dir, 0)
+
+function! s:make_session_and_quit()
+  let s:filename = strftime("%Y-%m-%d_%H-%M-%S.session")
+  let s:filepath = g:session_dir . '/' . s:filename
+  execute 'mksession ' . s:filepath
+  quitall
+endfunction
+
+" セッションを作成して終了
+command! Q call s:make_session_and_quit()
 
 " Leader
 " -------------------------------------

@@ -1,0 +1,17 @@
+# 逆
+grep -v
+
+# 大文字小文字無視
+grep i
+
+# ファイル名のみ
+grep -l
+
+# ファイル名を表示しない
+grep -h
+
+# 行番号を表示
+grep -n
+
+# OR検索
+grep -e aho -e baka

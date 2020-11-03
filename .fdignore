@@ -3,3 +3,4 @@ node_modules/
 build/
 .clangd/
 .ccls-cache/
+package-lock.json

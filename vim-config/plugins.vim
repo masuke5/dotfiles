@@ -20,9 +20,11 @@ elseif has('unix')
 endif
 
 " vim-plugの自動インストール
+" TODO: Powershell
 if empty(glob(s:vim_plug_path))
   if !executable('curl')
     echoerr 'curlをインストールしてください'
+    " プラグインに依存する設定ファイルを読み込まないようにする
     set noloadplugins
     finish
   endif
@@ -50,6 +52,7 @@ Plug 'wakatime/vim-wakatime'
 " Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-altr'
 Plug 'lambdalisue/fern.vim'
+Plug 'editorconfig/editorconfig-vim'
 
 " Snippet
 Plug 'SirVer/ultisnips'
@@ -66,6 +69,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " 言語プラグイン
@@ -77,7 +81,8 @@ Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'prettier/vim-prettier', {
   \ 'do': 'npm install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown',
+  \         'vue', 'yaml', 'html'] }
 
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 Plug 'JulesWang/css.vim', { 'for': ['css', 'scss'] }
@@ -173,9 +178,9 @@ let g:lightline = {
 \ }
 
 function! SearchCount()
-  let l:sc = searchcount()
-  if !empty(l:sc)
-    return '[' . l:sc['current'] . '/' . l:sc['total'] . ']'
+  let cnt = searchcount()
+  if !empty(cnt)
+    return '[' . cnt['current'] . '/' . cnt['total'] . ']'
   else
     return ''
   endif
@@ -183,30 +188,19 @@ endfunction
 
 " vim-lsp用
 function! LspStatus()
-  let l:counts = lsp#get_buffer_diagnostics_counts()
-  let l:result = ''
+  let counts = lsp#get_buffer_diagnostics_counts()
+  let result = ''
+  
+  function! s:count_text(result, label, cnt)
+    return a:cnt > 0 ? a:result . ' ' . a:label . a:cnt : a:result
+  endfunction
 
-  let l:count = l:counts['information']
-  if l:count > 0
-    let l:result = l:result . ' I' . l:count
-  endif
+  let result = s:count_text(result, 'I', counts['information'])
+  let result = s:count_text(result, 'H', counts['hint'])
+  let result = s:count_text(result, 'W', counts['warning'])
+  let result = s:count_text(result, 'E', counts['error'])
 
-  let l:count = l:counts['hint']
-  if l:count > 0
-    let l:result = l:result . ' H' . l:count
-  endif
-
-  let l:count = l:counts['warning']
-  if l:count > 0
-    let l:result = l:result . ' W' . l:count
-  endif
-
-  let l:count = l:counts['error']
-  if l:count > 0
-    let l:result = l:result . ' E' . l:count
-  endif
-
-  return l:result[1:]
+  return result[1:]
 endfunction
 
 " }}}
@@ -245,23 +239,34 @@ nnoremap <silent> <space>ue :UltiSnipsEdit<CR>
 " fzf.vim {{{
 
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -g "!package-lock.json"  %s || true'
+  let command_fmt =
+    \ 'rg --column --line-number --no-heading --color=always --smart-case'
+    \ . ' --ignore-file .fdignore %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let spec = {
+    \ 'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]
+    \ }
   call fzf#vim#grep(initial_command, 1, spec, a:fullscreen)
 endfunction
 
-function! VimLspDocumentSymbol(query, fullscreen)
-  let opt = {
-\   'source': ['abc', 'bca', 'def', 'ef', 'baka', 'kasu'],
-\ }
+" セッション
+function! s:restore_and_remove_session(filename)
+  execute 'source ' . a:filename
+  call delete(a:filename)
+endfunction
 
-  call fzf#run(fzf#wrap(opt, a:fullscreen))
+function! SessionFzf(query, fullscreen)
+  let session_files = glob(g:session_dir . '/*.session', v:false, v:true)
+  let spec = {
+    \ 'source': session_files,
+    \ 'sink': function('s:restore_and_remove_session')
+    \ }
+  call fzf#run(fzf#wrap(spec, a:fullscreen))
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-command! -nargs=* -bang VimLspDS call VimLspDocumentSymbol(<q-args>, <bang>0)
+command! -nargs=* -bang Sessions call SessionFzf(<q-args>, <bang>0)
 
 nnoremap <leader>j :Files<CR>
 nnoremap <leader>w :RG<CR>
@@ -271,10 +276,17 @@ inoremap <C-d> <ESC>:Snippets<CR>
 
 nnoremap <leader>fk :History<CR>
 nnoremap <leader>fh :Helptags<CR>
-nnoremap <leader>fd :VimLspDS<CR>
+nnoremap <leader>fs :Sessions<CR>
 
 " popup windowでfzfを開く
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Normal', 'border': 'sharp' } }
+let g:fzf_layout = {
+  \ 'window': {
+  \   'width': 0.9,
+  \   'height': 0.6,
+  \   'highlight': 'Normal',
+  \   'border': 'sharp'
+  \ }
+  \ }
 
 " }}}
 
@@ -340,7 +352,9 @@ if executable('ccls')
    au User lsp_setup call lsp#register_server({
       \ 'name': 'ccls',
       \ 'cmd': {server_info->['ccls']},
-      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+      \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+           \ lsp#utils#find_nearest_parent_file_directory(
+               \ lsp#utils#get_buffer_path(), 'compile_commands.json'))},
       \ 'initialization_options': {
       \   'highlight': { 'lsRanges' : v:true },
       \ },
@@ -350,9 +364,12 @@ endif
 
 if !has('nvim')
   autocmd User lsp_float_opened
-    \ call popup_setoptions(lsp#ui#vim#output#getpreviewwinid(),
-    \              {'border': [0, 0, 0, 0],
-    \               'padding': [1, 1, 1, 1]})
+    \ call popup_setoptions(
+        \ lsp#ui#vim#output#getpreviewwinid(),
+        \ {
+        \   'border': [0, 0, 0, 0],
+        \   'padding': [1, 1, 1, 1]
+        \ })
 end
 
 command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')        
@@ -364,6 +381,13 @@ let g:lsp_settings_filetype_vue = ['eslint-language-server', 'vls']
 " asyncomplete.vim {{{
 
 imap <C-g> <Plug>(asyncomplete_force_refresh)
+
+" ultisnips
+call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+  \ 'name': 'ultisnips',
+  \ 'allowlist': ['*'],
+  \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+  \ }))
 
 " }}}
 

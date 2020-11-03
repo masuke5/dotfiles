@@ -16,7 +16,9 @@ if &loadplugins
 endif
 
 " 設定ファイルを更新
-command! Uv source $HOME/.vimrc
+" autocmd FileTypeなどで設定した項目が上書きされる可能性があるので
+" editを実行して再度autocmdを実行させる
+command! Uv source $HOME/.vimrc | edit
 
 " 設定ファイルを開くエイリアス
 command! Ov edit $HOME/.vimrc
