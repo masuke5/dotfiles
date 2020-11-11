@@ -15,6 +15,8 @@ autoload -Uz _zinit
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 zinit light tj/git-extras
+zinit light woefe/git-prompt.zsh
+zinit light popstas/zsh-command-time
 
 # fzf
 zinit ice from"gh-r" as"program"
@@ -49,7 +51,10 @@ setopt hist_no_store
 setopt pushd_ignore_dups
 setopt auto_menu
 
-PROMPT="%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}$ %{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_PREFIX=' ['
+ZSH_THEME_GIT_PROMPT_SUFFIX=']'
+ZSH_GIT_PROMPT_ENABLE_SECONDARY=1
+PROMPT='%{$fg[yellow]%}%* %{$fg[cyan]%}%~%{$fg[white]%}$(gitprompt)$ %{$reset_color%}'
 
 ## shortcut
 

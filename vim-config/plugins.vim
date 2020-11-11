@@ -42,7 +42,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim', { 'for': ['vue', 'html', 'jinja'] }
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
-Plug 'junegunn/goyo.vim'
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'kshenoy/vim-signature'
 Plug 'machakann/vim-swap'
 Plug 'masuke5/doisa-vim'
@@ -51,7 +51,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'wakatime/vim-wakatime'
 " Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-altr'
-Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'editorconfig/editorconfig-vim'
 
 " Snippet
@@ -76,7 +76,8 @@ Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 Plug 'jez/vim-better-sml', { 'for': 'sml' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': { -> mkdp#util#install() } }
-Plug 'godlygeek/tabular' " vim-markdownが依存
+" vim-markdownが依存
+Plug 'godlygeek/tabular', { 'for': 'markdown' }
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'prettier/vim-prettier', {
@@ -101,7 +102,6 @@ Plug 'Shirk/vim-gas', { 'for': 'gas' }
 Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': ['c', 'cpp'] }
 
 " カラースキーム
-Plug 'masuke5/masuc'
 Plug 'Haron-Prime/Antares'
 Plug 'tomasr/molokai'
 Plug 'w0ng/vim-hybrid'
@@ -114,12 +114,10 @@ Plug 'dracula/vim'
 Plug 'Rigellute/rigel'
 Plug 'sainnhe/gruvbox-material'
 Plug 'arcticicestudio/nord-vim'
-Plug 'sjl/badwolf'
 Plug 'ayu-theme/ayu-vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'fcpg/vim-orbital'
 Plug 'cocopon/iceberg.vim'
-Plug 'edersonferreira/dalton-vim'
 Plug 'yuttie/hydrangea-vim'
 
 call plug#end()
@@ -388,6 +386,8 @@ call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_opti
   \ 'allowlist': ['*'],
   \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
   \ }))
+
+let g:asyncomplete_auto_completeopt = 1
 
 " }}}
 

@@ -1,8 +1,9 @@
-URxvt.inputMethod: fcitx
-URxvt.perl-ext: xim-onthespot
+URxvt.perl-ext-common: xim-onthespot
+URxvt.inputMethod: fcitx-mozc
 URxvt.preeditType: OnTheSpot
-URxvt.font: xft:Ubuntu Mono:size=12:antialias=true,xft:Cica:size=12:antialias=true
+URxvt.font: xft:Cascadia Code:size=11:antialias=true,xft:NasuM:size=11:antialias=true
 URxvt.scrollBar: false
+URxvt.letterSpace: -1
 
 ! Generated with :
 ! XRDB2Xreources.py

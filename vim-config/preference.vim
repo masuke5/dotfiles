@@ -51,11 +51,21 @@ function s:set_cursor_color_on_insert() abort
   endif
 endfunction
 
-" vim-lspのハイライト
-function s:fix_vim_lsp_highlight() abort
-  " エラー、警告を波線にする
+" エラー、警告を波線にする
+function s:vim_lsp_use_undercurl() abort
   highlight SWarning cterm=undercurl guisp=Yellow gui=undercurl
   highlight SError cterm=undercurl guisp=Red gui=undercurl
+  highlight link LspErrorHighlight SError
+  highlight link LspErrorText SError
+  highlight clear LspErrorLine
+  highlight link LspWarningHighlight SWarning
+  highlight link LspWarningText SWarning
+  highlight clear LspWarningLine
+endfunction
+
+function s:vim_lsp_use_true_color() abort
+  highlight SWarning guifg=#f2e933
+  highlight SError guifg=#fc4949
   highlight link LspErrorHighlight SError
   highlight link LspErrorText SError
   highlight clear LspErrorLine
@@ -69,7 +79,8 @@ function! s:on_highlight()
   " call s:make_transparent()
   call s:set_cursor_color_on_insert()
   " call s:dim_inactive_window()
-  call s:fix_vim_lsp_highlight()
+  " call s:vim_lsp_use_undercurl()
+  call s:vim_lsp_use_true_color()
 endfunction
 
 autocmd! Colorscheme * call s:on_highlight()
