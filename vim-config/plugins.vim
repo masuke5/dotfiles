@@ -53,6 +53,7 @@ Plug 'wakatime/vim-wakatime'
 Plug 'kana/vim-altr'
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'editorconfig/editorconfig-vim'
+Plug 'sbdchd/neoformat'
 
 " Snippet
 Plug 'SirVer/ultisnips'
@@ -67,23 +68,22 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'lighttiger2505/deoplete-vim-lsp'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 
 " 言語プラグイン
 Plug 'jez/vim-better-sml', { 'for': 'sml' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': { -> mkdp#util#install() } }
+Plug 'iamcco/markdown-preview.nvim', { 'for': ['markdown', 'vim-plug'], 'do': { -> mkdp#util#install() } }
 " vim-markdownが依存
 Plug 'godlygeek/tabular', { 'for': 'markdown' }
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'npm install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown',
-  \         'vue', 'yaml', 'html'] }
 
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 Plug 'JulesWang/css.vim', { 'for': ['css', 'scss'] }
@@ -100,6 +100,7 @@ Plug 'aklt/plantuml-syntax', { 'for': 'plantuml' }
 Plug 'othree/yajs.vim', { 'for': 'javascript' }
 Plug 'Shirk/vim-gas', { 'for': 'gas' }
 Plug 'jackguo380/vim-lsp-cxx-highlight', { 'for': ['c', 'cpp'] }
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 
 " カラースキーム
 Plug 'Haron-Prime/Antares'
@@ -119,6 +120,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'fcpg/vim-orbital'
 Plug 'cocopon/iceberg.vim'
 Plug 'yuttie/hydrangea-vim'
+Plug 'sainnhe/edge'
 
 call plug#end()
 
@@ -157,7 +159,7 @@ let g:lightline = {
 \ 'active': {
 \   'left': [['mode', 'paste'],
 \            ['gitbranch', 'lspstatus', 'readonly', 'filename', 'modified']],
-\   'right': [['searchcount', 'lineinfo'],
+\   'right': [['lineinfo'],
 \             ['percent'],
 \             ['charvaluehex', 'fileformat', 'fileencoding', 'filetype']]
 \ },
@@ -166,7 +168,6 @@ let g:lightline = {
 \ },
 \ 'component_function': {
 \   'gitbranch': 'gitbranch#name',
-\   'searchcount': 'SearchCount',
 \   'lspstatus': 'LspStatus'
 \ },
 \ 'enable': {
@@ -174,15 +175,6 @@ let g:lightline = {
 \   'tabline': 0
 \ }
 \ }
-
-function! SearchCount()
-  let cnt = searchcount()
-  if !empty(cnt)
-    return '[' . cnt['current'] . '/' . cnt['total'] . ']'
-  else
-    return ''
-  endif
-endfunction
 
 " vim-lsp用
 function! LspStatus()
@@ -300,13 +292,6 @@ nnoremap <silent> <leader>gu :GitGutterUndoHunk<CR>
 
 " }}}
 
-" rust.vim {{{
-
-" 保存時にrustfmtする
-let g:rustfmt_autosave = 1
-
-" }}}
-
 " markdown-preview {{{
 
 nnoremap <leader>mp :MarkdownPreview<CR>
@@ -330,7 +315,7 @@ let g:vue_pre_processors = 'detect_on_enter'
 
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 200
-let g:lsp_virtual_text_enabled = 0
+" let g:lsp_virtual_text_enabled = 0
 " let g:lsp_semantic_enabled = 1
 
 nnoremap <F2> :LspRename<CR>
@@ -378,16 +363,28 @@ let g:lsp_settings_filetype_vue = ['eslint-language-server', 'vls']
 
 " asyncomplete.vim {{{
 
-imap <C-g> <Plug>(asyncomplete_force_refresh)
+" imap <C-g> <Plug>(asyncomplete_force_refresh)
+" 
+" " ultisnips
+" call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+"   \ 'name': 'ultisnips',
+"   \ 'allowlist': ['*'],
+"   \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+"   \ }))
+" 
+" let g:asyncomplete_auto_completeopt = 1
 
-" ultisnips
-call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-  \ 'name': 'ultisnips',
-  \ 'allowlist': ['*'],
-  \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-  \ }))
+" }}}
 
-let g:asyncomplete_auto_completeopt = 1
+" deoplete.nvim {{{
+
+let g:deoplete#enable_at_startup = 1
+
+call deoplete#custom#option('num_processes', 4)
+call deoplete#custom#option('refresh_always', v:false)
+call deoplete#custom#option('sources', {
+  \ '_': ['lsp', 'ultisnips']
+  \ })
 
 " }}}
 
@@ -404,20 +401,6 @@ call altr#define('include/%.hpp', 'src/%.cpp')
 
 " }}}
 
-" vim-prettier {{{
-
-function! s:execute_prettier()
-  if !empty(glob('.prettierrc.json'))
-    PrettierAsync
-  endif
-endfunction
-
-augroup PrettierAutoFormat
-  autocmd BufWritePre *.ts call s:execute_prettier()
-augroup END
-
-" }}}
-
 " {{{ fern.vim
 
 nnoremap <leader>f :Fern . -drawer -reveal=%<CR>
@@ -429,6 +412,17 @@ endfunction
 augroup fern-custom
   autocmd! *
   autocmd FileType fern call s:init_fern()
+augroup END
+
+" }}}
+
+" neoformat {{{
+
+let g:neoformat_enabled_haskell = ['stylishhaskell']
+
+augroup fmt
+  autocmd!
+  autocmd BufWritePre *.py,*.rs,*.hs,*.ts,*.js,*.c,*.h,*.cpp,*.hpp Neoformat
 augroup END
 
 " }}}

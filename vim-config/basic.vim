@@ -79,6 +79,7 @@ set relativenumber
 set laststatus=2
 set splitbelow
 set shortmess+=c
+set shortmess-=S
 set cmdheight=1
 set completeopt=menu
 if !has('nvim')
@@ -117,10 +118,10 @@ augroup SettingsPerFileType
   autocmd!
   " タブ幅を2にする
   autocmd FileType
-    \ vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css,ocaml
+    \ vim,ruby,nim,toml,json,yaml,vue,javascript,typescript,html,pug,jinja,sml,css,ocaml,haskell
     \ call s:set_tabwidth(2)
   " 100列目に縦線を表示
-  autocmd FileType vim,rust,python,ocaml,c,cpp call s:set_vertical_line_at(100)
+  autocmd FileType vim,rust,python,ocaml,c,cpp,haskell call s:set_vertical_line_at(100)
 augroup END
 
 " 拡張子を元にfiletypeを設定する

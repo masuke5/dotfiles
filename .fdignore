@@ -1,6 +1,9 @@
 node_modules/
 .git/
 build/
+target/debug/
+target/release/
 .clangd/
 .ccls-cache/
 package-lock.json
+.venv/
